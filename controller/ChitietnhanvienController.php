@@ -69,9 +69,9 @@ switch ($method) {
 
     case 'DELETE':
         $data = json_decode(file_get_contents("php://input"));
-        if (isset($data->idkhoahoc) && isset($data->idhoadon)) {
+        if (isset($data->idkhoahoc) && isset($data->idnhanvien)) {
             $nhanvien->idkhoahoc = $data->idkhoahoc;
-            $nhanvien->idhoadon = $data->idhoadon;
+            $nhanvien->idnhanvien = $data->idnhanvien;
 
             if ($nhanvien->delete()) {
                 echo json_encode(["message" => "Record deleted successfully."]);

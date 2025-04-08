@@ -15,8 +15,9 @@ class Database {
             die('Connection failed: ' . $this->conn->connect_error);
         }
         else {
-            // echo 'succesfucc';
+             echo 'succesfucc';
         }
         return $this->conn;
     }
 }
+?>

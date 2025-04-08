@@ -16,28 +16,28 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET'){
     $kq = $khoahoc ->read();
+     
+    // echo " ua cai gi vai";
     echo json_encode($kq);
 }
 elseif ($method ==='POST'){
-    $data= json_encode(file_get_contents("php://input"));
-    if (isset($data->soluongbuoi) && isset($data->tenkhoahoc) && isset($data->thoigianhoc)){
-        $khoahoc->soluongbuoi=$data->soluongbuoi;
-        $khoahoc->tenkhoahoc=$data->tenkhoahoc;
-        $khoahoc->thoigianhoc=$data->thoigianhoc;
+$data = json_decode(file_get_contents("php://input"));
 
-        if ($khoahoc->create()){
-            echo "oke nha";
-        }
-        else {
-            http_response_code(500);
-            echo "loi j ay";
-        }
+if (isset($data->soluongbuoi) && isset($data->tenkhoahoc) && isset($data->thoigianhoc)) {
+    $khoahoc->soluongbuoi = $data->soluongbuoi;
+    $khoahoc->tenkhoahoc = $data->tenkhoahoc;
+    $khoahoc->thoigianhoc = $data->thoigianhoc;
 
+    if ($khoahoc->create()) {
+        echo "oke nha";
+    } else {
+        http_response_code(500);
+        echo "loi j ay";
     }
-    else {
-        http_response_code(400);
-        echo "thieu du lieu ne";
-    }
+} else {
+    http_response_code(400);
+    echo "thieu du lieu ne";
+}
 
 }
 elseif ($method === 'PUT'){

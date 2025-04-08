@@ -17,7 +17,7 @@ class ChiTietNhanVien {
     public function create() {
         $query = "INSERT INTO " . $this->table . " (idnhanvien, idkhoahoc, tinhtranggiangday, sogioday, dongia, thanhtien) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("iissdd", $this->idnhanvien, $this->idkhoahoc, $this->tinhtranggiangday, $this->sogioday, $this->dongia, $this->thanhtien);
+        $stmt->bind_param("iisddd", $this->idnhanvien, $this->idkhoahoc, $this->tinhtranggiangday, $this->sogioday, $this->dongia, $this->thanhtien);
         return $stmt->execute();
     }
 
@@ -31,7 +31,7 @@ class ChiTietNhanVien {
     public function update() {
         $query = "UPDATE " . $this->table . " SET tinhtranggiangday = ?, sogioday = ?, dongia = ?, thanhtien = ? WHERE idnhanvien = ? AND idkhoahoc = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssddii", $this->tinhtranggiangday, $this->sogioday, $this->dongia, $this->thanhtien, $this->idnhanvien, $this->idkhoahoc);
+        $stmt->bind_param("sdddii", $this->tinhtranggiangday, $this->sogioday, $this->dongia, $this->thanhtien, $this->idnhanvien, $this->idkhoahoc);
         return $stmt->execute();
     }
 

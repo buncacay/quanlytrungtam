@@ -17,9 +17,9 @@ class hoadon {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " (thoigianlap, tenhoadon, nguoilap, soluongmua, dongia, giamgia, thanhtien) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO " . $this->table . " (thoigianlap, tenhoadon, nguoilap, soluongmua, dongia, giamgia, thanhtien) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("siiddds", $this->tenhoadon, $this->nguoilap, $this->soluongmua, $this->dongia, $this->giamgia, $this->thanhtien, $this->thoigianlap);
+        $stmt->bind_param("ssiiddd", $this->tenhoadon, $this->nguoilap, $this->soluongmua, $this->dongia, $this->giamgia, $this->thanhtien, $this->thoigianlap);
         return $stmt->execute();
     }
 
@@ -33,7 +33,7 @@ class hoadon {
     public function update() {
         $query = "UPDATE " . $this->table . " SET tenhoadon = ?, nguoilap = ?, soluongmua = ?, dongia = ?, giamgia = ?, thanhtien = ?, thoigianlap = ? WHERE idhoadon = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssiidddi",$this->thoigianlap, $this->tenhoadon, $this->nguoilap, $this->soluongmua, $this->dongia, $this->giamgia, $this->thanhtien, $this->idhoadon);
+        $stmt->bind_param("siidddii",$this->thoigianlap, $this->tenhoadon, $this->nguoilap, $this->soluongmua, $this->dongia, $this->giamgia, $this->thanhtien, $this->idhoadon);
         return $stmt->execute();
     }
 
