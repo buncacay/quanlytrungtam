@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phân công giảng dạy</title>
+    <link rel="stylesheet" href="../../css/phanconggiangday.css">
+</head>
+<body>
+    <div class="assignment-container">
+        <h1>Phân công giảng dạy</h1>
+        <div class="assignment-form">
+            <h2>Gán giảng viên cho lớp học</h2>
+            <form id="assignmentForm">
+                <div class="form-group">
+                    <label for="teacher">Chọn giảng viên:</label>
+                    <select id="teacher" name="teacher" required>
+                        <option value="">-- Chọn giảng viên --</option>
+                        <option value="1">Nguyễn Văn A</option>
+                        <option value="2">Trần Thị B</option>
+                        <option value="3">Lê Hoàng C</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="class">Chọn lớp học:</label>
+                    <select id="class" name="class" required>
+                        <option value="">-- Chọn lớp học --</option>
+                        <option value="english-basic">Tiếng Anh cơ bản</option>
+                        <option value="ielts-prep">Luyện thi IELTS</option>
+                        <option value="business-english">Tiếng Anh thương mại</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="schedule">Lịch giảng dạy:</label>
+                    <input type="datetime-local" id="schedule" name="schedule" required>
+                </div>
+                <div class="form-group">
+                    <label for="notify">Gửi thông báo:</label>
+                    <input type="checkbox" id="notify" name="notify"> Qua Email/SMS
+                </div>
+                <button type="submit" class="btn-submit">Phân công</button>
+            </form>
+        </div>
+
+        <div class="assignment-list">
+            <h2>Danh sách phân công</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Giảng viên</th>
+                        <th>Lớp học</th>
+                        <th>Lịch dạy</th>
+                        <th>Thông báo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nguyễn Văn A</td>
+                        <td>Tiếng Anh cơ bản</td>
+                        <td>2025-04-15 09:00</td>
+                        <td>Đã gửi</td>
+                    </tr>
+                    <tr>
+                        <td>Trần Thị B</td>
+                        <td>Luyện thi IELTS</td>
+                        <td>2025-04-16 14:00</td>
+                        <td>Chưa gửi</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

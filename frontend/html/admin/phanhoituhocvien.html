@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phản hồi từ sinh viên</title>
+    <link rel="stylesheet" href="../../css/phanhoituhocvien.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Phản hồi từ sinh viên</h1>
+            <p>Góp ý của bạn giúp chúng tôi cải thiện chất lượng giảng dạy và khóa học.</p>
+        </header>
+
+        <!-- Feedback Form -->
+        <section class="feedback-form">
+            <h2>Biểu mẫu phản hồi</h2>
+            <form id="feedbackForm">
+                <label for="studentName">Tên sinh viên:</label>
+                <input type="text" id="studentName" name="studentName" placeholder="Nhập tên của bạn" required>
+
+                <label for="courseName">Khóa học:</label>
+                <input type="text" id="courseName" name="courseName" placeholder="Tên khóa học" required>
+
+                <label for="instructorName">Giảng viên:</label>
+                <input type="text" id="instructorName" name="instructorName" placeholder="Tên giảng viên" required>
+
+                <label for="rating">Đánh giá khóa học:</label>
+                <select id="rating" name="rating" required>
+                    <option value="" disabled selected>Chọn đánh giá</option>
+                    <option value="5">5 - Xuất sắc</option>
+                    <option value="4">4 - Tốt</option>
+                    <option value="3">3 - Trung bình</option>
+                    <option value="2">2 - Kém</option>
+                    <option value="1">1 - Rất kém</option>
+                </select>
+
+                <label for="comments">Phản hồi chi tiết:</label>
+                <textarea id="comments" name="comments" rows="4" placeholder="Nhập ý kiến của bạn"></textarea>
+
+                <button type="submit">Gửi phản hồi</button>
+            </form>
+        </section>
+
+        <!-- Report Section -->
+        <section class="feedback-report">
+            <h2>Báo cáo tổng hợp</h2>
+            <div id="reportContent">
+                <p>Không có phản hồi nào được ghi nhận.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Trung tâm Ngoại ngữ - Phản hồi từ sinh viên</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('studentName').value;
+            const course = document.getElementById('courseName').value;
+            const instructor = document.getElementById('instructorName').value;
+            const rating = document.getElementById('rating').value;
+            const comments = document.getElementById('comments').value;
+
+            const reportContent = document.getElementById('reportContent');
+            reportContent.innerHTML = `
+                <h3>Phản hồi mới</h3>
+                <p><strong>Tên sinh viên:</strong> ${name}</p>
+                <p><strong>Khóa học:</strong> ${course}</p>
+                <p><strong>Giảng viên:</strong> ${instructor}</p>
+                <p><strong>Đánh giá:</strong> ${rating} sao</p>
+                <p><strong>Phản hồi chi tiết:</strong> ${comments}</p>
+                <hr>
+            `;
+            this.reset();
+        });
+    </script>
+</body>
+</html>

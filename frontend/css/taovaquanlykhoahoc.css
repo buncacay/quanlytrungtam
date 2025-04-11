@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f9f9f9;
+}
+
+.course-management {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+    color: #007bff;
+}
+
+.form-section, .course-list-section {
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.course-list {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.course-list th, .course-list td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.course-list th {
+    background-color: #007bff;
+    color: white;
+}
+
+.edit, .delete {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.delete {
+    background-color: #dc3545;
+}
+
+.edit:hover {
+    background-color: #218838;
+}
+
+.delete:hover {
+    background-color: #c82333;
+}

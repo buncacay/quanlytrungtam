@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.finance-report-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    color: #2c3e50;
+}
+
+.summary-section, .chart-section, .details-section {
+    margin-bottom: 30px;
+}
+
+.summary-cards {
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+}
+
+.card {
+    background: #3498db;
+    color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    background: #2980b9;
+}
+
+.chart-section canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table thead {
+    background: #3498db;
+    color: #fff;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table tbody tr:nth-child(odd) {
+    background: #f9f9f9;
+}
+
+table tbody tr:nth-child(even) {
+    background: #fff;
+}

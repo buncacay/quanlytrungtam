@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lưu trữ Tài liệu tham khảo</title>
+    <link rel="stylesheet" href="../../css/tailieuthamkhao.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Thư viện tài liệu tham khảo</h1>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm tài liệu, sách hoặc bài báo...">
+                <button onclick="searchMaterials()">Tìm kiếm</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="materials-container">
+            <!-- Material Card -->
+            <div class="material-card">
+                <img src="nguphap.jpg" alt="Tài liệu 1">
+                <h3>Sách: Ngữ pháp Tiếng Anh</h3>
+                <p>Người viết: Nguyễn Văn A</p>
+                <p>Thể loại: Sách học thuật</p>
+                <div class="buttons">
+                    <button onclick="viewMaterial('Ngữ pháp Tiếng Anh')">Xem</button>
+                    <button onclick="downloadMaterial('Ngữ pháp Tiếng Anh')">Tải xuống</button>
+                </div>
+            </div>
+
+            <div class="material-card">
+                <img src="baibao.jpg" alt="Tài liệu 2">
+                <h3>Bài báo: Phương pháp học Tiếng Anh hiện đại</h3>
+                <p>Tác giả: Trần Thị B</p>
+                <p>Thể loại: Bài báo khoa học</p>
+                <div class="buttons">
+                    <button onclick="viewMaterial('Phương pháp học Tiếng Anh hiện đại')">Xem</button>
+                    <button onclick="downloadMaterial('Phương pháp học Tiếng Anh hiện đại')">Tải xuống</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Trung tâm Ngoại ngữ - Lưu trữ tài liệu tham khảo</p>
+        </footer>
+    </div>
+
+    <script>
+        function searchMaterials() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const materials = document.querySelectorAll('.material-card');
+
+            materials.forEach(material => {
+                const title = material.querySelector('h3').innerText.toLowerCase();
+                if (title.includes(input)) {
+                    material.style.display = '';
+                } else {
+                    material.style.display = 'none';
+                }
+            });
+        }
+
+        function viewMaterial(title) {
+            alert(`Đang mở tài liệu: ${title}`);
+        }
+
+        function downloadMaterial(title) {
+            alert(`Đang tải xuống tài liệu: ${title}`);
+        }
+    </script>
+</body>
+</html>

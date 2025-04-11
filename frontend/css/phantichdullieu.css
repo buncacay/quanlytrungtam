@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #007bff;
+    color: white;
+}
+
+.chart-section {
+    margin: 20px 0;
+    text-align: center;
+}
+
+#chart-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+table th {
+    background-color: #007bff;
+    color: white;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    color: #333;
+}

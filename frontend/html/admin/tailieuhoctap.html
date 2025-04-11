@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học liệu Trung tâm Ngoại ngữ</title>
+    <link rel="stylesheet" href="../../css/tailieuhoctap.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Học liệu Trung tâm Ngoại ngữ</h1>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm khóa học...">
+                <button onclick="searchCourses()">Tìm kiếm</button>
+            </div>
+        </header>
+
+        <!-- Course Section -->
+        <div class="courses-container">
+            <!-- Course Card -->
+            <div class="course-card">
+                <h3>Khóa học: Tiếng Anh Giao Tiếp</h3>
+                <p><strong>Tài liệu:</strong></p>
+                <ul>
+                    <li>
+                        <img src="speaking.jpeg" alt="Speaking Skills">
+                        <span>Speaking Skills</span>
+                        <button onclick="viewDocument('Speaking Skills')">Xem</button>
+                        <button onclick="downloadDocument('Speaking Skills')">Tải xuống</button>
+                    </li>
+                    <li>
+                        <img src="listening.jpg" alt="Listening Skills">
+                        <span>Listening Skills</span>
+                        <button onclick="viewDocument('Listening Skills')">Xem</button>
+                        <button onclick="downloadDocument('Listening Skills')">Tải xuống</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="course-card">
+                <h3>Khóa học: Luyện Thi TOEIC</h3>
+                <p><strong>Tài liệu:</strong></p>
+                <ul>
+                    <li>
+                        <img src="grammar.jpg" alt="Grammar for TOEIC">
+                        <span>Grammar for TOEIC</span>
+                        <button onclick="viewDocument('Grammar for TOEIC')">Xem</button>
+                        <button onclick="downloadDocument('Grammar for TOEIC')">Tải xuống</button>
+                    </li>
+                    <li>
+                        <img src="test.jpg" alt="Practice Tests">
+                        <span>Practice Tests</span>
+                        <button onclick="viewDocument('Practice Tests')">Xem</button>
+                        <button onclick="downloadDocument('Practice Tests')">Tải xuống</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Trung tâm Ngoại ngữ - Học liệu khóa học</p>
+        </footer>
+    </div>
+
+    <script>
+        function searchCourses() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const courses = document.querySelectorAll('.course-card');
+
+            courses.forEach(course => {
+                const courseTitle = course.querySelector('h3').innerText.toLowerCase();
+                if (courseTitle.includes(input)) {
+                    course.style.display = '';
+                } else {
+                    course.style.display = 'none';
+                }
+            });
+        }
+
+        function viewDocument(docName) {
+            alert(`Đang mở tài liệu: ${docName}`);
+        }
+
+        function downloadDocument(docName) {
+            alert(`Đang tải xuống tài liệu: ${docName}`);
+        }
+    </script>
+</body>
+</html>

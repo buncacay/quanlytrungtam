@@ -1,0 +1,91 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f8f9fa;
+}
+
+h2 {
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.progress-tracking {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-section, .details-section, .recommendation-section {
+    margin-bottom: 20px;
+}
+
+.progress-section h3, 
+.details-section h3, 
+.recommendation-section h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background: #e9ecef;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 20px;
+}
+
+.progress-bar {
+    background: #28a745;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    height: 20px;
+    border-radius: 20px;
+}
+
+.details-section ul, .recommendation-section ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.details-section li, .recommendation-section li {
+    margin: 5px 0;
+    padding: 8px;
+    background: #f8f9fa;
+    border-left: 4px solid #007bff;
+}
+
+.details-section li strong {
+    color: #333;
+}
+
+.recommendation-section li {
+    border-left: 4px solid #ffc107;
+}
+.back-button {
+    display: inline-block;
+    background-color: #007BFF; /* Màu xanh dương */
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.back-button:hover {
+    background-color: #0056b3; /* Màu xanh dương đậm hơn khi hover */
+    transform: scale(1.05); /* Hiệu ứng phóng to nhẹ */
+}
+
+.back-button:active {
+    background-color: #003f7f; /* Màu tối hơn khi nhấn */
+    transform: scale(0.95); /* Hiệu ứng thu nhỏ khi nhấn */
+}

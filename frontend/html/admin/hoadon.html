@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý hóa đơn</title>
+    <link rel="stylesheet" href="../../css/hoadon.css">
+</head>
+<body>
+    <div class="invoice-container">
+        <h1>Quản lý hóa đơn</h1>
+
+        <!-- Form tạo hóa đơn -->
+        <div class="invoice-form">
+            <h2>Tạo hóa đơn mới</h2>
+            <form id="invoiceForm">
+                <div class="form-group">
+                    <label for="studentName">Tên học viên:</label>
+                    <input type="text" id="studentName" name="studentName" placeholder="Nhập tên học viên" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseName">Tên khóa học:</label>
+                    <input type="text" id="courseName" name="courseName" placeholder="Nhập tên khóa học" required>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Số tiền (VND):</label>
+                    <input type="number" id="amount" name="amount" placeholder="Nhập số tiền thanh toán" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Ngày thanh toán:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <button type="submit" class="btn-submit">Tạo hóa đơn</button>
+            </form>
+        </div>
+
+        <!-- Danh sách hóa đơn -->
+        <div class="invoice-list">
+            <h2>Lịch sử thanh toán</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã hóa đơn</th>
+                        <th>Tên học viên</th>
+                        <th>Khóa học</th>
+                        <th>Số tiền</th>
+                        <th>Ngày thanh toán</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#001</td>
+                        <td>Nguyễn Văn A</td>
+                        <td>Tiếng Anh cơ bản</td>
+                        <td>5,000,000 VND</td>
+                        <td>2025-04-10</td>
+                        <td>
+                            <button class="btn-view">Xem</button>
+                            <button class="btn-delete">Xóa</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#002</td>
+                        <td>Trần Thị B</td>
+                        <td>Luyện thi IELTS</td>
+                        <td>8,000,000 VND</td>
+                        <td>2025-04-09</td>
+                        <td>
+                            <button class="btn-view">Xem</button>
+                            <button class="btn-delete">Xóa</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký Khóa học</title>
+    <link rel="stylesheet" href="../../css/dangkykhoahoc.css">
+</head>
+<body>
+    <div class="course-registration">
+        <h1>Đăng ký Khóa học</h1>
+        
+        <div class="course-list">
+            <!-- Mẫu khóa học -->
+            <div class="course-card">
+                <img src="anhta.webp" alt="Hình ảnh khóa học">
+                <div class="course-details">
+                    <h2>Tiếng Anh Giao Tiếp Cơ Bản</h2>
+                    <p><strong>Thời hạn học:</strong> 3 tháng</p>
+                    <p><strong>Bắt đầu từ:</strong> 15/04/2025</p>
+                    <p><strong>Lịch học:</strong> Thứ 2, Thứ 4, Thứ 6 - 18:00 - 20:00</p>
+                    <p><strong>Giảng viên:</strong> Nguyễn Văn A</p>
+                </div>
+                <button class="register-button">Đăng ký ngay</button>
+            </div>
+
+            <div class="course-card">
+                <img src="anhel.webp" alt="Hình ảnh khóa học">
+                <div class="course-details">
+                    <h2>Ngữ pháp Tiếng Anh Nâng Cao</h2>
+                    <p><strong>Thời hạn học:</strong> 2 tháng</p>
+                    <p><strong>Bắt đầu từ:</strong> 20/04/2025</p>
+                    <p><strong>Lịch học:</strong> Thứ 3, Thứ 5 - 19:00 - 21:00</p>
+                    <p><strong>Giảng viên:</strong> Trần Thị B</p>
+                </div>
+                <button class="register-button">Đăng ký ngay</button>
+            </div>
+        </div>
+
+        <!-- Modal thanh toán -->
+        <div id="payment-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Thanh toán Khóa học</h2>
+                <p>Bạn có chắc chắn muốn đăng ký khóa học <strong id="course-name"></strong> không?</p>
+                <button class="confirm-button">Xác nhận & Thanh toán</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal logic
+        const modal = document.getElementById("payment-modal");
+        const closeModal = document.querySelector(".close-button");
+        const courseName = document.getElementById("course-name");
+
+        document.querySelectorAll(".register-button").forEach(button => {
+            button.addEventListener("click", function () {
+                const courseTitle = this.previousElementSibling.querySelector("h2").textContent;
+                courseName.textContent = courseTitle;
+                modal.style.display = "block";
+            });
+        });
+
+        closeModal.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
+</body>
+</html>

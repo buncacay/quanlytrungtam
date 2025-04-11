@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Lịch học</title>
+    <link rel="stylesheet" href="../../css/lichhoc.css">
+</head>
+<body>
+    <div class="schedule-management">
+        <h2>Quản lý Lịch học</h2>
+        
+        <div class="filter-section">
+            <label for="view-mode">Chọn chế độ hiển thị:</label>
+            <select id="view-mode">
+                <option value="week">Theo tuần</option>
+                <option value="month">Theo tháng</option>
+                <option value="semester">Theo học kỳ</option>
+            </select>
+            <button onclick="filterSchedule()">Xem lịch</button>
+        </div>
+
+        <div class="schedule-table">
+            <h3>Lịch học hiện tại</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ngày</th>
+                        <th>Thời gian</th>
+                        <th>Môn học</th>
+                        <th>Giảng viên</th>
+                        <th>Phòng học</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>12/04/2025</td>
+                        <td>08:00 - 10:00</td>
+                        <td>Ngữ pháp nâng cao</td>
+                        <td>Trần Văn A</td>
+                        <td>P201</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>13/04/2025</td>
+                        <td>14:00 - 16:00</td>
+                        <td>Giao tiếp tiếng Anh</td>
+                        <td>Nguyễn Thị B</td>
+                        <td>P202</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="notification-section">
+            <h3>Thông báo</h3>
+            <textarea id="notification-text" placeholder="Nội dung thông báo"></textarea>
+            <button onclick="sendNotification()">Gửi thông báo</button>
+        </div>
+    </div>
+
+    <script>
+        function filterSchedule() {
+            alert("Chức năng lọc lịch học đang được thực hiện!");
+        }
+
+        function sendNotification() {
+            const text = document.getElementById("notification-text").value;
+            if (text.trim() === "") {
+                alert("Vui lòng nhập nội dung thông báo.");
+                return;
+            }
+            alert(`Thông báo đã được gửi: ${text}`);
+        }
+    </script>
+</body>
+</html>

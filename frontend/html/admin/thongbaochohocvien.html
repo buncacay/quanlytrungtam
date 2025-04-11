@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông báo trung tâm</title>
+    <link rel="stylesheet" href="../../css/thongbaochohocvien.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Thông báo từ trung tâm</h1>
+            <p>Hãy luôn cập nhật những thông tin mới nhất từ trung tâm ngoại ngữ.</p>
+        </header>
+
+        <!-- Notifications Section -->
+        <div class="notifications-container">
+            <!-- Notification Card -->
+            <div class="notification-card">
+                <h3>Lịch học mới</h3>
+                <p>Lớp: Tiếng Anh Giao tiếp A1</p>
+                <p>Ngày: 15/04/2025</p>
+                <p>Thời gian: 18:00 - 20:00</p>
+                <div class="buttons">
+                    <button onclick="sendEmail()">Gửi Email</button>
+                    <button onclick="notifyApp()">Thông báo qua ứng dụng</button>
+                </div>
+            </div>
+
+            <div class="notification-card">
+                <h3>Thay đổi lịch học</h3>
+                <p>Lớp: IELTS Cấp tốc</p>
+                <p>Ngày cũ: 16/04/2025</p>
+                <p>Ngày mới: 18/04/2025</p>
+                <div class="buttons">
+                    <button onclick="sendEmail()">Gửi Email</button>
+                    <button onclick="notifyApp()">Thông báo qua ứng dụng</button>
+                </div>
+            </div>
+
+            <div class="notification-card">
+                <h3>Sự kiện: Workshop luyện nói tiếng Anh</h3>
+                <p>Ngày: 20/04/2025</p>
+                <p>Thời gian: 9:00 - 12:00</p>
+                <div class="buttons">
+                    <button onclick="sendEmail()">Gửi Email</button>
+                    <button onclick="notifyApp()">Thông báo qua ứng dụng</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Trung tâm Ngoại ngữ - Thông báo cho học viên</p>
+        </footer>
+    </div>
+
+    <script>
+        function sendEmail() {
+            alert("Gửi thông báo qua email.");
+        }
+
+        function notifyApp() {
+            alert("Gửi thông báo qua ứng dụng di động.");
+        }
+    </script>
+</body>
+</html>

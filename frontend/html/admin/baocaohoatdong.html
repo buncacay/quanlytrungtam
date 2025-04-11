@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo hoạt động</title>
+    <link rel="stylesheet" href="../../css/baocaohoatdong.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Báo cáo hoạt động trung tâm ngoại ngữ</h1>
+            <p>Tổng hợp thông tin hoạt động và tài chính.</p>
+        </header>
+
+        <!-- Overview Section -->
+        <section class="overview-section">
+            <h2>Tổng quan hoạt động</h2>
+            <div class="overview-cards">
+                <div class="card">
+                    <h3>Học viên</h3>
+                    <p>Số lượng: <strong>200</strong></p>
+                </div>
+                <div class="card">
+                    <h3>Khóa học</h3>
+                    <p>Số lượng: <strong>15</strong></p>
+                </div>
+                <div class="card">
+                    <h3>Giảng viên</h3>
+                    <p>Số lượng: <strong>10</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Financial Report Section -->
+        <section class="financial-report">
+            <h2>Báo cáo tài chính</h2>
+            <canvas id="financialChart"></canvas>
+            <div class="financial-summary">
+                <p><strong>Doanh thu:</strong> 500,000,000 VND</p>
+                <p><strong>Chi phí:</strong> 300,000,000 VND</p>
+                <p><strong>Lợi nhuận:</strong> 200,000,000 VND</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Trung tâm Ngoại ngữ - Báo cáo hoạt động</p>
+        </footer>
+    </div>
+
+    <script>
+        // Dữ liệu cho biểu đồ tài chính
+        const financialData = {
+            labels: ['Doanh thu', 'Chi phí', 'Lợi nhuận'],
+            datasets: [{
+                data: [500000000, 300000000, 200000000],
+                backgroundColor: ['#4CAF50', '#FF5722', '#2196F3'],
+            }]
+        };
+
+        // Cấu hình biểu đồ tài chính
+        const config = {
+            type: 'doughnut',
+            data: financialData,
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Tình trạng tài chính'
+                    }
+                }
+            }
+        };
+
+        // Khởi tạo biểu đồ
+        window.onload = () => {
+            const ctx = document.getElementById('financialChart').getContext('2d');
+            new Chart(ctx, config);
+        };
+    </script>
+</body>
+</html>
