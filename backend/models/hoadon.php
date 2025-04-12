@@ -1,5 +1,5 @@
 <?php
-class hoadon {
+class Hoadon {
     private $conn;
     private $table = "hoadon";
 
@@ -17,31 +17,67 @@ class hoadon {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " (thoigianlap, tenhoadon, nguoilap, soluongmua, dongia, giamgia, thanhtien) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO " . $this->table . " 
+                  (thoigianlap, tenhoadon, nguoilap, soluongmua, dongia, giamgia, thanhtien) 
+                  VALUES (:thoigianlap, :tenhoadon, :nguoilap, :soluongmua, :dongia, :giamgia, :thanhtien)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssiiddd", $this->tenhoadon, $this->nguoilap, $this->soluongmua, $this->dongia, $this->giamgia, $this->thanhtien, $this->thoigianlap);
-        return $stmt->execute();
+
+        return $stmt->execute([
+            ':thoigianlap' => $this->thoigianlap,
+            ':tenhoadon' => $this->tenhoadon,
+            ':nguoilap' => $this->nguoilap,
+            ':soluongmua' => $this->soluongmua,
+            ':dongia' => $this->dongia,
+            ':giamgia' => $this->giamgia,
+            ':thanhtien' => $this->thanhtien
+        ]);
     }
 
     public function read() {
         $query = "SELECT * FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function update() {
-        $query = "UPDATE " . $this->table . " SET tenhoadon = ?, nguoilap = ?, soluongmua = ?, dongia = ?, giamgia = ?, thanhtien = ?, thoigianlap = ? WHERE idhoadon = ?";
+        $query = "UPDATE " . $this->table . " 
+                  SET tenhoadon = :tenhoadon, 
+                      nguoilap = :nguoilap, 
+                      soluongmua = :soluongmua, 
+                      dongia = :dongia, 
+                      giamgia = :giamgia, 
+                      thanhtien = :thanhtien, 
+                      thoigianlap = :thoigianlap 
+                  WHERE idhoadon = :idhoadon";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("siidddii",$this->thoigianlap, $this->tenhoadon, $this->nguoilap, $this->soluongmua, $this->dongia, $this->giamgia, $this->thanhtien, $this->idhoadon);
-        return $stmt->execute();
+
+        return $stmt->execute([
+            ':tenhoadon' => $this->tenhoadon,
+            ':nguoilap' => $this->nguoilap,
+            ':soluongmua' => $this->soluongmua,
+            ':dongia' => $this->dongia,
+            ':giamgia' => $this->giamgia,
+            ':thanhtien' => $this->thanhtien,
+            ':thoigianlap' => $this->thoigianlap,
+            ':idhoadon' => $this->idhoadon
+        ]);
     }
 
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE idhoadon = ?";
+        $query = "DELETE FROM " . $this->table . " WHERE idhoadon = :idhoadon";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $this->idhoadon);
-        return $stmt->execute();
+        return $stmt->execute([':idhoadon' => $this->idhoadon]);
+    }
+
+    public function showById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE idhoadon = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([':id' => $id]);
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result : null;
     }
 }
 ?>

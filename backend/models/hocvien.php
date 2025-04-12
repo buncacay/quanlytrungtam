@@ -44,5 +44,25 @@ class hocvien {
 
         return $stmt->execute();
     }
+
+    public function showById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE idhocvien = ?";
+        $stmt = $this->conn->prepare($query);
+    
+        if (!$stmt) {
+            echo json_encode(["message" => "Query prepare failed", "error" => $this->conn->error]);
+            return null;
+        }
+    
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+    
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        } else {
+            return null;
+        }
+    }
 }
 ?>

@@ -1,23 +1,24 @@
 <?php
 class Database {
-    private $servername = "localhost"; 
-    private $username = "root"; 
-    private $password = ""; 
-    private $dbname = "language_center"; 
+    private $servername = "localhost";
+    private $username = "root";
+    private $password = "";
+    private $dbname = "language_center";
+    private $charset = "utf8mb4";
     public $conn;
 
     public function getConnection() {
-        // Create connection
-        $this->conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
-
-        // Check connection
-        if ($this->conn->connect_error) {
-            die('Connection failed: ' . $this->conn->connect_error);
+        try {
+            $dsn = "mysql:host={$this->servername};dbname={$this->dbname};charset={$this->charset}";
+            $this->conn = new PDO($dsn, $this->username, $this->password);
+            
+           
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            return $this->conn;
+        } catch (PDOException $e) {
+            die("Connection failed: " . $e->getMessage());
         }
-        else {
-             echo 'succesfucc';
-        }
-        return $this->conn;
     }
 }
 ?>

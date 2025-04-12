@@ -15,31 +15,57 @@ class ChiTietNhanVien {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " (idnhanvien, idkhoahoc, tinhtranggiangday, sogioday, dongia, thanhtien) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO " . $this->table . " 
+                  (idnhanvien, idkhoahoc, tinhtranggiangday, sogioday, dongia, thanhtien) 
+                  VALUES (:idnhanvien, :idkhoahoc, :tinhtranggiangday, :sogioday, :dongia, :thanhtien)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("iisddd", $this->idnhanvien, $this->idkhoahoc, $this->tinhtranggiangday, $this->sogioday, $this->dongia, $this->thanhtien);
-        return $stmt->execute();
+
+        return $stmt->execute([
+            ':idnhanvien' => $this->idnhanvien,
+            ':idkhoahoc' => $this->idkhoahoc,
+            ':tinhtranggiangday' => $this->tinhtranggiangday,
+            ':sogioday' => $this->sogioday,
+            ':dongia' => $this->dongia,
+            ':thanhtien' => $this->thanhtien
+        ]);
     }
 
     public function read() {
         $query = "SELECT * FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function update() {
-        $query = "UPDATE " . $this->table . " SET tinhtranggiangday = ?, sogioday = ?, dongia = ?, thanhtien = ? WHERE idnhanvien = ? AND idkhoahoc = ?";
+        $query = "UPDATE " . $this->table . " 
+                  SET tinhtranggiangday = :tinhtranggiangday, 
+                      sogioday = :sogioday, 
+                      dongia = :dongia, 
+                      thanhtien = :thanhtien 
+                  WHERE idnhanvien = :idnhanvien AND idkhoahoc = :idkhoahoc";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sdddii", $this->tinhtranggiangday, $this->sogioday, $this->dongia, $this->thanhtien, $this->idnhanvien, $this->idkhoahoc);
-        return $stmt->execute();
+
+        return $stmt->execute([
+            ':tinhtranggiangday' => $this->tinhtranggiangday,
+            ':sogioday' => $this->sogioday,
+            ':dongia' => $this->dongia,
+            ':thanhtien' => $this->thanhtien,
+            ':idnhanvien' => $this->idnhanvien,
+            ':idkhoahoc' => $this->idkhoahoc
+        ]);
     }
 
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE idnhanvien = ? AND idkhoahoc = ?";
+        $query = "DELETE FROM " . $this->table . " 
+                  WHERE idnhanvien = :idnhanvien AND idkhoahoc = :idkhoahoc";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ii", $this->idnhanvien, $this->idkhoahoc);
-        return $stmt->execute();
+
+        return $stmt->execute([
+            ':idnhanvien' => $this->idnhanvien,
+            ':idkhoahoc' => $this->idkhoahoc
+        ]);
     }
 }
 ?>

@@ -15,31 +15,64 @@ class ChiTietHocVien {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " (idhocvien, idkhoahoc, idhoadon, tinhtranghocphi, ketquahoctap, ghichu) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO " . $this->table . " 
+                  (idhocvien, idkhoahoc, idhoadon, tinhtranghocphi, ketquahoctap, ghichu) 
+                  VALUES (:idhocvien, :idkhoahoc, :idhoadon, :tinhtranghocphi, :ketquahoctap, :ghichu)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("iiissss", $this->idhocvien, $this->idkhoahoc, $this->idhoadon, $this->tinhtranghocphi, $this->ketquahoctap, $this->ghichu);
-        return $stmt->execute();
+
+        return $stmt->execute([
+            ':idhocvien' => $this->idhocvien,
+            ':idkhoahoc' => $this->idkhoahoc,
+            ':idhoadon' => $this->idhoadon,
+            ':tinhtranghocphi' => $this->tinhtranghocphi,
+            ':ketquahoctap' => $this->ketquahoctap,
+            ':ghichu' => $this->ghichu
+        ]);
     }
 
     public function read() {
         $query = "SELECT * FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function update() {
-        $query = "UPDATE " . $this->table . " SET tinhtranghocphi = ?, ketquahoctap = ?, ghichu = ? WHERE idhocvien = ? AND idkhoahoc = ? AND idhoadon = ?";
+        $query = "UPDATE " . $this->table . " 
+                  SET tinhtranghocphi = :tinhtranghocphi, ketquahoctap = :ketquahoctap, ghichu = :ghichu 
+                  WHERE idhocvien = :idhocvien AND idkhoahoc = :idkhoahoc AND idhoadon = :idhoadon";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssiii", $this->tinhtranghocphi, $this->ketquahoctap, $this->ghichu, $this->idhocvien, $this->idkhoahoc, $this->idhoadon);
-        return $stmt->execute();
+
+        return $stmt->execute([
+            ':tinhtranghocphi' => $this->tinhtranghocphi,
+            ':ketquahoctap' => $this->ketquahoctap,
+            ':ghichu' => $this->ghichu,
+            ':idhocvien' => $this->idhocvien,
+            ':idkhoahoc' => $this->idkhoahoc,
+            ':idhoadon' => $this->idhoadon
+        ]);
     }
 
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE idhocvien = ? AND idkhoahoc = ? AND idhoadon = ?";
+        $query = "DELETE FROM " . $this->table . " 
+                  WHERE idhocvien = :idhocvien AND idkhoahoc = :idkhoahoc AND idhoadon = :idhoadon";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("iii", $this->idhocvien, $this->idkhoahoc, $this->idhoadon);
-        return $stmt->execute();
+
+        return $stmt->execute([
+            ':idhocvien' => $this->idhocvien,
+            ':idkhoahoc' => $this->idkhoahoc,
+            ':idhoadon' => $this->idhoadon
+        ]);
+    }
+
+    public function getById($idhocvien){
+        $query = "SELECT * FROM " . $this->table . " WHERE idhocvien = :idhocvien";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':idhocvien', $idhocvien, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results ?: null;
     }
 }
 ?>

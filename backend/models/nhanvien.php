@@ -20,9 +20,22 @@ class nhanvien {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " (tennhanvien, trinhdo, chungchi, sdt, diachi, tienthuong, tienphat, chucvu, tonggioday, ghichu) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO " . $this->table . " (tennhanvien, trinhdo, chungchi, sdt, diachi, tienthuong, tienphat, chucvu, tonggioday, ghichu) 
+                  VALUES (:tennhanvien, :trinhdo, :chungchi, :sdt, :diachi, :tienthuong, :tienphat, :chucvu, :tonggioday, :ghichu)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sssssddsds", $this->tennhanvien, $this->trinhdo, $this->chungchi, $this->sdt, $this->diachi, $this->tienthuong, $this->tienphat, $this->chucvu, $this->tonggioday, $this->ghichu);
+
+        // Bind parameters
+        $stmt->bindParam(':tennhanvien', $this->tennhanvien);
+        $stmt->bindParam(':trinhdo', $this->trinhdo);
+        $stmt->bindParam(':chungchi', $this->chungchi);
+        $stmt->bindParam(':sdt', $this->sdt);
+        $stmt->bindParam(':diachi', $this->diachi);
+        $stmt->bindParam(':tienthuong', $this->tienthuong, PDO::PARAM_INT);
+        $stmt->bindParam(':tienphat', $this->tienphat, PDO::PARAM_INT);
+        $stmt->bindParam(':chucvu', $this->chucvu);
+        $stmt->bindParam(':tonggioday', $this->tonggioday, PDO::PARAM_INT);
+        $stmt->bindParam(':ghichu', $this->ghichu);
+
         return $stmt->execute();
     }
 
@@ -30,20 +43,49 @@ class nhanvien {
         $query = "SELECT * FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        
+        // Fetch all rows
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function update() {
-        $query = "UPDATE " . $this->table . " SET tennhanvien = ?, trinhdo = ?, chungchi = ?, sdt = ?, diachi = ?, tienthuong = ?, tienphat = ?, chucvu = ?, tonggioday = ?, ghichu = ? WHERE idnhanvien = ?";
+        $query = "UPDATE " . $this->table . " SET 
+                  tennhanvien = :tennhanvien, 
+                  trinhdo = :trinhdo, 
+                  chungchi = :chungchi, 
+                  sdt = :sdt, 
+                  diachi = :diachi, 
+                  tienthuong = :tienthuong, 
+                  tienphat = :tienphat, 
+                  chucvu = :chucvu, 
+                  tonggioday = :tonggioday, 
+                  ghichu = :ghichu 
+                  WHERE idnhanvien = :idnhanvien";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sssssddsdss", $this->tennhanvien, $this->trinhdo, $this->chungchi, $this->sdt, $this->diachi, $this->tienthuong, $this->tienphat, $this->chucvu, $this->tonggioday, $this->ghichu, $this->idnhanvien);
+
+        // Bind parameters
+        $stmt->bindParam(':tennhanvien', $this->tennhanvien);
+        $stmt->bindParam(':trinhdo', $this->trinhdo);
+        $stmt->bindParam(':chungchi', $this->chungchi);
+        $stmt->bindParam(':sdt', $this->sdt);
+        $stmt->bindParam(':diachi', $this->diachi);
+        $stmt->bindParam(':tienthuong', $this->tienthuong, PDO::PARAM_INT);
+        $stmt->bindParam(':tienphat', $this->tienphat, PDO::PARAM_INT);
+        $stmt->bindParam(':chucvu', $this->chucvu);
+        $stmt->bindParam(':tonggioday', $this->tonggioday, PDO::PARAM_INT);
+        $stmt->bindParam(':ghichu', $this->ghichu);
+        $stmt->bindParam(':idnhanvien', $this->idnhanvien, PDO::PARAM_INT);
+
         return $stmt->execute();
     }
 
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE idnhanvien = ?";
+        $query = "DELETE FROM " . $this->table . " WHERE idnhanvien = :idnhanvien";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $this->idnhanvien);
+
+        // Bind parameters
+        $stmt->bindParam(':idnhanvien', $this->idnhanvien, PDO::PARAM_INT);
+
         return $stmt->execute();
     }
 }
