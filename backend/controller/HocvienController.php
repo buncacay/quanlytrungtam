@@ -1,11 +1,17 @@
 <?php
-header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Max-Age: 86400"); // Giữ preflight trong cache 1 ngày
+header("Content-Type: application/json; charset=UTF-8");
 
 require_once '../config/database.php';
 require_once '../models/hocvien.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 $db = new Database();
 $conn = $db->getConnection();
@@ -26,8 +32,19 @@ switch ($method) {
                 echo json_encode(["message" => "Record not found."]);
             }
         } else {
-            $result = $hocvien->read();
-            echo json_encode($result);
+            $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+            $offset = ($page - 1) * $limit;
+
+            $result = $hocvien->read($limit, $offset);
+           
+
+            echo json_encode([
+                "data" => $result,
+                "total" => $total,
+                "page" => $page,
+                "limit" => $limit
+            ]);
         }
         break;
 
@@ -49,19 +66,25 @@ switch ($method) {
         break;
 }
 
-
-
 function createHocVien($hocvien) {
     $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->hoten, $data->ngaysinh, $data->sdt, $data->diachi, $data->sdtph)) {
+    if (isset($data->hoten, $data->ngaysinh, $data->sdt)) {
         $hocvien->hoten = $data->hoten;
         $hocvien->ngaysinh = $data->ngaysinh;
         $hocvien->sdt = $data->sdt;
-        $hocvien->diachi = $data->diachi;
-        $hocvien->sdtph = $data->sdtph;
+        $hocvien->sdtph = !empty($data->sdtph) ? $data->sdtph : null;
+        $hocvien->diachi = !empty($data->diachi) ? $data->diachi : null;
 
         if ($hocvien->create()) {
-            echo json_encode(["message" => "Record created successfully."]);
+            $response = [
+                "idhocvien" => $hocvien->idhocvien,
+                "hoten" => $hocvien->hoten,
+                "ngaysinh" => $hocvien->ngaysinh,
+                "sdt" => $hocvien->sdt,
+                "sdtph" => $hocvien->sdtph,
+                "diachi" => $hocvien->diachi
+            ];
+            echo json_encode($response);
         } else {
             http_response_code(500);
             echo json_encode(["message" => "Unable to create record."]);
@@ -74,13 +97,13 @@ function createHocVien($hocvien) {
 
 function updateHocVien($hocvien) {
     $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->idhocvien, $data->hoten, $data->ngaysinh, $data->sdt, $data->diachi, $data->sdtph)) {
+    if (isset($data->idhocvien, $data->hoten, $data->ngaysinh, $data->sdt)) {
         $hocvien->idhocvien = $data->idhocvien;
         $hocvien->hoten = $data->hoten;
         $hocvien->ngaysinh = $data->ngaysinh;
         $hocvien->sdt = $data->sdt;
-        $hocvien->diachi = $data->diachi;
-        $hocvien->sdtph = $data->sdtph;
+        $hocvien->diachi = isset($data->diachi) ? $data->diachi : null;
+        $hocvien->sdtph = isset($data->sdtph) ? $data->sdtph : null;
 
         if ($hocvien->update()) {
             echo json_encode(["message" => "Record updated successfully."]);

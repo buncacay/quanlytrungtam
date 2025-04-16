@@ -57,9 +57,3 @@ button:hover {
     background-color: #0056b3;
 }
 
-#confirmationMessage {
-    margin-top: 20px;
-    text-align: center;
-    color: green;
-    font-weight: bold;
-}

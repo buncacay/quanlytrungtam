@@ -10,19 +10,21 @@ h2, h3 {
     color: #007bff;
 }
 
-.student-info {
-    background: #ffffff;
+#student-info {
+    background: pink;
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+
 }
 
-.student-info p {
+#student-info p {
     margin: 10px 0;
 }
 
-.student-details {
+#student-hdon, #student-khoc {
     background: #ffffff;
     padding: 20px;
     border-radius: 8px;

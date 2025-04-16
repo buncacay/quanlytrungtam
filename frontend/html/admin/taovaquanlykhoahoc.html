@@ -5,65 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tạo và Quản lý Khóa Học</title>
     <link rel="stylesheet" href="../../css/taovaquanlykhoahoc.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../../css/chinh.css">
 </head>
 <body>
     <div class="course-management">
         <h2>Tạo và Quản lý Khóa Học</h2>
-
+        
+        <div id="header"></div>
+        <div id="sidebar"></div>
         <!-- Form thêm mới khóa học -->
-        <div class="form-section">
-            <h3>Thêm Khóa Học</h3>
-            <form id="add-course-form">
-                <label for="course-name">Tên khóa học:</label>
-                <input type="text" id="course-name" name="course-name" placeholder="Nhập tên khóa học">
+        <div class="cards-container">
+            <div class="form-section">
+                <h3>Thêm Khóa Học</h3>
+                <form id="add-course-form">
+                    <label for="course-name">Tên khóa học:</label>
+                    <input type="text" id="course-name" name="course-name" placeholder="Nhập tên khóa học">
+    
+                    <label for="instructor">Giảng viên:</label>
+                    <select id="instructor" name="instructor">
+                        
+                    </select>
+    
+                    <label for="soluongbuoi">Số lượng buổi:</label>
+                    <input type="text" id="soluongbuoi" name="schedule" placeholder="Nhập số lượng buổi (vd: 12)">
+    
+                    <label for="thoigianhoc">Thời gian học:</label>
+                    <input type="text" id="thoigianhoc" name="materials" placeholder="Nhập thời gian học (vd: 18h - 20h)">
 
-                <label for="instructor">Giảng viên:</label>
-                <select id="instructor" name="instructor">
-                    <option value="">-- Chọn giảng viên --</option>
-                    <option value="1">Nguyễn Văn A</option>
-                    <option value="2">Trần Thị B</option>
-                </select>
+                    <label for="lichhoc">Lịch học</label>
+                    <input type="text" id="lichhoc" name="schedule" placeholder="Nhập lịch học (vd: Thứ 2, 4, 6 )">
 
-                <label for="schedule">Lịch học:</label>
-                <input type="text" id="schedule" name="schedule" placeholder="Nhập lịch học (vd: Thứ 2, 4, 6 - 18h)">
-
-                <label for="materials">Tài liệu:</label>
-                <input type="text" id="materials" name="materials" placeholder="Nhập tài liệu liên quan">
-
-                <button type="submit">Thêm khóa học</button>
-            </form>
+    
+                    <button type="submit" onclick="them(event)">Thêm khóa học</button>
+                </form>
+            </div>
+    
+            <!-- Danh sách khóa học -->
+            <div id="course-list-section">
+           
+                </table>
+            </div>
         </div>
-
-        <!-- Danh sách khóa học -->
-        <div class="course-list-section">
-            <h3>Danh Sách Khóa Học</h3>
-            <table class="course-list">
-                <thead>
-                    <tr>
-                        <th>Tên Khóa Học</th>
-                        <th>Giảng Viên</th>
-                        <th>Lịch Học</th>
-                        <th>Tài Liệu</th>
-                        <th>Hành Động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Tiếng Anh Cơ Bản</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Thứ 2, 4, 6 - 18h</td>
-                        <td>Sách "English for Beginners"</td>
-                        <td>
-                            <button class="edit">Chỉnh sửa</button>
-                            <button class="delete">Xóa</button>
-                        </td>
-                    </tr>
-                    <!-- Các khóa học khác sẽ được thêm động -->
-                </tbody>
-            </table>
-        </div>
+      
     </div>
-
-    <script src="chinh.js"></script>
+    <script src="../../js/app.js"></script>
+    <script src="../../fetch/taovaquanlykhoahoc.js"></script>
+    
 </body>
 </html>

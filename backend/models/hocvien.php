@@ -15,54 +15,72 @@ class hocvien {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " (hoten, ngaysinh, sdt, diachi, sdtph) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO " . $this->table . " (hoten, ngaysinh, sdt, diachi, sdtph) 
+                  VALUES (:hoten, :ngaysinh, :sdt, :diachi, :sdtph)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sssss", $this->hoten, $this->ngaysinh, $this->sdt, $this->diachi, $this->sdtph);
-
-        return $stmt->execute();
+    
+        $success = $stmt->execute([
+            ':hoten' => $this->hoten,
+            ':ngaysinh' => $this->ngaysinh,
+            ':sdt' => $this->sdt,
+            ':diachi' => $this->diachi,
+            ':sdtph' => $this->sdtph
+        ]);
+    
+        if ($success) {
+            $this->idhocvien = $this->conn->lastInsertId(); 
+            return true;
+        }
+    
+        return false;
     }
+    
 
-    public function read() {
-        $query = "SELECT * FROM " . $this->table;
+    public function read($limit, $offset) {
+        $query = "SELECT * FROM " . $this->table . " LIMIT :limit OFFSET :offset";
         $stmt = $this->conn->prepare($query);
+    
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    
         $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     public function update() {
-        $query = "UPDATE " . $this->table . " SET hoten = ?, ngaysinh = ?, sdt = ?, diachi = ?, sdtph = ? WHERE idhocvien = ?";
+        $query = "UPDATE " . $this->table . " 
+                  SET hoten = :hoten, ngaysinh = :ngaysinh, sdt = :sdt, diachi = :diachi, sdtph = :sdtph 
+                  WHERE idhocvien = :idhocvien";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sssssi", $this->hoten, $this->ngaysinh, $this->sdt, $this->diachi, $this->sdtph, $this->idhocvien);
-
-        return $stmt->execute();
+        return $stmt->execute([
+            ':hoten' => $this->hoten,
+            ':ngaysinh' => $this->ngaysinh,
+            ':sdt' => $this->sdt,
+            ':diachi' => $this->diachi,
+            ':sdtph' => $this->sdtph,
+            ':idhocvien' => $this->idhocvien
+        ]);
     }
 
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE idhocvien = ?";
+        $query = "DELETE FROM " . $this->table . " WHERE idhocvien = :idhocvien";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $this->idhocvien);
-
-        return $stmt->execute();
+        return $stmt->execute([':idhocvien' => $this->idhocvien]);
     }
 
     public function showById($id) {
-        $query = "SELECT * FROM " . $this->table . " WHERE idhocvien = ?";
+        $query = "SELECT * FROM chitiethocvien c 
+                  INNER JOIN hocvien h ON c.idhocvien = h.idhocvien 
+                  INNER JOIN khoahoc kh ON kh.idkhoahoc = c.idkhoahoc
+                  WHERE c.idhocvien = :id";
+    
         $stmt = $this->conn->prepare($query);
-    
-        if (!$stmt) {
-            echo json_encode(["message" => "Query prepare failed", "error" => $this->conn->error]);
-            return null;
-        }
-    
-        $stmt->bind_param("i", $id);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
     
-        $result = $stmt->get_result();
-        if ($result->num_rows > 0) {
-            return $result->fetch_assoc();
-        } else {
-            return null;
-        }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 }
 ?>

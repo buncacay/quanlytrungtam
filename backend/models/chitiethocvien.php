@@ -15,19 +15,18 @@ class ChiTietHocVien {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " 
-                  (idhocvien, idkhoahoc, idhoadon, tinhtranghocphi, ketquahoctap, ghichu) 
-                  VALUES (:idhocvien, :idkhoahoc, :idhoadon, :tinhtranghocphi, :ketquahoctap, :ghichu)";
+        $query = "INSERT INTO chitiethocvien (idkhoahoc, idhocvien, tinhtranghocphi, ghichu, ketquahoctap)
+                     VALUES (:idkhoahoc, :idhocvien, :tinhtranghocphi, :ghichu, :ketquahoctap)";
+                   
         $stmt = $this->conn->prepare($query);
-
         return $stmt->execute([
-            ':idhocvien' => $this->idhocvien,
-            ':idkhoahoc' => $this->idkhoahoc,
-            ':idhoadon' => $this->idhoadon,
-            ':tinhtranghocphi' => $this->tinhtranghocphi,
-            ':ketquahoctap' => $this->ketquahoctap,
-            ':ghichu' => $this->ghichu
-        ]);
+        ':idkhoahoc' => $this->idkhoahoc,
+        ':idhocvien' => $this->idhocvien,
+        ':tinhtranghocphi' => $this->tinhtranghocphi,  // Đảm bảo trường này có giá trị
+        ':ghichu' => $this->ghichu,
+        ':ketquahoctap' => $this->ketquahoctap
+        ]); 
+
     }
 
     public function read() {
@@ -40,7 +39,7 @@ class ChiTietHocVien {
     public function update() {
         $query = "UPDATE " . $this->table . " 
                   SET tinhtranghocphi = :tinhtranghocphi, ketquahoctap = :ketquahoctap, ghichu = :ghichu 
-                  WHERE idhocvien = :idhocvien AND idkhoahoc = :idkhoahoc AND idhoadon = :idhoadon";
+                  WHERE idhocvien = :idhocvien AND idkhoahoc = :idkhoahoc " ;
         $stmt = $this->conn->prepare($query);
 
         return $stmt->execute([
@@ -48,20 +47,19 @@ class ChiTietHocVien {
             ':ketquahoctap' => $this->ketquahoctap,
             ':ghichu' => $this->ghichu,
             ':idhocvien' => $this->idhocvien,
-            ':idkhoahoc' => $this->idkhoahoc,
-            ':idhoadon' => $this->idhoadon
+            ':idkhoahoc' => $this->idkhoahoc
+            
         ]);
     }
 
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " 
-                  WHERE idhocvien = :idhocvien AND idkhoahoc = :idkhoahoc AND idhoadon = :idhoadon";
+        $query = "DELETE FROM " . $this->table . " WHERE idhocvien = :idhocvien AND idkhoahoc = :idkhoahoc";
         $stmt = $this->conn->prepare($query);
 
         return $stmt->execute([
             ':idhocvien' => $this->idhocvien,
-            ':idkhoahoc' => $this->idkhoahoc,
-            ':idhoadon' => $this->idhoadon
+            ':idkhoahoc' => $this->idkhoahoc
+            
         ]);
     }
 

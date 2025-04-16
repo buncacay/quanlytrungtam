@@ -1,12 +1,17 @@
 <?php
-header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Max-Age: 86400"); // Giữ preflight trong cache 1 ngày
+header("Content-Type: application/json; charset=UTF-8");
 
 require_once '../config/database.php';
 require_once '../models/chitiethocvien.php';
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+} 
 $db = new Database();
 $conn = $db->getConnection();
 
@@ -53,14 +58,12 @@ switch ($method) {
 
 function createChiTiet($hocvien) {
     $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->idhocvien, $data->idkhoahoc, $data->idhoadon, $data->tinhtranghocphi, $data->ketquahoctap)) {
+    if (isset($data->idhocvien, $data->idkhoahoc,$data->tinhtranghocphi,$data->ketquahoctap)) {
         $hocvien->idhocvien = $data->idhocvien;
         $hocvien->idkhoahoc = $data->idkhoahoc;
-        $hocvien->idhoadon = $data->idhoadon;
         $hocvien->tinhtranghocphi = $data->tinhtranghocphi;
         $hocvien->ketquahoctap = $data->ketquahoctap;
-        $hocvien->ghichu = isset($data->ghichu) ? $data->ghichu : null;
-
+      
         if ($hocvien->create()) {
             echo json_encode(["message" => "Record created successfully."]);
         } else {
@@ -69,19 +72,25 @@ function createChiTiet($hocvien) {
         }
     } else {
         http_response_code(400);
+        
         echo json_encode(["message" => "Incomplete data."]);
+        if (!isset($data->idhocvien)) {
+            echo json_encode(["message" => "idhocvien data."]);
+        }
+        if (!isset($data->idkhoahoc)) {
+            echo json_encode(["message" => "idkhoahoc data."]);
+
+        }
     }
 }
 
 function updateChiTiet($hocvien) {
     $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->idhocvien, $data->idkhoahoc, $data->idhoadon, $data->tinhtranghocphi, $data->ketquahoctap)) {
+    if (isset($data->idhocvien, $data->idkhoahoc)) {
         $hocvien->idhocvien = $data->idhocvien;
         $hocvien->idkhoahoc = $data->idkhoahoc;
-        $hocvien->idhoadon = $data->idhoadon;
-        $hocvien->tinhtranghocphi = $data->tinhtranghocphi;
-        $hocvien->ketquahoctap = $data->ketquahoctap;
-        $hocvien->ghichu = isset($data->ghichu) ? $data->ghichu : null;
+        
+       
 
         if ($hocvien->update()) {
             echo json_encode(["message" => "Record updated successfully."]);
@@ -97,10 +106,10 @@ function updateChiTiet($hocvien) {
 
 function deleteChiTiet($hocvien) {
     $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->idhocvien, $data->idkhoahoc, $data->idhoadon)) {
+    if (isset($data->idhocvien, $data->idkhoahoc)) {
         $hocvien->idhocvien = $data->idhocvien;
         $hocvien->idkhoahoc = $data->idkhoahoc;
-        $hocvien->idhoadon = $data->idhoadon;
+     
 
         if ($hocvien->delete()) {
             echo json_encode(["message" => "Record deleted successfully."]);

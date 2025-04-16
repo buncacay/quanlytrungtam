@@ -5,40 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng ký học viên</title>
     <link rel="stylesheet" href="../../css/dangkyhocvien.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../../css/chinh.css">
 </head>
 <body>
     <div class="register-container">
         <h2>Đăng ký học viên</h2>
+        <div id="header"></div>
+        <div id="sidebar"></div>
+     
         <form id="registrationForm">
             <div class="form-group">
                 <label for="fullname">Họ và tên:</label>
                 <input type="text" id="fullname" name="fullname" placeholder="Nhập họ và tên" required>
             </div>
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Nhập email" required>
+                <label for="sdt">Số điện thoại:</label>
+                <input type="tel" id="sdt" name="sdt" placeholder="Nhập số điện thoại" required pattern="[0-9]{10}">
             </div>
+           
             <div class="form-group">
-                <label for="phone">Số điện thoại:</label>
-                <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Mật khẩu:</label>
-                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
+                <label for="birth">Ngày sinh:</label>
+                <input type="date" id="birth" name="birth" required>
             </div>
             <div class="form-group">
                 <label for="course">Chọn khóa học:</label>
                 <select id="course" name="course" required>
-                    <option value="">-- Chọn khóa học --</option>
-                    <option value="English 101">English 101</option>
-                    <option value="TOEIC Preparation">TOEIC Preparation</option>
-                    <option value="Business English">Business English</option>
+                 
                 </select>
             </div>
             <button type="submit">Đăng ký</button>
         </form>
         <div id="confirmationMessage"></div>
     </div>
-    <script src="../../js/dangkyhocvien.js"></script>
+    <script src="../../fetch/dangkyhocvien.js"></script>
+    <script src="../../js/app.js"></script>
 </body>
 </html>

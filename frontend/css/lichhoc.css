@@ -45,23 +45,23 @@ button:hover {
     background-color: #0056b3;
 }
 
-.schedule-table {
+#schedule-table {
     margin-bottom: 20px;
 }
 
-.schedule-table table {
+#schedule-table table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
 }
 
-.schedule-table th, .schedule-table td {
+#schedule-table th, .schedule-table td {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: left;
 }
 
-.schedule-table th {
+#schedule-table th {
     background-color: #007bff;
     color: white;
 }

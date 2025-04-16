@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    console.log("cuc cuuuuuu");
-    console.log('Đã chạy file tthocvien.js');
-    alert('Từ file tthocvien.js!');
+    
     await ShowAll();
 });
 
@@ -39,7 +37,7 @@ async function ShowAll() {
             <tr>
                 <td>${student.idhocvien}</td>
                 <td>${student.hoten}</td>
-                <td><a href="tthocvien.html">Xem chi tiết</a></td>
+                <a href="tthocvien.html?id=${student.idhocvien}">Xem chi tiết</a>
             </tr>
         `;
     });
