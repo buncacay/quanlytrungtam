@@ -66,9 +66,11 @@ async function fetchKhoaHoc() {
     if (!res.ok) {
         throw new Error(await res.text());
     }
+   
 
     const data = await res.json();
-    data.forEach(khoahoc => {
+    console.log(data);
+    data.data.forEach(khoahoc => {
         const otp = document.createElement('option');
         otp.value = khoahoc.idkhoahoc;
         otp.textContent = khoahoc.tenkhoahoc;

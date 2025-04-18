@@ -64,6 +64,10 @@ class hocvien {
     }
 
     public function delete() {
+        $query1 = "DELETE FROM chitiethocvien WHERE idhocvien = :idhocvien";
+        $stmt1 = $this->conn->prepare($query1);
+        $stmt1->execute([':idhocvien' => $this->idhocvien]);
+
         $query = "DELETE FROM " . $this->table . " WHERE idhocvien = :idhocvien";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute([':idhocvien' => $this->idhocvien]);

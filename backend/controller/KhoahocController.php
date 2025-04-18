@@ -41,35 +41,60 @@ switch ($method) {
         break;
 }
 
-
 function getKhoaHoc($khoahoc) {
+    $page = isset($_GET['pages']) ? intval($_GET['pages']) : 1;
+    $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+    $offset = ($page - 1) * $limit;
+    $search = isset($_GET['search']) ? $_GET['search'] : null; // Lấy từ tham số search
+
     if (isset($_GET['action']) && $_GET['action'] === 'chitiet') {
-        $result = $khoahoc->getChiTietKhoaHoc();
+        $result = $khoahoc->getChiTietKhoaHoc($limit, $offset, $search);
     } else {
-        $result = $khoahoc->read();
+        $result = $khoahoc->read($limit, $offset);
     }
-    echo json_encode($result);
+
+    echo json_encode([
+        "data" => $result,
+        "page" => $page,
+        "limit" => $limit
+    ]);
 }
 
 function createKhoaHoc($khoahoc) {
     $data = json_decode(file_get_contents("php://input"));
 
-    if (isset($data->soluongbuoi, $data->tenkhoahoc, $data->thoigianhoc,$data->lichhoc)) {
-        $khoahoc->soluongbuoi = $data->soluongbuoi;
+    if (isset($data->tenkhoahoc, $data->thoigianhoc, $data->soluongbuoi, $data->lichhoc, $data->diadiemhoc)) {
         $khoahoc->tenkhoahoc = $data->tenkhoahoc;
         $khoahoc->thoigianhoc = $data->thoigianhoc;
+        $khoahoc->soluongbuoi = $data->soluongbuoi;
         $khoahoc->lichhoc = $data->lichhoc;
-
+        $khoahoc->diadiemhoc = $data->diadiemhoc;
+        $khoahoc->mota = $data->mota;
+    
+        if (isset($_FILES['course-image'])) {
+            $imageName = $khoahoc->uploadImage($_FILES['course-image']);
+            if ($imageName) {
+                $khoahoc->images = $imageName;
+            } else {
+                http_response_code(500);
+                echo json_encode(["message" => "Unable to upload image."]);
+                return;
+            }
+        } else {
+            $khoahoc->images = null;
+        }
+    
         if ($khoahoc->create()) {
-           
-                $response = [
-                    "idkhoahoc" => $khoahoc->idkhoahoc,
-                    "tenkhoahoc" => $khoahoc->tenkhoahoc,
-                    "thoigianhoc" => $khoahoc->thoigianhoc,
-                    "lichhoc" => $khoahoc->lichhoc
-                   
-                ];
-                echo json_encode($response);
+            $response = [
+                "idkhoahoc" => $khoahoc->idkhoahoc,
+                "tenkhoahoc" => $khoahoc->tenkhoahoc,
+                "thoigianhoc" => $khoahoc->thoigianhoc,
+                "lichhoc" => $khoahoc->lichhoc,
+                "diadiemhoc" => $khoahoc->diadiemhoc,
+                "mota" => $khoahoc->mota,
+                "images" => $khoahoc->images
+            ];
+            echo json_encode($response);
         } else {
             http_response_code(500);
             echo json_encode(["message" => "Unable to create record."]);
@@ -79,6 +104,7 @@ function createKhoaHoc($khoahoc) {
         echo json_encode(["message" => "Incomplete data."]);
     }
 }
+    
 
 function updateKhoaHoc($khoahoc) {
     $data = json_decode(file_get_contents("php://input"));
@@ -88,7 +114,20 @@ function updateKhoaHoc($khoahoc) {
         $khoahoc->soluongbuoi = $data->soluongbuoi;
         $khoahoc->tenkhoahoc = $data->tenkhoahoc;
         $khoahoc->thoigianhoc = $data->thoigianhoc;
+        $khoahoc->diadiemhoc=$data->diadiemhoc;
         $khoahoc->lichhoc = $data->lichhoc;
+        $khoahoc->mota = $data->mota;
+
+        if (isset($_FILES['course-image'])) {
+            $imageName = $khoahoc->uploadImage($_FILES['course-image']);
+            if ($imageName) {
+                $khoahoc->images = $imageName; 
+            } else {
+                http_response_code(500);
+                echo json_encode(["message" => "Unable to upload image."]);
+                return;
+            }
+        }
 
         if ($khoahoc->update()) {
             echo json_encode(["message" => "Record updated successfully."]);
@@ -102,12 +141,11 @@ function updateKhoaHoc($khoahoc) {
     }
 }
 
-function deleteKhoaHoc($khoahoc) {
-    $data = json_decode(file_get_contents("php://input"));
+function deleteKhoaHoc($idkhoahoc) {
+    
 
     if (isset($data->idkhoahoc)) {
-        $khoahoc->idkhoahoc = $data->idkhoahoc;
-
+       
         if ($khoahoc->delete()) {
             echo json_encode(["message" => "Record deleted successfully."]);
         } else {
@@ -119,3 +157,4 @@ function deleteKhoaHoc($khoahoc) {
         echo json_encode(["message" => "Incomplete data."]);
     }
 }
+?>

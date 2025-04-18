@@ -14,43 +14,18 @@
         <div id="header"></div>
         <div id="sidebar"></div>
         <div class="filter-section">
-            <textarea placeholder="Tìm kiếm theo tên khóa học hoặc tên giảng viên" id="search"></textarea>
+            <input type="text" placeholder="Tìm kiếm theo tên khóa học hoặc tên giảng viên" id="search">
             <button onclick="filterSchedule()">Tìm kiếm</button>
         </div>
 
-        <div id="schedule-table">
-            <h3>Lịch học hiện tại</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Ngày học</th>
-                        <th>Thời gian</th>
-                        <th>Khóa học</th>
-                        <th>Giảng viên</th>
-                        <th>Phòng học</th>
-                        <th>Ghi chú</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>12/04/2025</td>
-                        <td>08:00 - 10:00</td>
-                        <td>Ngữ pháp nâng cao</td>
-                        <td>Trần Văn A</td>
-                        <td>P201</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>13/04/2025</td>
-                        <td>14:00 - 16:00</td>
-                        <td>Giao tiếp tiếng Anh</td>
-                        <td>Nguyễn Thị B</td>
-                        <td>P202</td>
-                        <td>-</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div id="all">
+            <div id="schedule-table">
+        
+            </div>
+            <div id="pagination">
+            </div>
         </div>
+      
 
        
     </div>

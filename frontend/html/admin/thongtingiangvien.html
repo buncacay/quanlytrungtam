@@ -3,26 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thông tin giảng viên</title>
+    <title>Tạo và Quản lý Khóa Học</title>
     <link rel="stylesheet" href="../../css/thongtingiangvien.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../../css/chinh.css">
 </head>
 <body>
-    <div class="teacher-info-container">
-        <h1>Thông tin giảng viên</h1>
-        <div class="teacher-card">
-            <img src="../images/anhgiangvien.png" alt="Ảnh giảng viên" class="teacher-photo">
-            <div class="teacher-details">
-                <h2>Nguyễn Văn A</h2>
-                <p><strong>Số điện thoại:</strong> 0123 456 789</p>
-                <p><strong>Chuyên môn:</strong> Tiếng Anh giao tiếp</p>
-                <p><strong>Lịch sử giảng dạy:</strong></p>
-                <ul>
-                    <li>Khóa học "Tiếng Anh Cơ Bản" - Tháng 1/2023</li>
-                    <li>Khóa học "Giao Tiếp Nâng Cao" - Tháng 6/2023</li>
-                    <li>Khóa học "IELTS Intensive" - Tháng 10/2023</li>
-                </ul>
+    <div class="course-management">
+        <h2>Tạo và Quản lý Khóa Học</h2>
+        
+        <div id="header"></div>
+        <div id="sidebar"></div>
+        <div class="cards-container">
+            <div class="form-section">
+                <h3>Thêm Khóa Học</h3>
+                <form id="add-course-form">
+                    <label for="course-name">Tên khóa học:</label>
+                    <input type="text" id="course-name" name="course-name" placeholder="Nhập tên khóa học">
+    
+                    <label for="instructor">Giảng viên:</label>
+                    <select id="instructor" name="instructor">
+                    </select>
+    
+                    <label for="soluongbuoi">Số lượng buổi:</label>
+                    <input type="text" id="soluongbuoi" name="schedule" placeholder="Nhập số lượng buổi (vd: 12)">
+    
+                    <label for="thoigianhoc">Thời gian học:</label>
+                    <input type="text" id="thoigianhoc" name="materials" placeholder="Nhập thời gian học (vd: 18h - 20h)">
+    
+                    <label for="lichhoc">Lịch học</label>
+                    <input type="text" id="lichhoc" name="schedule" placeholder="Nhập lịch học (vd: Thứ 2, 4, 6)">
+    
+                    <button type="submit" onclick="them(event)">Thêm khóa học</button>
+                </form>
             </div>
+            <div class="tong">
+                <div id="course-list-section">
+                    
+                </div>
+                <div id="pagination">
+                </div>
+            </div>
+            
         </div>
+        
     </div>
+    
+    <script src="../../js/app.js"></script>
+    <script src="../../fetch/thongtingiangvien.js"></script>
+
+   
 </body>
 </html>

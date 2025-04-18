@@ -2,11 +2,11 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Max-Age: 86400"); // Giữ preflight trong cache 1 ngày
+header("Access-Control-Max-Age: 86400");
 header("Content-Type: application/json; charset=UTF-8");
 
 require_once '../config/database.php';
-require_once '../models/hocvien.php';
+require_once '../models/chitietkhoahoc.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -16,48 +16,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $db = new Database();
 $conn = $db->getConnection();
 
-$hocvien = new hocvien($conn);
+$chitiet = new chitietkhoahoc($conn);
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        if (isset($_GET['idhocvien'])) {
-            $id = intval($_GET['idhocvien']);
-            $data = $hocvien->showById($id);
-            if ($data) {
-                echo json_encode($data);
-            } else {
-                http_response_code(404);
-                echo json_encode(["message" => "Record not found."]);
-            }
-        } else {
+        if (isset($_GET['idkhoahoc'])) {
+            $chitiet->idkhoahoc = $_GET['idkhoahoc']; // dùng đúng biến $chitiet
+    
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
             $offset = ($page - 1) * $limit;
-
-            $result = $hocvien->read($limit, $offset);
-           
-
+    
+            $result = $chitiet->read($limit, $offset);
+    
             echo json_encode([
                 "data" => $result,
-                // "total" => $total,
                 "page" => $page,
                 "limit" => $limit
             ]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "Missing idkhoahoc"]);
         }
         break;
+    
+        
 
     case 'POST':
-        createHocVien($hocvien);
+        createBaiHoc($chitiet);
         break;
 
     case 'PUT':
-        updateHocVien($hocvien);
+        updateBaiHoc($chitiet);
         break;
 
     case 'DELETE':
-        deleteHocVien($hocvien);
+        deleteBaiHoc($chitiet);
         break;
 
     default:
@@ -66,25 +62,21 @@ switch ($method) {
         break;
 }
 
-function createHocVien($hocvien) {
+function createBaiHoc($chitiet) {
     $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->hoten, $data->ngaysinh, $data->sdt)) {
-        $hocvien->hoten = $data->hoten;
-        $hocvien->ngaysinh = $data->ngaysinh;
-        $hocvien->sdt = $data->sdt;
-        $hocvien->sdtph = !empty($data->sdtph) ? $data->sdtph : null;
-        $hocvien->diachi = !empty($data->diachi) ? $data->diachi : null;
+    if (isset($data->idkhoahoc, $data->tenbaihoc, $data->link, $data->idbaihoc)) {
+        $chitiet->idkhoahoc = $data->idkhoahoc;
+        $chitiet->idbaihoc = $data->idbaihoc;
+        $chitiet->tenbaihoc = $data->tenbaihoc;
+        $chitiet->link = $data->link;
 
-        if ($hocvien->create()) {
-            $response = [
-                "idhocvien" => $hocvien->idhocvien,
-                "hoten" => $hocvien->hoten,
-                "ngaysinh" => $hocvien->ngaysinh,
-                "sdt" => $hocvien->sdt,
-                "sdtph" => $hocvien->sdtph,
-                "diachi" => $hocvien->diachi
-            ];
-            echo json_encode($response);
+        if ($chitiet->create()) {
+            echo json_encode([
+                "idkhoahoc" => $chitiet->idkhoahoc,
+                "idbaihoc" => $chitiet->idbaihoc,
+                "tenbaihoc" => $chitiet->tenbaihoc,
+                "link" => $chitiet->link
+            ]);
         } else {
             http_response_code(500);
             echo json_encode(["message" => "Unable to create record."]);
@@ -95,17 +87,15 @@ function createHocVien($hocvien) {
     }
 }
 
-function updateHocVien($hocvien) {
+function updateBaiHoc($chitiet) {
     $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->idhocvien, $data->hoten, $data->ngaysinh, $data->sdt)) {
-        $hocvien->idhocvien = $data->idhocvien;
-        $hocvien->hoten = $data->hoten;
-        $hocvien->ngaysinh = $data->ngaysinh;
-        $hocvien->sdt = $data->sdt;
-        $hocvien->diachi = isset($data->diachi) ? $data->diachi : null;
-        $hocvien->sdtph = isset($data->sdtph) ? $data->sdtph : null;
+    if (isset($data->idkhoahoc, $data->idbaihoc, $data->tenbaihoc, $data->link)) {
+        $chitiet->idkhoahoc = $data->idkhoahoc;
+        $chitiet->idbaihoc = $data->idbaihoc;
+        $chitiet->tenbaihoc = $data->tenbaihoc;
+        $chitiet->link = $data->link;
 
-        if ($hocvien->update()) {
+        if ($chitiet->update()) {
             echo json_encode(["message" => "Record updated successfully."]);
         } else {
             http_response_code(500);
@@ -117,11 +107,12 @@ function updateHocVien($hocvien) {
     }
 }
 
-function deleteHocVien($hocvien) {
-    if (isset($_GET['idhocvien'])) {
-        $hocvien->idhocvien = $_GET['idhocvien'];
+function deleteBaiHoc($chitiet) {
+    if (isset($_GET['idkhoahoc'], $_GET['idbaihoc'])) {
+        $chitiet->idkhoahoc = $_GET['idkhoahoc'];
+        $chitiet->idbaihoc = $_GET['idbaihoc'];
 
-        if ($hocvien->delete()) {
+        if ($chitiet->delete()) {
             echo json_encode(["message" => "Record deleted successfully."]);
         } else {
             http_response_code(500);
@@ -132,4 +123,5 @@ function deleteHocVien($hocvien) {
         echo json_encode(["message" => "Incomplete data."]);
     }
 }
+?>
 
