@@ -77,6 +77,7 @@ class hocvien {
         $query = "SELECT * FROM chitiethocvien c 
                   INNER JOIN hocvien h ON c.idhocvien = h.idhocvien 
                   INNER JOIN khoahoc kh ON kh.idkhoahoc = c.idkhoahoc
+                  INNER JOIN hoadon hd ON hd.idhocvien = h.idhocvien
                   WHERE c.idhocvien = :id";
     
         $stmt = $this->conn->prepare($query);

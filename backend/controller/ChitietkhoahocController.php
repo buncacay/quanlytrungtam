@@ -52,9 +52,14 @@ switch ($method) {
         updateBaiHoc($chitiet);
         break;
 
-    case 'DELETE':
-        deleteBaiHoc($chitiet);
-        break;
+        case 'DELETE':
+            if (isset($_GET['idbaihoc'])) {
+                deleteBaiHoc($chitiet);
+            } else {
+                deleteKhoaHoc($chitiet);
+            }
+            break;
+        
 
     default:
         http_response_code(405);
@@ -123,5 +128,25 @@ function deleteBaiHoc($chitiet) {
         echo json_encode(["message" => "Incomplete data."]);
     }
 }
+
+function deleteKhoaHoc($chitiet) {
+    if (isset($_GET['idkhoahoc'])) {
+        $chitiet->idkhoahoc = $_GET['idkhoahoc'];
+
+        if ($chitiet->deletekhoahoc()) {
+            echo json_encode(["message" => "Record deleted successfully."]);
+        } else {
+            http_response_code(500);
+            echo json_encode(["message" => "Unable to delete record."]);
+        }
+    } else {
+        http_response_code(400);
+        echo json_encode(["message" => "Incomplete data."]);
+    }
+}
+
+
+
+
 ?>
 

@@ -18,8 +18,8 @@ class KhoaHoc {
 
     public function create() {
         $query = "INSERT INTO " . $this->table . " 
-            (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc,mota, images) 
-            VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota,  :images)";
+            (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc,mota, images, giatien, giamgia) 
+            VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota,  :images, :giatien, :giamgia)";
         
         $stmt = $this->conn->prepare($query);
     
@@ -30,6 +30,8 @@ class KhoaHoc {
         $stmt->bindParam(':lichhoc', $this->lichhoc);
         $stmt->bindParam(':diadiemhoc', $this->diadiemhoc);
         $stmt->bindParam(':mota', $this->mota);
+        $stmt->bindParam(':giatien', $this->giatien);
+        $stmt->bindParam(':giamgia', $this->giamgia);
         // Xử lý ảnh
         if (isset($this->image) && move_uploaded_file($this->image['tmp_name'], 'uploads/' . $this->image['name'])) {
             $this->images = 'uploads/' . $this->image['name']; // Lưu đường dẫn vào biến images
@@ -56,8 +58,10 @@ class KhoaHoc {
                   soluongbuoi = :soluongbuoi, 
                   lichhoc = :lichhoc, 
                   mota = :mota,
-                  images = :images 
-                  WHERE idkhoahoc = :idkhoahoc";
+                  images = :images,
+                  giatien = :giatien,
+                  giamgia = :giamgia 
+                  WHERE idkhoahoc = :idkhoahoc and trangthai = 1";
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(':tenkhoahoc', $this->tenkhoahoc);
@@ -66,7 +70,8 @@ class KhoaHoc {
         $stmt->bindParam(':idkhoahoc', $this->idkhoahoc, PDO::PARAM_INT);
         $stmt->bindParam(':lichhoc', $this->lichhoc);
         $stmt->bindParam(':mota', $this->mota);
-
+        $stmt->bindParam(':giaitien', $this->giatien);
+        $stmt->bindParam(':giamgia', $this->giamgia);
         if (isset($this->image) && move_uploaded_file($this->image['tmp_name'], 'uploads/' . $this->image['name'])) {
             $imagePath = 'uploads/' . $this->image['name'];  // Đường dẫn ảnh
             $stmt->bindParam(':images', $imagePath);  // Bind đường dẫn ảnh
@@ -78,7 +83,7 @@ class KhoaHoc {
     }
 
     public function read($limit, $offset) {
-        $query = "SELECT * FROM " . $this->table . " LIMIT :limit OFFSET :offset";
+        $query = "SELECT * FROM " . $this->table . " where trangthai = 1 LIMIT :limit OFFSET :offset";
         $stmt = $this->conn->prepare($query);
     
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
@@ -89,7 +94,11 @@ class KhoaHoc {
     }
 
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE idkhoahoc = :idkhoahoc";
+      // 1 la con 
+      // 0 la da bi xoa
+
+
+        $query = "UPDATE " . $this->table . " SET trangthai = 0 WHERE idkhoahoc = :idkhoahoc";
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(':idkhoahoc', $this->idkhoahoc, PDO::PARAM_INT);
@@ -100,7 +109,8 @@ class KhoaHoc {
     public function getChiTietKhoaHoc($limit, $offset, $search) {
         $query = "SELECT * FROM `khoahoc`
                   INNER JOIN chitietnhanvien 
-                  ON khoahoc.idkhoahoc = chitietnhanvien.idkhoahoc";
+                  ON khoahoc.idkhoahoc = chitietnhanvien.idkhoahoc
+                  INNER JOIN nhanvien ON nhanvien.idnhanvien = chitietnhanvien.idnhanvien ";
     
         $conditions = [];
         if (!empty($search)) {
@@ -129,6 +139,9 @@ class KhoaHoc {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
+   
     
 }
 

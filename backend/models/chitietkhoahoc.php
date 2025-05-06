@@ -64,5 +64,13 @@ INNER JOIN chitietkhoahoc on khoahoc.idkhoahoc=chitietkhoahoc.idkhoahoc  where k
         return $stmt->execute();
     }
 
+    public function deletekhoahoc() {
+        $query = "DELETE FROM  " . $this->table . " WHERE idkhoahoc = :idkhoahoc";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':idkhoahoc', $this->idkhoahoc);
+        return $stmt->execute();
+    }
+    
+
 }
 ?>

@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', async function(){
     const data  = await fetchThongTin(id);
     console.log(data);
     HienThiThongTin(data);
+    await HienThiListKhoaHoc();
 });
 
 async function remove() {
@@ -36,8 +37,8 @@ async function remove() {
 async function edit(){
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
-    const data = await fetchThongTin(id);
-    // window.location.href=`dangkyhocvien`
+    
+    window.location.href=`dangkyhocvien.html?id=${id}`;
 }
 
 
@@ -47,20 +48,45 @@ async function fetchThongTin(id){
         throw new Error(await res.text());
     }
     const data = await res.json();
-    alert("cuc cu");
     console.log("data " + data);
     return data;
 }
 
+async function fetchKhoaHoc(pages = 1, limit = 10) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/KhoaHocController.php?pages=${pages}&limit=${limit}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+
+
+async function HienThiListKhoaHoc() {
+    const selection = document.getElementById('dky');
+    const data = await fetchKhoaHoc(); 
+    const danhSach = data.data; // mảng chứa các khóa học
+    console.log(danhSach[0].tenkhoahoc); // Kiểm tra dữ liệu
+
+    danhSach.forEach(khoahoc => {
+        const otp = document.createElement('option'); 
+        // alert("asdfasdf" + khoahoc.idkhoahoc);
+        otp.value = khoahoc.idkhoahoc;
+        otp.textContent = khoahoc.tenkhoahoc;
+        selection.appendChild(otp); 
+    });
+}
+
+
 async function HienThiThongTin(data){
    
-
+    console.log("uia " +data);
     const info = document.getElementById('student-info');
     info.innerHTML = `
         <h2>Thông tin học viên</h2>
-        <p><strong>Họ và tên:</strong> ${data.hoten}</p>
-        <p><strong>Mã học viên:</strong> ${data.idhocvien}</p>
-        <p><strong>Số điện thoại:</strong> ${data.sdt}</p>
+        <p><strong>Họ và tên:</strong> ${data[0]['hoten']}</p>
+        <p><strong>Mã học viên:</strong> ${data[0]['idhocvien']}</p>
+        <p><strong>Số điện thoại:</strong> ${data[0]['sdt']}</p>
     `;
     
    
@@ -74,6 +100,7 @@ async function HienThiThongTin(data){
                     <th>Mã hóa đơn</th>
                     <th>Tên hóa đơn</th>
                     <th>Thời gian lập</th>
+                    <th>Thành tiền</th>
                     <th>Chỉnh sửa</th>
                 </tr>
             </thead>
@@ -85,12 +112,18 @@ async function HienThiThongTin(data){
     const tbody = document.getElementById("detail-body");
 
     data.forEach(dlieu => {
+        // alert(dlieu['idhoadon']);
         tbody.innerHTML += `
             <tr>
-                <td>${dlieu.idhoadon}</td>
-                <td>${dlieu.tenhoadon}</td>
-                <td>${dlieu.thoigianlap}</td>
-                <td><button href="#">Edit</button> <button href="#">Remove</button>  <button href="#">Show more</button></td>
+                <td>${dlieu['idhoadon']}</td>
+                <td>${dlieu['tenhoadon']}</td>
+                <td>${dlieu['thoigianlap']}</td>
+                <td>${dlieu['thanhtien']}</td>
+                <td>
+                    <button href="#">Edit</button> 
+                    <button href="#">Remove</button>  
+                    <button href="#">Show more</button>
+                </td>
             </tr>
         `;
     });
@@ -119,8 +152,20 @@ async function HienThiThongTin(data){
             <tr>
                 <td>${dlieu.idkhoahoc}</td>
                 <td>${dlieu.tenkhoahoc}</td>
-                <td><button href="#">Edit</button> <button href="#">Remove</button> <button href="#">Show more</button>  </td>
+                <td>
+                    <button onclick="editkhoahoc(${dlieu.idkhoahoc})">Edit</button> 
+                    <button onclick="removekhoahoc(${dlieu.idkhoahoc})">Remove</button> 
+                    
+                </td>
             </tr>
         `;
     });
 }
+
+
+function editkhoahoc(id){
+   
+    window.location.href=`taovaquanlykhoahoc.html?idkhoahoc=${id}`;
+}
+
+

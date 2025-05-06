@@ -44,7 +44,7 @@ async function HienThiThongTin(data) {
                 <td>${khoahoc.lichhoc}</td>
                 <td>
                     <button onclick="edit(${khoahoc.idkhoahoc})">Edit</button> 
-                    <button onclick="remove()">Remove</button> 
+                    <button onclick="remove(${khoahoc.idkhoahoc})">Remove</button> 
                   
                 </td>
             </tr>`;
@@ -53,6 +53,28 @@ async function HienThiThongTin(data) {
 
 function edit(id){
     window.location.href=`taovaquanlykhoahoc.html?idkhoahoc=${id}`;
+}
+
+async function remove(id){
+    if (confirm("Bạn có muốn xóa khóa học này không?")){
+        if (RemoveKhoaHoc(id)){
+            const all = document.getElementById('course-list-section');
+            all.innerHTML='';
+            await ShowAll();
+        }
+    }
+}
+
+async function RemoveKhoaHoc(id){
+    const res=await fetch(`http://localhost/quanlytrungtam/backend/controller/KhoahocController.php?idkhoahoc=${id}`,{
+        method : 'DELETE'
+    });
+    if (!res.ok){
+        throw new Error(await res.text());
+        return false;
+    }
+    return true;
+    
 }
 
 function renderPagination() {

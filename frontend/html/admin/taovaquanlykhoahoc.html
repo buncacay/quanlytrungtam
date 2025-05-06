@@ -16,7 +16,7 @@
         <div id="sidebar"></div>
         <div class="cards-container">
             <div class="form-section">
-                <button onclick="addBaiHoc()"></button>
+                <button onclick="save_Images()"></button>
                 <h3>Thêm Khóa Học</h3>
                 <img id="preview" src="../../images/anhgiangvien.png" style="display:block; width:200px;">
                 <form id="add-course-form">
@@ -40,6 +40,12 @@
     
                     <label for="lichhoc">Lịch học</label>
                     <input type="text" id="lichhoc" name="schedule" placeholder="Nhập lịch học (vd: Thứ 2, 4, 6)">
+
+                    <label for="giatien">Giá tiền</label>
+                    <input type="number" id="giatien" name="schedule" placeholder="Giá tiền khóa học">
+
+                    <label for="giamgia">Giảm giá</label>
+                    <input type="text" id="giamgia" name="schedule" placeholder="Giảm giá khóa học (nếu có)">
     
                     <button id="btn" type="submit" onclick="them(event)">Thêm khóa học</button>
                 </form>
@@ -85,7 +91,7 @@
     </div>
     
     <script src="../../js/app.js"></script>
-    <script src="../../fetch/taovaquanlykhoahoc.js"></script>
+    <script type="module" src="../../fetch/taovaquanlykhoahoc.js"></script>
 
    
 </body>

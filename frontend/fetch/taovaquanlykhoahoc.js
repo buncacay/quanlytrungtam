@@ -1,7 +1,24 @@
-
-document.getElementById('course-image').addEventListener('change',async function(event) {
-   await images();
+document.getElementById('course-image').addEventListener('change', function(event) {
+    HienThiAnh(event);
 });
+
+async function HienThiAnh(event) {
+    const file = event.target.files[0];
+
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const prev = document.getElementById('preview');
+            prev.src = e.target.result;
+            prev.style.display = 'block';
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
+
+
 
 document.addEventListener('DOMContentLoaded', async function () {
     await fetchGiangVien();
@@ -21,128 +38,48 @@ document.addEventListener('DOMContentLoaded', async function () {
         const soluongbuoi = document.getElementById('soluongbuoi');
         const thoigianhoc = document.getElementById('thoigianhoc');
         const lichhoc = document.getElementById('lichhoc');
+        const mota = document.getElementById('motakhoahoc');
+        
         console.log("abc " + kq.tenkhoahoc);
-        alert(kq[0]['tenkhoahoc']);
+        // alert(kq[0]['tenkhoahoc']);
 
-        ten.value = kq.tenkhoahoc;  // Sửa từ textContent thành value
-        gv.value = kq.tennhanvien;  // Sửa từ textContent thành value
-        soluongbuoi.value = kq.soluongbuoi;  // Sửa từ textContent thành value
-        thoigianhoc.value = kq.thoigianhoc;  // Sửa từ textContent thành value
-        lichhoc.value = kq.lichhoc;  // Sửa từ textContent thành value
+        ten.value = kq[0]['tenkhoahoc'];  // Sửa từ textContent thành value
+        gv.value = kq[0]['idnhanvien'];  // Sửa từ textContent thành value
+        soluongbuoi.value = kq[0]['soluongbuoi'];  // Sửa từ textContent thành value
+        thoigianhoc.value = kq[0]['thoigianhoc'];  // Sửa từ textContent thành value
+        lichhoc.value = kq[0]['lichhoc'];  // Sửa từ textContent thành value
+        mota.value=kq[0]['mota'];
+
+        const noidung = document.getElementById('noidungkhoahoc');
+        noidung.innerHTML="";
+        kq.forEach(baihoc =>{
+            noidung.innerHTML += `
+            <div class="lesson-item">
+              <span class="lesson-title">${baihoc.tenbaihoc}</span>
+              <div class="lesson-actions">
+                <button onclick="edit(this.closest('.lesson-item'), event)">✏️</button>
+                <button onclick="remove(this.closest('.lesson-item'), event)">🗑️</button>
+              </div>
+              <div class="lesson-link">
+                👉 <a href="${baihoc.link}" target="_blank">${baihoc.link}</a>
+              </div>
+            </div>
+          `;
+          
+        })
+
     }
 });
 
 
-async function images(){
-    const file = event.target.files[0];
-
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            const prev = document.getElementById('preview');
-            prev.src = e.target.result;
-            prev.style.display = 'block';
-        };
-
-        reader.readAsDataURL(file);
-    }
-    return prev.src;
-}
 
 
 
-async function addKhoaHoc(data) {
-    try {
-        const res = await fetch('http://localhost/quanlytrungtam/backend/controller/KhoaHocController.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        if (!res.ok) throw new Error('Lỗi: ' + await res.text());
-        return await res.json();
-    } catch (error) {
-        alert("Lỗi khi thêm khóa học: " + error.message);
-    }
-}
-
-async function fetchGiangVien() {
-    const select = document.getElementById('instructor');
-    const res = await fetch('http://localhost/quanlytrungtam/backend/controller/NhanVienController.php');
-    if (!res.ok) throw new Error(await res.text());
-    const data = await res.json();
-    console.log("giang vien " + data);
-    select.innerHTML = "";
-    data.forEach(nhanvien => {
-        const option = document.createElement('option');
-        option.value = nhanvien.idnhanvien;
-        option.textContent = nhanvien.tennhanvien;
-        select.appendChild(option);
-    });
-}
-async function addBaiHoc() {
-   
-    const noidung = document.getElementById('noidungkhoahoc');
-    const data = []; 
-
-    const lessons = noidung.getElementsByClassName('lesson-item');
-    for (let lesson of lessons) {
-        const ten = lesson.querySelector('.lesson-title').textContent; // Lấy tên bài học
-        const link = lesson.querySelector('.lesson-link a').href; // Lấy link bài học
-        
-        const kq = await addKhoaHoc(data);
-
-        data.push({
-            idkhoahoc: kq.idkhoahoc,
-            idbaihoc: data.length,
-            tenbaihoc: ten,
-            link: link
-        });
-    }
-
-    // In ra dữ liệu hoặc thực hiện các thao tác khác
-    console.log(data);
-}
-
-async function fetchKhoaHoc(id) {
-    const url = `http://localhost/quanlytrungtam/backend/controller/ChitietkhoahocController.php?idkhoahoc=${id}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(await res.text());
-    const data = await res.json();
-    console.log(data.data);
-    return data.data;
-}
 
 
-async function addGiangVien(data) {
-    try {
-        const res = await fetch('http://localhost/quanlytrungtam/backend/controller/ChiTietNhanVienController.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        if (!res.ok) throw new Error('Lỗi: ' + await res.text());
-        return await res.json();
-    } catch (error) {
-        alert("Lỗi khi thêm chi tiết giảng viên: " + error.message);
-    }
-}
 
-async function addChiTietKhoaHoc(){
-    
-    const res= await fetch('http://localhost/quanlytrungtam/backend/controller/ChitietkhoahocController.php',{
-            method:'POST',
-            headers:
-            {
-                'Content-Type' : 'application/json'
-            },
-            body:JSON.stringify(data)
-    });
-    if (!res.ok) throw new Error('Lỗi: ' + await res.text());
-    return await res.json();
-     
-    
-}
+
+
 
 
 
@@ -155,19 +92,32 @@ async function them(event) {
     const thoigianhoc = document.getElementById('thoigianhoc').value;
     const lichhoc = document.getElementById('lichhoc').value;
     const idnhanvien = document.getElementById('instructor').value;
-    const mota= document.getElementById('mota').value;
-    const image = await images();
+    const mota= document.getElementById('motakhoahoc').value;
+    alert(mota);
+   
     const data = {
         tenkhoahoc: ten,
         thoigianhoc: thoigianhoc,
         soluongbuoi: soluongbuoi,
         lichhoc: lichhoc,
+        diadiemhoc: "not found",
         mota : mota,
-        images : image
+        trangthai : 1,
+       
     };
+    const fileInput = document.getElementById('course-image');
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('data', JSON.stringify(data));
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+    
+  
 
-    const kq = await addKhoaHoc(data);
-
+    const kq = await addKhoaHoc(formData);
+    console.log(kq);
     if (kq) {
         const data2 = {
             idnhanvien: idnhanvien,
@@ -177,12 +127,29 @@ async function them(event) {
             dongia: 4.3,
             thanhtien: 10
         };
+
+        const lessons = document.querySelectorAll('#noidungkhoahoc .lesson-item');
+        const data3 = [];
+        let d=0;
+        lessons.forEach(lesson =>{
+            const tilte = lesson.querySelector('.lesson-title')?.textContent.trim();
+            const link=lesson.querySelector('.lesson-link a')?.href;
+    
+            data3.push({
+                idkhoahoc : kq.idkhoahoc,
+                idbaihoc: d,
+                tenbaihoc:title,
+                link: link
+            });
+            d++;
+        });
         await addGiangVien(data2);
-        await ShowAll(currentPage);
+        await addChiTietKhoaHoc(data3);
         alert("them thanh cong");
     } else {
         alert("Thêm khóa học thất bại!");
     }
+    event.preventDefault()
 }
 
 async function add(){
@@ -200,6 +167,8 @@ async function add(){
                         </div>
     `;
 }
+
+
 function save(lessonElement, event) {
     event.stopPropagation();
     lessonElement.classList.remove("editing");
@@ -244,6 +213,9 @@ function edit(lessonElement, event) {
         <button onclick="remove(this.closest('.lesson-item'), event)">🗑️</button>
     `;
 }
+
+
+
 
 
 
