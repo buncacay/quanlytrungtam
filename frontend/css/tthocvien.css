@@ -80,3 +80,32 @@ button:hover {
         max-width: 100%;
     }
 }
+
+
+#pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    padding: 8px 14px;
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-button:hover {
+    background-color: #d0d7de;
+}
+
+.pagination-button.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #2980b9;
+}

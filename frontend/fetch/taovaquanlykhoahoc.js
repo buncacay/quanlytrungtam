@@ -1,3 +1,6 @@
+import {fetchGiangVien} from './get.js';
+import {addKhoaHoc} from './add.js';
+
 document.getElementById('course-image').addEventListener('change', function(event) {
     HienThiAnh(event);
 });
@@ -70,14 +73,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     }
 });
-
-
-
-
-
-
-
-
 
 
 
@@ -249,3 +244,9 @@ document.querySelectorAll('.lesson-item').forEach(item => {
         toggleLink(this);
     });
 });
+
+window.edit = edit;
+window.remove = remove;
+window.save = save;
+window.add = add;
+window.them = them;

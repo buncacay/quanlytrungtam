@@ -18,23 +18,24 @@ class Hoadon {
 
     public function create() {
         $query = "INSERT INTO " . $this->table . " 
-                  (thoigianlap, tenhoadon, nguoilap, soluongmua, dongia, giamgia, thanhtien) 
-                  VALUES (:thoigianlap, :tenhoadon, :nguoilap, :soluongmua, :dongia, :giamgia, :thanhtien)";
+                  (thoigianlap, tenhoadon,  giamgia, thanhtien, idhocvien, idkhoahoc) 
+                  VALUES (:thoigianlap, :tenhoadon, :giamgia, :thanhtien, :idhocvien, :idkhoahoc)";
         $stmt = $this->conn->prepare($query);
 
         return $stmt->execute([
             ':thoigianlap' => $this->thoigianlap,
             ':tenhoadon' => $this->tenhoadon,
-            ':nguoilap' => $this->nguoilap,
-            ':soluongmua' => $this->soluongmua,
-            ':dongia' => $this->dongia,
+            ':idkhoahoc' => $this->idkhoahoc,
+            ':idhocvien' => $this->idhocvien,
+            // ':soluongmua' => $this->soluongmua,
+            // ':dongia' => $this->dongia,
             ':giamgia' => $this->giamgia,
             ':thanhtien' => $this->thanhtien
         ]);
     }
 
     public function read() {
-        $query = "SELECT * FROM " . $this->table;
+        $query = "SELECT * FROM " . $this->table . " INNER join hocvien on hoadon.idhocvien=hocvien.idhocvien INNER JOIN khoahoc on khoahoc.idkhoahoc=hoadon.idkhoahoc where hoadon.trangthai=1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
@@ -44,9 +45,8 @@ class Hoadon {
     public function update() {
         $query = "UPDATE " . $this->table . " 
                   SET tenhoadon = :tenhoadon, 
-                      nguoilap = :nguoilap, 
-                      soluongmua = :soluongmua, 
-                      dongia = :dongia, 
+                      idkhoahoc = :idkhoahoc,
+                      idhocvien = :idhocvien,
                       giamgia = :giamgia, 
                       thanhtien = :thanhtien, 
                       thoigianlap = :thoigianlap 
@@ -56,23 +56,29 @@ class Hoadon {
         return $stmt->execute([
             ':tenhoadon' => $this->tenhoadon,
             ':nguoilap' => $this->nguoilap,
-            ':soluongmua' => $this->soluongmua,
-            ':dongia' => $this->dongia,
+            // ':soluongmua' => $this->soluongmua,
+            // ':dongia' => $this->dongia,
             ':giamgia' => $this->giamgia,
             ':thanhtien' => $this->thanhtien,
             ':thoigianlap' => $this->thoigianlap,
             ':idhoadon' => $this->idhoadon
         ]);
     }
-
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE idhoadon = :idhoadon";
-        $stmt = $this->conn->prepare($query);
-        return $stmt->execute([':idhoadon' => $this->idhoadon]);
-    }
+        // 1 la con 
+        // 0 la da bi xoa
+  
+  
+          $query = "UPDATE " . $this->table . " SET trangthai = 0 WHERE idhoadon = :idhoadon";
+          $stmt = $this->conn->prepare($query);
+  
+          $stmt->bindParam(':idhoadon', $this->idhoadon, PDO::PARAM_INT);
+  
+          return $stmt->execute();
+      }
 
     public function showById($id) {
-        $query = "SELECT * FROM " . $this->table . " WHERE idhoadon = :id";
+        $query = "SELECT * FROM " . $this->table . " WHERE idhoadon = :id and trangthai=1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([':id' => $id]);
 

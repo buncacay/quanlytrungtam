@@ -33,37 +33,16 @@
                             <label for="discount">Chính sách giảm giá/Học bổng (%):</label>
                             <input type="number" id="discount" name="discount" placeholder="Nhập % giảm giá">
                         </div>
-                        <button type="submit" class="btn-submit">Thiết lập</button>
+                        <button type="submit" class="btn-submit" onclick="click(event)">Thiết lập</button>
                     </form>
                 </div>
         
-                <div class="fee-list">
+                <div class="fee-list" id="list">
                     <h2>Danh sách học phí</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Khóa học</th>
-                                <th>Học phí</th>
-                                <th>Giảm giá/Học bổng</th>
-                                <th>Học phí sau giảm</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Tiếng Anh cơ bản</td>
-                                <td>5,000,000 VND</td>
-                                <td>10%</td>
-                                <td>4,500,000 VND</td>
-                            </tr>
-                            <tr>
-                                <td>Luyện thi IELTS</td>
-                                <td>8,000,000 VND</td>
-                                <td>15%</td>
-                                <td>6,800,000 VND</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                   
+                      
                 </div>
+                <div id="pagination" ></div>
             </div>
         </div>
 

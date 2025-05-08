@@ -1,12 +1,24 @@
+import {RemoveKhoaHoc} from './delete.js';
+import {fetchKhoaHocPhanTrang} from './get.js';
 
-async function ShowAll(pages = 1, limit = 10) {
-    currentPage = pages;
-    const data = await fetchKhoaHoc(pages, limit);
-    console.log("Fetched data:", data); // kiểm tra dữ liệu trả về
-    totalPages = data.totalPages || 1;
-    console.log(`Page: ${currentPage}, Total: ${totalPages}`);
-    await HienThiThongTin(data);
-    renderPagination();
+let currentPage = 1;
+let totalPages=1;
+
+// hien thong tin cua trang day
+async function ShowAll(pages = 1) {
+    
+    const response = await fetchKhoaHocPhanTrang(pages, 5);
+    console.log(response);
+    const students = response.data;
+    currentPage = response.page;
+    totalPages = response.total;
+    
+
+    // console.log("Fetched data:", data); // kiểm tra dữ liệu trả về
+    // totalPages = data.totalPages || 1;
+    // console.log(`Page: ${currentPage}, Total: ${totalPages}`);
+    await HienThiThongTin(currentPage, totalPages, students);
+    
 }
 
 
@@ -16,7 +28,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 
-async function HienThiThongTin(data) {
+async function HienThiThongTin(page,total,data) {
+    const start = (page - 1) * 5;
+    const end = start + 5;
+   
+    
+
     const all = document.getElementById('course-list-section');
     all.innerHTML = `
         <h3>Danh Sách Khóa Học</h3>
@@ -35,7 +52,7 @@ async function HienThiThongTin(data) {
     `;
     const body = document.getElementById('body-details');
     body.innerHTML = "";
-    data.data.forEach(khoahoc => {
+    data.forEach(khoahoc => {
         body.innerHTML += `
             <tr>
                 <td>${khoahoc.tenkhoahoc}</td>
@@ -49,6 +66,8 @@ async function HienThiThongTin(data) {
                 </td>
             </tr>`;
     });
+    renderPagination(page, total);
+    
 }
 
 function edit(id){
@@ -65,53 +84,50 @@ async function remove(id){
     }
 }
 
-async function RemoveKhoaHoc(id){
-    const res=await fetch(`http://localhost/quanlytrungtam/backend/controller/KhoahocController.php?idkhoahoc=${id}`,{
-        method : 'DELETE'
-    });
-    if (!res.ok){
-        throw new Error(await res.text());
-        return false;
+
+// hien cac nut ne
+function renderPagination(currentPage, totalPages ) {
+    const container = document.getElementById("pagination");
+    container.innerHTML = "";
+
+    const maxVisiblePages = 5;
+    let startPage = Math.max(currentPage - Math.floor(maxVisiblePages / 2), 1);
+    let endPage = startPage + maxVisiblePages - 1;
+
+    if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(endPage - maxVisiblePages + 1, 1);
     }
-    return true;
-    
-}
 
-function renderPagination() {
-    const all = document.getElementById('pagination');
-    all.innerHTML = "";
-    const max = 10;
-    let start = Math.max(currentPage - Math.floor(max / 2), 1);
-    let end = currentPage + Math.floor(max / 2);
+    const prevBtn = document.createElement("button");
+    prevBtn.textContent = "« Trước";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.className = 'pagination-button';
+    prevBtn.onclick = () => ShowAll(currentPage - 1);
+    container.appendChild(prevBtn);
 
-    const prev = document.createElement('button');
-    prev.textContent = "<< Trước";
-    prev.disabled = currentPage === 1;
-    prev.onclick = () => ShowAll(currentPage - 1);
-    all.appendChild(prev);
-
-    for (let i = start; i <= end; i++) {
+    for (let i = startPage; i <= endPage; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
+        btn.className = 'pagination-button';
         btn.className = i === currentPage ? "active" : "";
         btn.onclick = () => ShowAll(i);
-        all.appendChild(btn);
+        container.appendChild(btn);
     }
 
-    const next = document.createElement('button');
-    next.textContent = "Sau »";
-    // next.disabled = data.data.length < limit;  // Khi số khóa học nhỏ hơn limit, không có trang sau
-    next.onclick = () => ShowAll(currentPage + 1);
-    all.appendChild(next);
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = "Sau »";
+    nextBtn.className = 'pagination-button';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => ShowAll(currentPage + 1);
+    container.appendChild(nextBtn);
 }
 
 
-let currentPage = 1;
-let totalPages = 1;
 
-async function fetchKhoaHoc(pages = 1, limit = 10) {
-    const url = `http://localhost/quanlytrungtam/backend/controller/KhoaHocController.php?pages=${pages}&limit=${limit}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(await res.text());
-    return await res.json();
-}
+
+window.edit = edit;
+window.remove = remove;
+// window.save = save;
+// window.add = add;
+// window.them = them;

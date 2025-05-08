@@ -1,3 +1,5 @@
+import {fetchKhoaHocWithSearch} from './get.js';
+
 let currentPage = 1;
 let totalPages = 1;
 const limit = 5;
@@ -7,33 +9,25 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 async function ShowAll(pages, search = null) {
-    currentPage = pages;
-    const data = await fetchKhoaHoc(pages, limit, search);  
-    totalPages = Math.ceil(data.total / limit); 
-    await HienThiThongTin(data);
-    renderPagination();
+    
+    const response = await fetchKhoaHocWithSearch(pages, limit, search);  
+    
+    const students = response.data;
+    currentPage = response.page;
+    totalPages = response.total;
+    console.log(students);
+    await HienThiThongTin(currentPage, totalPages, students);
+
+    
 }
 
-async function fetchKhoaHoc(pages, limit, search = null) {
-    let url ="";
-    if (search!=null){
-        url = `http://localhost/quanlytrungtam/backend/controller/KhoahocController.php?action=chitiet&pages=${pages}&limit=${limit}&search=${search}`;
 
-    }
-    else {
-        url = `http://localhost/quanlytrungtam/backend/controller/KhoahocController.php?action=chitiet&pages=${pages}&limit=${limit}`;
 
-    }
-    const res = await fetch(url);
-    if (!res.ok) {
-        throw new Error(await res.text());
-    }
-    const data = await res.json();
-    console.log("huhu " , data);
-    return data;
-}
-
-async function HienThiThongTin(data) {
+async function HienThiThongTin(page,total,data) {
+    
+    const start = (page - 1) * 5;
+    const end = start + 5;
+   
     const all = document.getElementById('schedule-table');
     all.innerHTML = `
        <h3>Lịch học hiện tại</h3>
@@ -54,8 +48,11 @@ async function HienThiThongTin(data) {
 
     const details = document.getElementById('details');
     details.innerHTML = "";
-
-    data.data.forEach(khoahoc => {
+    if (!Array.isArray(data)) {
+        console.error("Dữ liệu không hợp lệ:", data);
+        return;
+    }
+    data.forEach(khoahoc => {
         details.innerHTML += `
             <tr>
                 <td>${khoahoc.lichhoc}</td>
@@ -67,9 +64,11 @@ async function HienThiThongTin(data) {
             </tr>
         `;
     });
+    renderPagination(page, total);
 }
 
-function renderPagination() {
+// hien cac nut ne
+function renderPagination(currentPage, totalPages ) {
     const container = document.getElementById("pagination");
     container.innerHTML = "";
 
@@ -82,33 +81,33 @@ function renderPagination() {
         startPage = Math.max(endPage - maxVisiblePages + 1, 1);
     }
 
-    // Button "Trước"
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "« Trước";
     prevBtn.disabled = currentPage === 1;
+    prevBtn.className = 'pagination-button';
     prevBtn.onclick = () => ShowAll(currentPage - 1);
     container.appendChild(prevBtn);
 
-    // Hiển thị các button số trang
     for (let i = startPage; i <= endPage; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
+        btn.className = 'pagination-button';
         btn.className = i === currentPage ? "active" : "";
         btn.onclick = () => ShowAll(i);
         container.appendChild(btn);
     }
 
-    // Button "Sau"
     const nextBtn = document.createElement("button");
     nextBtn.textContent = "Sau »";
+    nextBtn.className = 'pagination-button';
     nextBtn.disabled = currentPage === totalPages;
     nextBtn.onclick = () => ShowAll(currentPage + 1);
     container.appendChild(nextBtn);
-
-   
 }
 
 async function filterSchedule() {
     const search = document.getElementById('search').value;
     await ShowAll(1, search);  // Chuyển search vào hàm ShowAll
 }
+
+window.filterSchedule=filterSchedule;

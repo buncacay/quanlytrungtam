@@ -28,6 +28,32 @@ export async function fetchKhoaHoc() {
     console.log(data.data);
     return data.data;
 }
+// pages = 1, limit = 5
+export async function fetchKhoaHocPhanTrang(pages, limit) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/KhoaHocController.php?pages=${pages}&limit=${limit}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    return await res.json();
+}
+
+export async function fetchKhoaHocWithSearch(pages, limit, search = null) {
+    let url ="";
+    if (search!=null){
+        url = `http://localhost/quanlytrungtam/backend/controller/KhoahocController.php?action=chitiet&pages=${pages}&limit=${limit}&search=${search}`;
+
+    }
+    else {
+        url = `http://localhost/quanlytrungtam/backend/controller/KhoahocController.php?action=chitiet&pages=${pages}&limit=${limit}`;
+
+    }
+    const res = await fetch(url);
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
+    const data = await res.json();
+    console.log("huhu " , data);
+    return data;
+}
 
 
 
@@ -53,3 +79,26 @@ export async function fetchHocVien(id){
     console.log("data " + data);
     return data;
 }
+
+
+export async function fetchAllHocVien(page = 1, limit=5) {
+    const res = await fetch(`http://localhost/quanlytrungtam/backend/controller/HocvienController.php?page=${page}&limit=${limit}`);
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
+
+    const data = await res.json();
+    return data;
+}
+
+
+ export async function fetchHoaDon(){
+    const res = await fetch(`http://localhost/quanlytrungtam/backend/controller/HoaDonController.php`);
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
+
+    const data = await res.json();
+    return data;
+}
+ 

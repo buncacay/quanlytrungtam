@@ -1,3 +1,6 @@
+import { fetchAllHocVien } from './get.js';
+
+
 let currentPage = 1;
 let totalPages = 1;
 const limit = 5;
@@ -6,21 +9,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     await ShowAll(currentPage);
 });
 
-async function fetchThongTin(page = 1) {
-    const res = await fetch(`http://localhost/quanlytrungtam/backend/controller/HocvienController.php?page=${page}&limit=${limit}`);
-    if (!res.ok) {
-        throw new Error(await res.text());
-    }
 
-    const data = await res.json();
-    return data;
-}
 
 async function ShowAll(page = 1) {
-    const response = await fetchThongTin(page);
+    const response = await fetchAllHocVien(page);
     const students = response.data;
     currentPage = response.page;
-    totalPages = response.total_pages;
+    totalPages = response.total;
+
 
     const student_all = document.getElementById('student-all');
     student_all.innerHTML = `
@@ -49,10 +45,10 @@ async function ShowAll(page = 1) {
         `;
     });
 
-    renderPagination();
+    renderPagination(page, totalPages);
 }
 
-function renderPagination() {
+function renderPagination(currentPage, totalPages ) {
     const container = document.getElementById("pagination");
     container.innerHTML = "";
 
@@ -68,12 +64,14 @@ function renderPagination() {
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "« Trước";
     prevBtn.disabled = currentPage === 1;
+    prevBtn.className = 'pagination-button';
     prevBtn.onclick = () => ShowAll(currentPage - 1);
     container.appendChild(prevBtn);
 
     for (let i = startPage; i <= endPage; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
+        btn.className = 'pagination-button';
         btn.className = i === currentPage ? "active" : "";
         btn.onclick = () => ShowAll(i);
         container.appendChild(btn);
@@ -81,6 +79,7 @@ function renderPagination() {
 
     const nextBtn = document.createElement("button");
     nextBtn.textContent = "Sau »";
+    extBtn.className = 'pagination-button';
     nextBtn.disabled = currentPage === totalPages;
     nextBtn.onclick = () => ShowAll(currentPage + 1);
     container.appendChild(nextBtn);

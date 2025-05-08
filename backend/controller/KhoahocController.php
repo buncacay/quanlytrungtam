@@ -28,7 +28,11 @@ switch ($method) {
         break;
 
     case 'PUT':
-        updateKhoaHoc($khoahoc);
+        if (isset($_GET['action']) && $_GET['action'] === 'gia') {
+            updateGiaKhoaHoc($khoahoc);  // Cập nhật giá khoá học
+        } else {
+            updateKhoaHoc($khoahoc);  // Cập nhật khoá học
+        }
         break;
 
     case 'DELETE':
@@ -45,16 +49,20 @@ function getKhoaHoc($khoahoc) {
     $page = isset($_GET['pages']) ? intval($_GET['pages']) : 1;
     $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
     $offset = ($page - 1) * $limit;
+   
     $search = isset($_GET['search']) ? $_GET['search'] : null;
 
     if (isset($_GET['action']) && $_GET['action'] === 'chitiet') {
         $result = $khoahoc->getChiTietKhoaHoc($limit, $offset, $search);
+        $total = ceil($khoahoc->countChiTiet()/$limit);
     } else {
         $result = $khoahoc->read($limit, $offset);
+        $total = ceil($khoahoc->countAll()/$limit);
     }
 
     echo json_encode([
         "data" => $result,
+        "total" => $total,
         "page" => $page,
         "limit" => $limit
     ]);
@@ -168,19 +176,12 @@ function deleteKhoaHoc($khoahoc) {
 function updateGiaKhoaHoc($khoahoc) {
     $data = json_decode(file_get_contents("php://input"));
 
-    if (isset($data->idkhoahoc, $data->soluongbuoi, $data->tenkhoahoc, $data->thoigianhoc, $data->lichhoc,  $data->giatien)) {
+    if (isset($data->idkhoahoc, $data->giatien)) {
         $khoahoc->idkhoahoc = $data->idkhoahoc;
-        $khoahoc->soluongbuoi = $data->soluongbuoi;
-        $khoahoc->tenkhoahoc = $data->tenkhoahoc;
-        $khoahoc->thoigianhoc = $data->thoigianhoc;
-        $khoahoc->diadiemhoc = $data->diadiemhoc;
-        $khoahoc->lichhoc = $data->lichhoc;
-        $khoahoc->mota = $data->mota ?? null;
-        $khoahoc->images = $data->images ?? null;
         $khoahoc->giatien = $data->giatien;
         $khoahoc->giamgia = $data->giamgia ?? null;
 
-        if ($khoahoc->update()) {
+        if ($khoahoc->updateGia()) {
             echo json_encode(["message" => "Cập nhật khoá học thành công."]);
         } else {
             http_response_code(500);
@@ -188,6 +189,7 @@ function updateGiaKhoaHoc($khoahoc) {
         }
     } else {
         http_response_code(400);
+     
         echo json_encode(["message" => "Thiếu dữ liệu cập nhật."]);
     }
 }

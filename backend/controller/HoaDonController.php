@@ -1,11 +1,16 @@
 <?php
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 require_once '../config/database.php';
 require_once '../models/hoadon.php';
+
+IF ($_SERVER['REQUEST_METHOD']==='OPTIONS'){
+    http_response_code(200);
+    exit();
+}
 
 $db = new Database();
 $conn = $db->getConnection();
@@ -49,12 +54,26 @@ switch ($method) {
 
 
 
+
 function handleCreate($hoadon) {
     $data = json_decode(file_get_contents("php://input"));
-    if (validateInvoiceData($data)) {
-        assignInvoiceData($hoadon, $data);
+    if (isset($data->thoigianlap, $data->idkhoahoc, $data->idhocvien,$data->thoigianlap, $data->thanhtien )) {
+        $hoadon->thoigianlap = $data->thoigianlap;
+        $hoadon->idkhoahoc = $data->idkhoahoc;
+        $hoadon->idhocvien = $data->idhocvien;
+        $hoadon->giamgia = !empty($data->giamgia) ? $data->giamgia : null;
+        $hoadon->thanhtien =$data->thanhtien;
+
         if ($hoadon->create()) {
-            echo json_encode(["message" => "Record created successfully."]);
+            $response = [
+                "thoigianlap" => $hoadon->thoigianlap,
+                "tenhoadon" => $hoadon->tenhoadon,
+                "idkhoahoc" => $hoadon->idkhoahoc,
+                "idhocvien" => $hoadon->idhocvien,
+                "giamgia" => $hoadon->giamgia ?? null,
+                "thanhtien" => $hoadon->thanhtien
+            ];
+            echo json_encode($response);
         } else {
             http_response_code(500);
             echo json_encode(["message" => "Unable to create record."]);
@@ -64,6 +83,7 @@ function handleCreate($hoadon) {
         echo json_encode(["message" => "Incomplete data."]);
     }
 }
+
 
 function handleUpdate($hoadon) {
     $data = json_decode(file_get_contents("php://input"));
@@ -82,10 +102,11 @@ function handleUpdate($hoadon) {
     }
 }
 
+
 function handleDelete($hoadon) {
-    $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->idhoadon)) {
-        $hoadon->idhoadon = $data->idhoadon;
+    if (isset($_GET['idhoadon'])) {
+        $hoadon->idhoadon = $_GET['idhoadon'];
+
         if ($hoadon->delete()) {
             echo json_encode(["message" => "Record deleted successfully."]);
         } else {
@@ -97,6 +118,7 @@ function handleDelete($hoadon) {
         echo json_encode(["message" => "Incomplete data."]);
     }
 }
+
 
 function validateInvoiceData($data) {
     return isset($data->tenhoadon, $data->thoigianlap, $data->nguoilap, $data->soluongmua, $data->dongia, $data->giamgia, $data->thanhtien);

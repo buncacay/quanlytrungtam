@@ -98,3 +98,22 @@ export async function addStudent(data) {
         console.error('Lỗi:', err);
     }
 }
+
+
+export async function addHoaDon(data){
+    const res= await fetch('http://localhost/quanlytrungtam/backend/controller/HoaDonController.php',{
+        method:'POST',
+        headers:
+        {
+            'Content-Type' : 'application/json'
+        },
+        body:JSON.stringify(data)
+});
+if (!res.ok) {
+    alert("xem lai");
+    throw new Error('Lỗi: ' + await res.text());
+}
+return await res.json();
+}
+
+

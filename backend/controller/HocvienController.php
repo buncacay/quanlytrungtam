@@ -35,13 +35,13 @@ switch ($method) {
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
             $offset = ($page - 1) * $limit;
-
+            $total = ceil($hocvien->countAll() / $limit); 
             $result = $hocvien->read($limit, $offset);
            
 
             echo json_encode([
                 "data" => $result,
-                // "total" => $total,
+                "total" => $total,
                 "page" => $page,
                 "limit" => $limit
             ]);
@@ -65,6 +65,8 @@ switch ($method) {
         echo json_encode(["message" => "Method not allowed."]);
         break;
 }
+
+
 
 function createHocVien($hocvien) {
     $data = json_decode(file_get_contents("php://input"));
@@ -132,4 +134,5 @@ function deleteHocVien($hocvien) {
         echo json_encode(["message" => "Incomplete data."]);
     }
 }
+
 

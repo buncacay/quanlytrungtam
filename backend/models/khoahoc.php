@@ -50,6 +50,14 @@ class KhoaHoc {
         return null;
     }
     
+    public function countAll() {
+        $query = "SELECT COUNT(*) as total FROM khoahoc";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['total'];
+    }
+    
 
     public function update() {
         $query = "UPDATE " . $this->table . " SET 
@@ -70,8 +78,9 @@ class KhoaHoc {
         $stmt->bindParam(':idkhoahoc', $this->idkhoahoc, PDO::PARAM_INT);
         $stmt->bindParam(':lichhoc', $this->lichhoc);
         $stmt->bindParam(':mota', $this->mota);
-        $stmt->bindParam(':giaitien', $this->giatien);
+        $stmt->bindParam(':giatien', $this->giatien);
         $stmt->bindParam(':giamgia', $this->giamgia);
+        $stmt->bindParam(':idkhoahoc', $this->idkhoahoc);
         if (isset($this->image) && move_uploaded_file($this->image['tmp_name'], 'uploads/' . $this->image['name'])) {
             $imagePath = 'uploads/' . $this->image['name'];  // Đường dẫn ảnh
             $stmt->bindParam(':images', $imagePath);  // Bind đường dẫn ảnh
@@ -140,7 +149,33 @@ class KhoaHoc {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
+    public function updateGia() {
+        $query = "UPDATE " . $this->table . " SET 
+                  giatien = :giatien,
+                  giamgia = :giamgia 
+                  WHERE idkhoahoc = :idkhoahoc and trangthai = 1";
+        $stmt = $this->conn->prepare($query);
+    
+        // Đảm bảo tên tham số trong bindParam khớp với tên trong câu truy vấn SQL
+        $stmt->bindParam(':giatien', $this->giatien);
+        $stmt->bindParam(':giamgia', $this->giamgia);
+        $stmt->bindParam(':idkhoahoc', $this->idkhoahoc); // Thêm idkhoahoc nếu cần
+    
+        return $stmt->execute();
+    }
+    
+    public function countChiTiet(){
+        function countAll() {
+            $query = "SELECT COUNT(*) as total FROM SELECT * FROM `khoahoc`
+                  INNER JOIN chitietnhanvien 
+                  ON khoahoc.idkhoahoc = chitietnhanvien.idkhoahoc
+                  INNER JOIN nhanvien ON nhanvien.idnhanvien = chitietnhanvien.idnhanvien ";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['total'];
+        }
+    }
    
     
 }

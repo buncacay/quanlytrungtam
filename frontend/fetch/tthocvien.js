@@ -1,7 +1,10 @@
+import {fetchKhoaHoc, fetchHocVien} from './get.js';
+
+
 document.addEventListener('DOMContentLoaded', async function(){
     const params = new URLSearchParams(window.location.search);
     const id= params.get('id');
-    const data  = await fetchThongTin(id);
+    const data  = await fetchHocVien(id);
     console.log(data);
     HienThiThongTin(data);
     await HienThiListKhoaHoc();
@@ -42,24 +45,8 @@ async function edit(){
 }
 
 
-async function fetchThongTin(id){
-    const res= await fetch(`http://localhost/quanlytrungtam/backend/controller/HocvienController.php?idhocvien=${id}`);
-    if (!res.ok){
-        throw new Error(await res.text());
-    }
-    const data = await res.json();
-    console.log("data " + data);
-    return data;
-}
 
-async function fetchKhoaHoc(pages = 1, limit = 10) {
-    const url = `http://localhost/quanlytrungtam/backend/controller/KhoaHocController.php?pages=${pages}&limit=${limit}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(await res.text());
-    const data = await res.json();
-    console.log(data);
-    return data;
-}
+
 
 
 async function HienThiListKhoaHoc() {

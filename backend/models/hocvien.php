@@ -35,6 +35,14 @@ class hocvien {
         return false;
     }
     
+    public function countAll() {
+        $query = "SELECT COUNT(*) as total FROM hocvien";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['total'];
+    }
+    
 
     public function read($limit, $offset) {
         $query = "SELECT * FROM " . $this->table . " LIMIT :limit OFFSET :offset";
