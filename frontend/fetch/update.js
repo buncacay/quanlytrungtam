@@ -54,3 +54,41 @@ export async function UpdateHoaDon(data){
     alert("Cập nhật thành công!");
     return true;
 } 
+
+
+export async function UpdateKhoaHoc(data){
+    alert("chay alrt");
+    const res = await fetch('http://localhost/quanlytrungtam/backend/controller/KhoaHocController.php',{
+        method:'PUT',
+        headers:{
+             "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+
+    });
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
+
+    alert("Cập nhật thành công!");
+    return true;
+} 
+
+
+export async function UpdateGiangVien(data){
+    alert("chay alrt");
+    const res = await fetch('http://localhost/quanlytrungtam/backend/controller/NhanVienController.php',{
+        method:'PUT',
+        headers:{
+             "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+
+    });
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
+
+    alert("Cập nhật thành công!");
+    return true;
+} 

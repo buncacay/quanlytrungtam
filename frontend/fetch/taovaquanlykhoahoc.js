@@ -1,5 +1,5 @@
-import {fetchGiangVien} from './get.js';
-import {addKhoaHoc} from './add.js';
+import {fetchGiangVien, fetchKhoaHoc, fetchChiTietKhoaHoc, fetchKhoaHocVoiId} from './get.js';
+import {addKhoaHoc, addChiTietKhoaHoc, addGiangVien} from './add.js';
 
 document.getElementById('course-image').addEventListener('change', function(event) {
     HienThiAnh(event);
@@ -21,18 +21,128 @@ async function HienThiAnh(event) {
     }
 }
 
+document.getElementById("themkhoahoc").addEventListener("click", async function (event) {
+  event.preventDefault();
+   alert("hiiiiiiii");
+   alert("clicked");
+    event.preventDefault();
+    const ten = document.getElementById('course-name').value;
+    const soluongbuoi = document.getElementById('soluongbuoi').value;
+    const thoigianhoc = document.getElementById('thoigianhoc').value;
+    const lichhoc = document.getElementById('lichhoc').value;
+    const idnhanvien = document.getElementById('instructor').value;
+    const mota= document.getElementById('motakhoahoc').value;
+    const giatien= document.getElementById('giatien').value;
+    const giamgia= document.getElementById('giamgia').value;
 
 
-document.addEventListener('DOMContentLoaded', async function () {
-    await fetchGiangVien();
+    // alert(mota);
+   
+    const data = {
+        tenkhoahoc: ten,
+        thoigianhoc: thoigianhoc,
+        soluongbuoi: soluongbuoi,
+        lichhoc: lichhoc,
+        diadiemhoc: "not found",
+        mota : mota,
+        trangthai : 1,
+        giatien: giatien,
+        giamgia: giamgia
+       
+    };
+    const fileInput = document.getElementById('course-image');
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('data', JSON.stringify(data));
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+    
+  
+ event.preventDefault();
+    const kq = await addKhoaHoc(formData);
+    console.log(kq);
+    
+    if (kq) {
+        const data2 = {
+            idnhanvien: idnhanvien,
+            idkhoahoc: kq.idkhoahoc,
+            tinhtranggiangday: "dang day",
+            sogioday: 0,
+            dongia: 4.3,
+            thanhtien: 10
+        };
+
+        if (await addGiangVien(data2)){
+                alert("them giang vien thanh cong");
+        }
+        else {
+            alert("them giang vien that bai");
+        }
+        try {
+
+        const lessons = document.querySelectorAll('#noidungkhoahoc .lesson-item');
+        const data3 = [];
+        let d=0;
+        lessons.forEach(lesson =>{
+            const title = lesson.querySelector('.lesson-title')?.textContent.trim();
+            const link=lesson.querySelector('.lesson-link a')?.href;
+            alert(d);
+            data3.push({
+                idkhoahoc : kq.idkhoahoc,
+                idbaihoc: d,
+                tenbaihoc:title,
+                link: link
+            });
+            d++;
+        });
+        alert("cho anh");
+        console.log("data 3" , data3);
+        if (await addChiTietKhoaHoc(data3)){
+                alert("them chi tiet thanh cong thanh cong");
+        }
+        
+        else {
+            alert("them chi tiet that bai");
+        }
+        }
+        
+       catch (error) {
+        alert("Lỗi khi thêm chi tiết giảng viên: " + error);
+    }
+    } else {
+        alert("Thêm khóa học thất bại!");
+    }
+});
+
+
+
+document.addEventListener('DOMContentLoaded', async function (event) {
+       
+
+   
+    const data = await fetchGiangVien();
+    
+    // console.log("giang vien " , data);
+    const select = document.getElementById('instructor');
+    select.innerHTML = "";
+    data.forEach(nhanvien => {
+        const option = document.createElement('option');
+        option.value = nhanvien.idnhanvien;
+        option.textContent = nhanvien.tennhanvien;
+        select.appendChild(option);
+    });
     const urlParams = new URLSearchParams(window.location.search);
     const idkhoahoc = urlParams.get('idkhoahoc');
-    const kq = await fetchKhoaHoc(idkhoahoc);
-    alert(idkhoahoc);
-    console.log((kq));  
+    const kq = await fetchKhoaHocVoiId(idkhoahoc);
+
+    // alert(idkhoahoc);
+      
 
     if (idkhoahoc) {
-        const submitBtn = document.getElementById('btn');
+        console.log(("adfasdfads " , kq));
+        const submitBtn = document.getElementById('themkhoahoc');
         submitBtn.textContent = 'Lưu chỉnh sửa';
         submitBtn.setAttribute('onclick', 'saveChanges(event, ' + idkhoahoc + ')');
 
@@ -42,8 +152,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         const thoigianhoc = document.getElementById('thoigianhoc');
         const lichhoc = document.getElementById('lichhoc');
         const mota = document.getElementById('motakhoahoc');
+        const giatien= document.getElementById('giatien');
+        const giamgia= document.getElementById('giamgia');
         
-        console.log("abc " + kq.tenkhoahoc);
+       
         // alert(kq[0]['tenkhoahoc']);
 
         ten.value = kq[0]['tenkhoahoc'];  // Sửa từ textContent thành value
@@ -52,10 +164,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         thoigianhoc.value = kq[0]['thoigianhoc'];  // Sửa từ textContent thành value
         lichhoc.value = kq[0]['lichhoc'];  // Sửa từ textContent thành value
         mota.value=kq[0]['mota'];
-
+        giatien.value=kq[0]['giatien'];
+        giamgia.value=kq[0]['giamgia'];
+        const chitiet = await fetchChiTietKhoaHoc(idkhoahoc);
+        console.log(chitiet.data);
         const noidung = document.getElementById('noidungkhoahoc');
         noidung.innerHTML="";
-        kq.forEach(baihoc =>{
+        chitiet.data.forEach(baihoc =>{
             noidung.innerHTML += `
             <div class="lesson-item">
               <span class="lesson-title">${baihoc.tenbaihoc}</span>
@@ -79,73 +194,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 
-async function them(event) {
-    // alert("hiiiiiiii");
-    event.preventDefault();
-    const ten = document.getElementById('course-name').value;
-    const soluongbuoi = document.getElementById('soluongbuoi').value;
-    const thoigianhoc = document.getElementById('thoigianhoc').value;
-    const lichhoc = document.getElementById('lichhoc').value;
-    const idnhanvien = document.getElementById('instructor').value;
-    const mota= document.getElementById('motakhoahoc').value;
-    alert(mota);
-   
-    const data = {
-        tenkhoahoc: ten,
-        thoigianhoc: thoigianhoc,
-        soluongbuoi: soluongbuoi,
-        lichhoc: lichhoc,
-        diadiemhoc: "not found",
-        mota : mota,
-        trangthai : 1,
-       
-    };
-    const fileInput = document.getElementById('course-image');
-    const file = fileInput.files[0];
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('data', JSON.stringify(data));
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-    }
-    
-  
-
-    const kq = await addKhoaHoc(formData);
-    console.log(kq);
-    if (kq) {
-        const data2 = {
-            idnhanvien: idnhanvien,
-            idkhoahoc: kq.idkhoahoc,
-            tinhtranggiangday: "dang day",
-            sogioday: 0,
-            dongia: 4.3,
-            thanhtien: 10
-        };
-
-        const lessons = document.querySelectorAll('#noidungkhoahoc .lesson-item');
-        const data3 = [];
-        let d=0;
-        lessons.forEach(lesson =>{
-            const tilte = lesson.querySelector('.lesson-title')?.textContent.trim();
-            const link=lesson.querySelector('.lesson-link a')?.href;
-    
-            data3.push({
-                idkhoahoc : kq.idkhoahoc,
-                idbaihoc: d,
-                tenbaihoc:title,
-                link: link
-            });
-            d++;
-        });
-        await addGiangVien(data2);
-        await addChiTietKhoaHoc(data3);
-        alert("them thanh cong");
-    } else {
-        alert("Thêm khóa học thất bại!");
-    }
-    event.preventDefault()
-}
 
 async function add(){
     const noidungkhoahoc=document.getElementById('noidungkhoahoc');
@@ -249,4 +297,4 @@ window.edit = edit;
 window.remove = remove;
 window.save = save;
 window.add = add;
-window.them = them;
+

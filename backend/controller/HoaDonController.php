@@ -26,8 +26,9 @@ switch ($method) {
             if ($result) {
                 echo json_encode($result);
             } else {
-                http_response_code(404);
-                echo json_encode(["message" => "Invoice not found."]);
+                // http_response_code(404);
+                echo json_encode([]);
+
             }
         } else {
             echo json_encode($hoadon->read());

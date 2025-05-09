@@ -21,24 +21,28 @@
                     <label for="name">Tên nhân viên:</label>
                     <input type="text" id="name" name="name" placeholder="Nhập tên giảng viên">
     
-                    <label for="instructor">Giảng viên:</label>
-                    <select id="instructor" name="instructor">
-                    </select>
+                   
     
-                    <label for="soluongbuoi">Số lượng buổi:</label>
-                    <input type="text" id="soluongbuoi" name="schedule" placeholder="Nhập số lượng buổi (vd: 12)">
+                    <label for="trinhdo">Trình độ: </label>
+                    <input type="text" id="trinhdo" name="schedule" placeholder="Trình độ (cử nhân, thạc sĩ)">
     
-                    <label for="thoigianhoc">Thời gian học:</label>
-                    <input type="text" id="thoigianhoc" name="materials" placeholder="Nhập thời gian học (vd: 18h - 20h)">
+                    <label for="chungchi">Chứng chỉ</label>
+                    <input type="text" id="chungchi" name="materials" placeholder="Chứng chỉ (TOEIC, IELTS)">
     
-                    <label for="lichhoc">Lịch học</label>
-                    <input type="text" id="lichhoc" name="schedule" placeholder="Nhập lịch học (vd: Thứ 2, 4, 6)">
+                    <label for="sdt">SDT</label>
+                    <input type="text" id="sdt" name="schedule" placeholder="sdt">
+                
     
+                    <label for="chucvu">Chức vụ</label>
+                    <input type="text" id="chucvu" name="schedule" placeholder="Chức vụ (giáo viên, nhân viên)">
+
+                    <label for="ghichu">Ghi chú</label>
+                    <input type="text" id="ghichu" name="schedule" placeholder="Chức vụ (giáo viên, nhân viên)">
                     <button type="submit" onclick="them(event)">Thêm khóa học</button>
                 </form>
             </div>
             <div class="tong">
-                <div id="course-list-section">
+                <div id="giangvien">
                     
                 </div>
                 <div id="pagination">
@@ -50,7 +54,7 @@
     </div>
     
     <script src="../../js/app.js"></script>
-    <script src="../../fetch/thongtingiangvien.js"></script>
+    <script type="module" src="../../fetch/thongtingiangvien.js"></script>
 
    
 </body>

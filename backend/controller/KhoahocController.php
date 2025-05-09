@@ -19,9 +19,24 @@ $khoahoc = new khoahoc($conn);
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
-    case 'GET':
-        getKhoaHoc($khoahoc);
-        break;
+   case 'GET':
+    if (isset($_GET['idkhoahoc'])) {
+        $khoahoc->idkhoahoc = $_GET['idkhoahoc']; // Gán vào thuộc tính đối tượng
+        $stmt = $khoahoc->getKhoaHocById(); // Gọi hàm không truyền tham số
+        $num = $stmt->rowCount();
+
+        if ($num > 0) {
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode($data);
+        } else {
+            echo json_encode([]);
+        }
+    } else {
+        $stmt = getKhoaHoc($khoahoc);
+       
+    }
+    break;
+
 
     case 'POST':
         createKhoaHoc($khoahoc);
@@ -53,11 +68,12 @@ function getKhoaHoc($khoahoc) {
     $search = isset($_GET['search']) ? $_GET['search'] : null;
 
     if (isset($_GET['action']) && $_GET['action'] === 'chitiet') {
+        // Nếu có tìm kiếm, truyền tham số $search vào countChiTiet
         $result = $khoahoc->getChiTietKhoaHoc($limit, $offset, $search);
-        $total = ceil($khoahoc->countChiTiet()/$limit);
+        $total = ceil($khoahoc->countChiTiet($search) / $limit);  // Chỉnh sửa ở đây
     } else {
         $result = $khoahoc->read($limit, $offset);
-        $total = ceil($khoahoc->countAll()/$limit);
+        $total = ceil($khoahoc->countAll() / $limit);  // Tổng số bản ghi khi không có tìm kiếm
     }
 
     echo json_encode([
@@ -67,6 +83,7 @@ function getKhoaHoc($khoahoc) {
         "limit" => $limit
     ]);
 }
+
 
 function createKhoaHoc($khoahoc) {
     // Nếu gửi bằng FormData (có file) thì $_FILES sẽ có dữ liệu
@@ -97,37 +114,50 @@ function createKhoaHoc($khoahoc) {
         $khoahoc->images = $data->images ?? null; // nếu không có cũng không lỗi
     }
 
-    if (isset($data->tenkhoahoc, $data->thoigianhoc, $data->soluongbuoi, $data->lichhoc, $data->diadiemhoc, $data->giatien)) {
-        $khoahoc->tenkhoahoc = $data->tenkhoahoc;
-        $khoahoc->thoigianhoc = $data->thoigianhoc;
-        $khoahoc->soluongbuoi = $data->soluongbuoi;
-        $khoahoc->lichhoc = $data->lichhoc;
-        $khoahoc->diadiemhoc = $data->diadiemhoc;
-        $khoahoc->giatien = $data->giatien;
-        $khoahoc->giamgia = $data->giamgia ?? null;
-        $khoahoc->mota = $data->mota ?? null;
+   $requiredFields = ['tenkhoahoc', 'thoigianhoc', 'soluongbuoi', 'lichhoc', 'diadiemhoc', 'giatien'];
+$missingFields = [];
 
-        if ($khoahoc->create()) {
-            $response = [
-                "idkhoahoc" => $khoahoc->idkhoahoc,
-                "tenkhoahoc" => $khoahoc->tenkhoahoc,
-                "thoigianhoc" => $khoahoc->thoigianhoc,
-                "lichhoc" => $khoahoc->lichhoc,
-                "diadiemhoc" => $khoahoc->diadiemhoc,
-                "mota" => $khoahoc->mota,
-                "images" => $khoahoc->images,
-                "giatien" => $khoahoc->giatien,
-                "giamgia" => $khoahoc->giamgia
-            ];
-            echo json_encode($response);
-        } else {
-            http_response_code(500);
-            echo json_encode(["message" => "Không thể tạo khoá học."]);
-        }
-    } else {
-        http_response_code(400);
-        echo json_encode(["message" => "Thiếu dữ liệu khoá học."]);
+foreach ($requiredFields as $field) {
+    if (!isset($data->$field)) {
+        $missingFields[] = $field;
     }
+}
+
+if (empty($missingFields)) {
+    $khoahoc->tenkhoahoc = $data->tenkhoahoc;
+    $khoahoc->thoigianhoc = $data->thoigianhoc;
+    $khoahoc->soluongbuoi = $data->soluongbuoi;
+    $khoahoc->lichhoc = $data->lichhoc;
+    $khoahoc->diadiemhoc = $data->diadiemhoc;
+    $khoahoc->giatien = $data->giatien;
+    $khoahoc->giamgia = $data->giamgia ?? null;
+    $khoahoc->mota = $data->mota ?? null;
+
+    if ($khoahoc->create()) {
+        $response = [
+            "idkhoahoc" => $khoahoc->idkhoahoc,
+            "tenkhoahoc" => $khoahoc->tenkhoahoc,
+            "thoigianhoc" => $khoahoc->thoigianhoc,
+            "lichhoc" => $khoahoc->lichhoc,
+            "diadiemhoc" => $khoahoc->diadiemhoc,
+            "mota" => $khoahoc->mota,
+            "images" => $khoahoc->images,
+            "giatien" => $khoahoc->giatien,
+            "giamgia" => $khoahoc->giamgia
+        ];
+        echo json_encode($response);
+    } else {
+        http_response_code(500);
+        echo json_encode(["message" => "Không thể tạo khoá học."]);
+    }
+} else {
+    http_response_code(400);
+    echo json_encode([
+        "message" => "Thiếu dữ liệu khoá học.",
+        "missing_fields" => $missingFields
+    ]);
+}
+
 }
 
 function updateKhoaHoc($khoahoc) {

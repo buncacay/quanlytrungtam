@@ -31,7 +31,12 @@ class ChiTietNhanVien {
     }
 
     public function read() {
-        $query = "SELECT * FROM " . $this->table;
+    $query = "SELECT * 
+          FROM chitietnhanvien ct
+          INNER JOIN nhanvien n ON ct.idnhanvien = n.idnhanvien
+          WHERE n.trangthai = 1";
+
+
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
@@ -44,7 +49,7 @@ class ChiTietNhanVien {
                       sogioday = :sogioday, 
                       dongia = :dongia, 
                       thanhtien = :thanhtien 
-                  WHERE idnhanvien = :idnhanvien AND idkhoahoc = :idkhoahoc";
+                  WHERE idnhanvien = :idnhanvien AND idkhoahoc = :idkhoahoc ";
         $stmt = $this->conn->prepare($query);
 
         return $stmt->execute([

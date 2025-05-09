@@ -68,29 +68,59 @@ switch ($method) {
 }
 
 function createBaiHoc($chitiet) {
-    $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->idkhoahoc, $data->tenbaihoc, $data->link, $data->idbaihoc)) {
-        $chitiet->idkhoahoc = $data->idkhoahoc;
-        $chitiet->idbaihoc = $data->idbaihoc;
-        $chitiet->tenbaihoc = $data->tenbaihoc;
-        $chitiet->link = $data->link;
+    $data = json_decode(file_get_contents("php://input"), true); // Decode thành mảng
+
+    if (!is_array($data)) {
+        http_response_code(400);
+        echo json_encode(["message" => "Dữ liệu gửi lên phải là một mảng bài học."]);
+        return;
+    }
+
+    $results = [];
+
+    foreach ($data as $index => $item) {
+        $missingFields = [];
+
+        // Kiểm tra từng trường bắt buộc
+        if (!isset($item['idkhoahoc'])) $missingFields[] = 'idkhoahoc';
+        if (!isset($item['idbaihoc']))  $missingFields[] = 'idbaihoc';
+        if (!isset($item['tenbaihoc'])) $missingFields[] = 'tenbaihoc';
+        if (!isset($item['link']))      $missingFields[] = 'link';
+
+        if (!empty($missingFields)) {
+            $results[] = [
+                "index" => $index,
+                "error" => "Thiếu trường: " . implode(', ', $missingFields),
+                "data" => $item
+            ];
+            continue;
+        }
+
+        // Gán dữ liệu vào đối tượng
+        $chitiet->idkhoahoc = $item['idkhoahoc'];
+        $chitiet->idbaihoc  = $item['idbaihoc'];
+        $chitiet->tenbaihoc = $item['tenbaihoc'];
+        $chitiet->link      = $item['link'];
 
         if ($chitiet->create()) {
-            echo json_encode([
-                "idkhoahoc" => $chitiet->idkhoahoc,
-                "idbaihoc" => $chitiet->idbaihoc,
-                "tenbaihoc" => $chitiet->tenbaihoc,
-                "link" => $chitiet->link
-            ]);
+            $results[] = [
+                "index" => $index,
+                "status" => "Thêm thành công",
+                "data" => $item
+            ];
         } else {
-            http_response_code(500);
-            echo json_encode(["message" => "Unable to create record."]);
+            $results[] = [
+                "index" => $index,
+                "error" => "Không thể thêm vào CSDL",
+                "data" => $item
+            ];
         }
-    } else {
-        http_response_code(400);
-        echo json_encode(["message" => "Incomplete data."]);
     }
+
+    // Trả về toàn bộ kết quả
+    echo json_encode($results, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 }
+
 
 function updateBaiHoc($chitiet) {
     $data = json_decode(file_get_contents("php://input"));

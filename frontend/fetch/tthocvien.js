@@ -1,12 +1,25 @@
-import {fetchKhoaHoc, fetchHocVien} from './get.js';
+import { fetchKhoaHoc, fetchHocVien, fetchHoaDonWithId } from './get.js';
+import {addStudent, addChiTietHocVien} from './add.js';
 
+let id = "";
+let khoahocDaDangKy = []; // Các khóa học học viên đã đăng ký
 
-document.addEventListener('DOMContentLoaded', async function(){
+document.addEventListener('DOMContentLoaded', async function () {
     const params = new URLSearchParams(window.location.search);
-    const id= params.get('id');
-    const data  = await fetchHocVien(id);
-    console.log(data);
-    HienThiThongTin(data);
+    id = params.get('id');
+
+    if (!id) {
+        alert("Không tìm thấy ID học viên.");
+        return;
+    }
+
+    const data = await fetchHocVien(id);
+    if (!data || data.length === 0) {
+        alert("Không tìm thấy thông tin học viên.");
+        return;
+    }
+
+    await HienThiThongTin(data);
     await HienThiListKhoaHoc();
 });
 
@@ -22,64 +35,49 @@ async function remove() {
 
             if (!res.ok) {
                 const errMsg = await res.text();
-                console.error("Lỗi xóa:", errMsg);
                 alert("Xóa thất bại: " + errMsg);
                 return;
             }
-            console.log(await res.json());
+
             alert("Xóa thành công");
             window.location.href = "danhsachhocvien.html";
         } catch (error) {
-            console.error("Lỗi fetch:", error);
-            alert("Đã xảy ra lỗi khi xóa học viên.");
+            console.error("Lỗi khi xóa học viên:", error);
+            alert("Đã xảy ra lỗi.");
         }
     }
 }
 
-
-async function edit(){
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    
-    window.location.href=`dangkyhocvien.html?id=${id}`;
+async function edit() {
+    window.location.href = `dangkyhocvien.html?id=${id}`;
 }
 
+async function HienThiThongTin(data) {
+    const hocvien = data[0];
 
-
-
-
-
-async function HienThiListKhoaHoc() {
-    const selection = document.getElementById('dky');
-    const data = await fetchKhoaHoc(); 
-    const danhSach = data.data; // mảng chứa các khóa học
-    console.log(danhSach[0].tenkhoahoc); // Kiểm tra dữ liệu
-
-    danhSach.forEach(khoahoc => {
-        const otp = document.createElement('option'); 
-        // alert("asdfasdf" + khoahoc.idkhoahoc);
-        otp.value = khoahoc.idkhoahoc;
-        otp.textContent = khoahoc.tenkhoahoc;
-        selection.appendChild(otp); 
-    });
-}
-
-
-async function HienThiThongTin(data){
-   
-    console.log("uia " +data);
-    const info = document.getElementById('student-info');
-    info.innerHTML = `
+    document.getElementById('student-info').innerHTML = `
         <h2>Thông tin học viên</h2>
-        <p><strong>Họ và tên:</strong> ${data[0]['hoten']}</p>
-        <p><strong>Mã học viên:</strong> ${data[0]['idhocvien']}</p>
-        <p><strong>Số điện thoại:</strong> ${data[0]['sdt']}</p>
+        <p><strong>Họ và tên:</strong> ${hocvien.hoten}</p>
+        <p><strong>Mã học viên:</strong> ${hocvien.idhocvien}</p>
+        <p><strong>Số điện thoại:</strong> ${hocvien.sdt}</p>
     `;
-    
-   
 
-    const detail = document.getElementById('student-hdon');
-    detail.innerHTML = `
+    // Lưu danh sách id khóa học đã đăng ký
+    khoahocDaDangKy = data.map(item => item.idkhoahoc).filter(Boolean);
+
+    const hoadon = await fetchHoaDonWithId(hocvien.idhocvien);
+    HienThiHoaDon(hoadon);
+    HienThiKhoaHoc(data);
+}
+
+function HienThiHoaDon(hoadon) {
+    const container = document.getElementById('student-hdon');
+    if (!hoadon || hoadon.length === 0) {
+        container.innerHTML = 'Người dùng chưa có hóa đơn nào';
+        return;
+    }
+
+    container.innerHTML = `
         <h3>Chi tiết hóa đơn</h3>
         <table class="table table-bordered">
             <thead>
@@ -91,32 +89,29 @@ async function HienThiThongTin(data){
                     <th>Chỉnh sửa</th>
                 </tr>
             </thead>
-            <tbody id="detail-body">
-            </tbody>
+            <tbody id="detail-body"></tbody>
         </table>
     `;
 
     const tbody = document.getElementById("detail-body");
+    tbody.innerHTML = hoadon.map(item => `
+        <tr>
+            <td>${item.idhoadon}</td>
+            <td>${item.tenhoadon}</td>
+            <td>${item.thoigianlap}</td>
+            <td>${item.thanhtien}</td>
+            <td>
+                <button onclick="editHoaDon(${item.idhoadon})">Edit</button>
+                <button onclick="removeHoaDon(${item.idhoadon})">Remove</button>
+                <button onclick="showMoreHoaDon(${item.idhoadon})">Show more</button>
+            </td>
+        </tr>
+    `).join('');
+}
 
-    data.forEach(dlieu => {
-        // alert(dlieu['idhoadon']);
-        tbody.innerHTML += `
-            <tr>
-                <td>${dlieu['idhoadon']}</td>
-                <td>${dlieu['tenhoadon']}</td>
-                <td>${dlieu['thoigianlap']}</td>
-                <td>${dlieu['thanhtien']}</td>
-                <td>
-                    <button href="#">Edit</button> 
-                    <button href="#">Remove</button>  
-                    <button href="#">Show more</button>
-                </td>
-            </tr>
-        `;
-    });
-
-    const khoahoc = document.getElementById('student-khoc');
-    khoahoc.innerHTML = `
+function HienThiKhoaHoc(data) {
+    const container = document.getElementById('student-khoc');
+    container.innerHTML = `
         <h3>Chi tiết khóa học</h3>
         <table class="table table-bordered">
             <thead>
@@ -124,35 +119,94 @@ async function HienThiThongTin(data){
                     <th>Mã khóa học</th>
                     <th>Tên khóa học</th>
                     <th>Chỉnh sửa</th>
-                  
                 </tr>
             </thead>
-            <tbody id="tbody_khoahoc">
-            </tbody>
+            <tbody id="tbody_khoahoc"></tbody>
         </table>
     `;
 
-    const tbody_khoahoc = document.getElementById("tbody_khoahoc");
+    const tbody = document.getElementById("tbody_khoahoc");
+    tbody.innerHTML = data.map(item => `
+        <tr>
+            <td>${item.idkhoahoc}</td>
+            <td>${item.tenkhoahoc}</td>
+            <td>
+                <button onclick="editkhoahoc(${item.idkhoahoc})">Edit</button>
+                <button onclick="removekhoahoc(${item.idkhoahoc})">Remove</button>
+            </td>
+        </tr>
+    `).join('');
+}
 
-    data.forEach(dlieu => {
-        tbody_khoahoc.innerHTML += `
-            <tr>
-                <td>${dlieu.idkhoahoc}</td>
-                <td>${dlieu.tenkhoahoc}</td>
-                <td>
-                    <button onclick="editkhoahoc(${dlieu.idkhoahoc})">Edit</button> 
-                    <button onclick="removekhoahoc(${dlieu.idkhoahoc})">Remove</button> 
-                    
-                </td>
-            </tr>
-        `;
+async function HienThiListKhoaHoc() {
+    const selection = document.getElementById('dky');
+    selection.innerHTML = ''; // Xóa danh sách cũ
+
+    const data = await fetchKhoaHoc();
+    const list = Array.isArray(data.data) ? data.data : data;
+
+    const chuaDangKy = list.filter(kh => !khoahocDaDangKy.includes(kh.idkhoahoc));
+
+    if (chuaDangKy.length === 0) {
+        const option = document.createElement('option');
+        option.textContent = 'Học viên đã đăng ký hết các khóa học.';
+        option.disabled = true;
+        selection.appendChild(option);
+        return;
+    }
+
+    chuaDangKy.forEach(khoahoc => {
+        const option = document.createElement('option');
+        option.value = khoahoc.idkhoahoc;
+        option.textContent = khoahoc.tenkhoahoc;
+        selection.appendChild(option);
     });
 }
 
+async function themkhoahoc() {
+    alert("Đang thêm dữ liệu...");
 
-function editkhoahoc(id){
-   
-    window.location.href=`taovaquanlykhoahoc.html?idkhoahoc=${id}`;
+    const data2 = {
+        idhocvien: id,
+        idkhoahoc: document.getElementById('dky').value,
+        ketquahoctap: "chua co",
+        tinhtranghocphi: "chua co"
+    };
+
+    const kq2 = await addChiTietHocVien(data2);
+    console.log("Kết quả thêm:", kq2);
+
+    // Reload lại thông tin học viên và danh sách
+    const updatedData = await fetchHocVien(id);
+    await HienThiThongTin(updatedData);
+    await HienThiListKhoaHoc();
 }
 
+// Các hàm xử lý thêm/xóa/sửa
+window.themkhoahoc = themkhoahoc;
+window.remove = remove;
+window.edit = edit;
 
+window.editkhoahoc = function(id) {
+    window.location.href = `taovaquanlykhoahoc.html?idkhoahoc=${id}`;
+};
+
+window.removekhoahoc = function(id) {
+    if (confirm("Bạn có chắc chắn muốn xóa khóa học này không?")) {
+        alert(`Chức năng xóa khóa học ${id} đang được phát triển.`);
+    }
+};
+
+window.editHoaDon = function(id) {
+    alert(`Chức năng chỉnh sửa hóa đơn ${id} đang được phát triển.`);
+};
+
+window.removeHoaDon = function(id) {
+    if (confirm("Bạn có chắc chắn muốn xóa hóa đơn này không?")) {
+        alert(`Chức năng xóa hóa đơn ${id} đang được phát triển.`);
+    }
+};
+
+window.showMoreHoaDon = function(id) {
+    alert(`Chi tiết thêm của hóa đơn ${id}...`);
+};

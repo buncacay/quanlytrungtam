@@ -1,5 +1,5 @@
 import { fetchKhoaHoc , fetchHocVien,  } from './get.js';
-import {addStudent, addKhoaHoc} from './add.js';
+import {addStudent, addChiTietHocVien} from './add.js';
 import {UpdateHocVien} from './update.js';
 
 document.getElementById('registrationForm').addEventListener('submit', async function(event) {
@@ -17,10 +17,10 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
        
     };
 
-    console.log("day la data ", JSON.stringify(data)); // Kiểm tra trước khi gửi
+    // console.log("day la data ", JSON.stringify(data)); // Kiểm tra trước khi gửi
     
     const kq = await addStudent(data);
-    console.log("day la kq ", kq);
+    // console.log("day la kq ", kq);
     const id = kq.idhocvien;
     console.log("id " + id);
     const data2 = {
@@ -29,7 +29,10 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         ketquahoctap : "chua co",
         tinhtranghocphi : "chua co"
     }
-    addKhoaHoc(data2);
+    console.log(data2);
+    const kq2 = await addChiTietHocVien(data2);
+    console.log(kq2);
+    
 
 });
 

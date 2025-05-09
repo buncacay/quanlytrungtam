@@ -1,42 +1,35 @@
 import { fetchAllHocVien } from './get.js';
 
-
 let currentPage = 1;
 let totalPages = 1;
 const limit = 5;
 
 document.addEventListener('DOMContentLoaded', async function () {
-    await ShowAll(currentPage);
+    await showAll(currentPage);
 });
 
+async function showAll(page = 1) {
+    try {
+        const response = await fetchAllHocVien(page);
+        const students = response.data || [];
+        currentPage = response.page;
+        totalPages = response.total;
 
+        renderTable(students);
+        renderPagination(currentPage, totalPages);
+    } catch (error) {
+        console.error("Lỗi khi tải danh sách học viên:", error);
+        document.getElementById('student-all').innerHTML = "<p>Không thể tải danh sách học viên.</p>";
+    }
+}
 
-async function ShowAll(page = 1) {
-    const response = await fetchAllHocVien(page);
-    const students = response.data;
-    currentPage = response.page;
-    totalPages = response.total;
-
-
-    const student_all = document.getElementById('student-all');
-    student_all.innerHTML = `
-        <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr>
-                    <th>Mã HV</th>
-                    <th>Họ tên</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody id="student-tbody"></tbody>
-        </table>
-    `;
-
-    const tbody = document.getElementById('student-tbody');
-    tbody.innerHTML = ""; // Xóa dữ liệu cũ
+function renderTable(students) {
+    const container = document.getElementById('student-all');
+    let rows = "";
 
     students.forEach(student => {
-        tbody.innerHTML += `
+        alert(student.idhocvien); // ✅ dùng alert đúng cách
+        rows += `
             <tr>
                 <td>${student.idhocvien}</td>
                 <td>${student.hoten}</td>
@@ -45,10 +38,24 @@ async function ShowAll(page = 1) {
         `;
     });
 
-    renderPagination(page, totalPages);
+    container.innerHTML = `
+        <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Mã HV</th>
+                    <th>Họ tên</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows}
+            </tbody>
+        </table>
+    `;
 }
 
-function renderPagination(currentPage, totalPages ) {
+
+function renderPagination(currentPage, totalPages) {
     const container = document.getElementById("pagination");
     container.innerHTML = "";
 
@@ -61,27 +68,27 @@ function renderPagination(currentPage, totalPages ) {
         startPage = Math.max(endPage - maxVisiblePages + 1, 1);
     }
 
-    const prevBtn = document.createElement("button");
-    prevBtn.textContent = "« Trước";
-    prevBtn.disabled = currentPage === 1;
-    prevBtn.className = 'pagination-button';
-    prevBtn.onclick = () => ShowAll(currentPage - 1);
+    // Nút Previous
+    const prevBtn = createPaginationButton("« Trước", currentPage > 1, () => showAll(currentPage - 1));
     container.appendChild(prevBtn);
 
+    // Các nút số trang
     for (let i = startPage; i <= endPage; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = i;
-        btn.className = 'pagination-button';
-        btn.className = i === currentPage ? "active" : "";
-        btn.onclick = () => ShowAll(i);
+        const btn = createPaginationButton(i, true, () => showAll(i));
+        if (i === currentPage) btn.classList.add("active");
         container.appendChild(btn);
     }
 
-    const nextBtn = document.createElement("button");
-    nextBtn.textContent = "Sau »";
-    extBtn.className = 'pagination-button';
-    nextBtn.disabled = currentPage === totalPages;
-    nextBtn.onclick = () => ShowAll(currentPage + 1);
+    // Nút Next
+    const nextBtn = createPaginationButton("Sau »", currentPage < totalPages, () => showAll(currentPage + 1));
     container.appendChild(nextBtn);
 }
 
+function createPaginationButton(text, enabled, onClick) {
+    const btn = document.createElement("button");
+    btn.textContent = text;
+    btn.className = "pagination-button";
+    btn.disabled = !enabled;
+    btn.onclick = onClick;
+    return btn;
+}

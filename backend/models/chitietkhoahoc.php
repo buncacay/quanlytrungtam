@@ -41,7 +41,7 @@ class chitietkhoahoc {
     public function read($limit, $offset) {
         $query = "SELECT * FROM `khoahoc` INNER join chitietnhanvien on khoahoc.idkhoahoc=chitietnhanvien.idkhoahoc 
 INNER join nhanvien on chitietnhanvien.idnhanvien=nhanvien.idnhanvien
-INNER JOIN chitietkhoahoc on khoahoc.idkhoahoc=chitietkhoahoc.idkhoahoc  where khoahoc.idkhoahoc=:idkhoahoc
+INNER JOIN chitietkhoahoc on khoahoc.idkhoahoc=chitietkhoahoc.idkhoahoc  where khoahoc.idkhoahoc=:idkhoahoc 
                   LIMIT :limit OFFSET :offset";
         $stmt = $this->conn->prepare($query);
     

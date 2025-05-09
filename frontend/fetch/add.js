@@ -1,11 +1,16 @@
 export async function addKhoaHoc(data) {
+   
     try {
         const res = await fetch('http://localhost/quanlytrungtam/backend/controller/KhoahocController.php', {
             method: 'POST',
            
             body:data
         });
-        if (!res.ok) throw new Error('Lỗi: ' + await res.text());
+        if (!res.ok) {
+            const err = await res.text();
+            alert(err);
+            throw new Error('Lỗi: ' + err);
+        }
         return await res.json();
     } catch (error) {
         alert("Lỗi khi thêm khóa học: " + error.message);
@@ -54,24 +59,30 @@ export async function addGiangVien(data) {
 }
 
 
-export async function addChiTietKhoaHoc(){
-  
-    const res= await fetch('http://localhost/quanlytrungtam/backend/controller/ChitietkhoahocController.php',{
-            method:'POST',
-            headers:
-            {
-                'Content-Type' : 'application/json'
-            },
-            body:JSON.stringify(data)
-    });
-    if (!res.ok) {
-        alert("xem lai");
-        throw new Error('Lỗi: ' + await res.text());
+export async function addChiTietKhoaHoc(data){
+  console.log(data);
+    try {
+        const res= await fetch('http://localhost/quanlytrungtam/backend/controller/ChitietkhoahocController.php',{
+                    method:'POST',
+                    headers:
+                    {
+                        'Content-Type' : 'application/json'
+                    },
+                    body:JSON.stringify(data)
+            });
+            if (!res.ok) {
+                alert("xem lai");
+                throw new Error('Lỗi: ' + await res.text());
+            }
+            return await res.json();
+            }
+   catch (error) {
+        alert("Lỗi khi thêm chi tiết giảng viên: " + error.message);
     }
-    return await res.json();
+}
      
     
-}
+
 
 export async function addStudent(data) {
     try {
@@ -91,8 +102,57 @@ export async function addStudent(data) {
 
         const result = await res.json();
         
-        document.getElementById('confirmationMessage').textContent =
-            'Đăng ký thành công! Vui lòng kiểm tra email/SMS để xác thực tài khoản.';
+        
+        return result;
+    } catch (err) {
+        console.error('Lỗi:', err);
+    }
+}
+
+export async function addChiTietHocVien(data) {
+    try {
+        const res = await fetch('http://localhost/quanlytrungtam/backend/controller/ChitiethocvienController.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error('Lỗi từ server:', errorText);
+            throw new Error(errorText);
+        }
+
+        const result = await res.json();
+        
+        
+        return result;
+    } catch (err) {
+        console.error('Lỗi:', err);
+    }
+}
+
+export async function addChiTietNhanVien(data) {
+    try {
+        const res = await fetch('http://localhost/quanlytrungtam/backend/controller/ChitietnhanvienController.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error('Lỗi từ server:', errorText);
+            throw new Error(errorText);
+        }
+
+        const result = await res.json();
+        
+        
         return result;
     } catch (err) {
         console.error('Lỗi:', err);

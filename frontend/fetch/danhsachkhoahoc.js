@@ -12,7 +12,6 @@ async function ShowAll(pages = 1) {
     const students = response.data;
     currentPage = response.page;
     totalPages = response.total;
-    
 
     // console.log("Fetched data:", data); // kiểm tra dữ liệu trả về
     // totalPages = data.totalPages || 1;

@@ -59,6 +59,7 @@ function createNhanVien($nhanvien) {
         $nhanvien->chucvu       = $data->chucvu;
         $nhanvien->tonggioday   = $data->tonggioday;
         $nhanvien->ghichu       = $data->ghichu;
+         $nhanvien->trangthai       = $data->trangthai;
 
         if ($nhanvien->create()) {
             echo json_encode(["message" => "Record created successfully."]);
@@ -90,6 +91,7 @@ function updateNhanVien($nhanvien) {
         $nhanvien->chucvu       = $data->chucvu;
         $nhanvien->tonggioday   = $data->tonggioday;
         $nhanvien->ghichu       = $data->ghichu;
+        $nhanvien->trangthai       = $data->trangthai;
 
         if ($nhanvien->update()) {
             echo json_encode(["message" => "Record updated successfully."]);

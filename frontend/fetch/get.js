@@ -3,18 +3,11 @@
 
 
 export async function fetchGiangVien() {
-    const select = document.getElementById('instructor');
     const res = await fetch('http://localhost/quanlytrungtam/backend/controller/NhanVienController.php');
     if (!res.ok) throw new Error(await res.text());
     const data = await res.json();
-    console.log("giang vien " + data);
-    select.innerHTML = "";
-    data.forEach(nhanvien => {
-        const option = document.createElement('option');
-        option.value = nhanvien.idnhanvien;
-        option.textContent = nhanvien.tennhanvien;
-        select.appendChild(option);
-    });
+   
+    return data;
 }
 
 
@@ -27,6 +20,15 @@ export async function fetchKhoaHoc() {
     const data = await res.json();
     console.log(data.data);
     return data.data;
+}
+
+export async function fetchKhoaHocVoiId(id) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/KhoahocController.php?idkhoahoc=${id}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
 }
 // pages = 1, limit = 5
 export async function fetchKhoaHocPhanTrang(pages, limit) {
@@ -54,6 +56,8 @@ export async function fetchKhoaHocWithSearch(pages, limit, search = null) {
     console.log("huhu " , data);
     return data;
 }
+
+
 
 
 
@@ -102,3 +106,13 @@ export async function fetchAllHocVien(page = 1, limit=5) {
     return data;
 }
  
+
+export async function fetchHoaDonWithId(id){
+    const res = await fetch(`http://localhost/quanlytrungtam/backend/controller/HoaDonController.php?idhoadon=${id}`);
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
+
+    const data = await res.json();
+    return data;
+}

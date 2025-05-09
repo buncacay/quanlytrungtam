@@ -20,8 +20,8 @@ class nhanvien {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " (tennhanvien, trinhdo, chungchi, sdt, diachi, tienthuong, tienphat, chucvu, tonggioday, ghichu) 
-                  VALUES (:tennhanvien, :trinhdo, :chungchi, :sdt, :diachi, :tienthuong, :tienphat, :chucvu, :tonggioday, :ghichu)";
+        $query = "INSERT INTO " . $this->table . " (tennhanvien, trinhdo, chungchi, sdt, diachi, tienthuong, tienphat, chucvu, tonggioday, ghichu,trangthai) 
+                  VALUES (:tennhanvien, :trinhdo, :chungchi, :sdt, :diachi, :tienthuong, :tienphat, :chucvu, :tonggioday, :ghichu, 1)";
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
@@ -60,6 +60,7 @@ class nhanvien {
                   chucvu = :chucvu, 
                   tonggioday = :tonggioday, 
                   ghichu = :ghichu 
+                   trangthai = :trangthai 
                   WHERE idnhanvien = :idnhanvien";
         $stmt = $this->conn->prepare($query);
 
@@ -75,12 +76,14 @@ class nhanvien {
         $stmt->bindParam(':tonggioday', $this->tonggioday, PDO::PARAM_INT);
         $stmt->bindParam(':ghichu', $this->ghichu);
         $stmt->bindParam(':idnhanvien', $this->idnhanvien, PDO::PARAM_INT);
+         $stmt->bindParam(':trangthai', $this->trangthai);
 
         return $stmt->execute();
     }
 
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE idnhanvien = :idnhanvien";
+   $query = "UPDATE " . $this->table . " SET trangthai = 0 WHERE idnhanvien = :idnhanvien";
+
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
@@ -88,5 +91,19 @@ class nhanvien {
 
         return $stmt->execute();
     }
+    
+    public function CapNhatTongGioDay() {
+        $sql = "UPDATE nhanvien n
+                JOIN (
+                    SELECT idnhanvien, SUM(sogioday) AS total_hours
+                    FROM chitietnhanvien
+                    GROUP BY idnhanvien
+                ) c ON n.idnhanvien = c.idnhanvien
+                SET n.tonggioday = c.total_hours";
+    
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+    }
+    
 }
 ?>

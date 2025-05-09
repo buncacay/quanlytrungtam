@@ -163,3 +163,80 @@ body {
     color: #333;
     text-align: center;
 }
+
+/* Bảng danh sách giảng viên */
+.course-list {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.course-list th, .course-list td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: center;
+}
+
+.course-list th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.course-list tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.course-list tr:hover {
+    background-color: #e0f7fa;
+    transition: background-color 0.3s ease;
+}
+
+/* Nút thao tác */
+.course-list button {
+    padding: 6px 10px;
+    margin: 2px;
+    border: none;
+    background-color: #2196F3;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.course-list button:hover {
+    background-color: #0b7dda;
+}
+
+/* Phân trang */
+#pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    background-color: #f1f1f1;
+    border: 1px solid #bbb;
+    padding: 8px 12px;
+    margin: 0 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.pagination-button:hover {
+    background-color: #ddd;
+}
+
+.pagination-button.active {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination-button:disabled {
+    background-color: #eee;
+    color: #999;
+    cursor: not-allowed;
+}
