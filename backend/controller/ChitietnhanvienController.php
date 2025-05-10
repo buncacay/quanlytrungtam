@@ -51,14 +51,31 @@ function readChiTiet($nhanvien) {
 }
 
 function createChiTiet($nhanvien) {
-    $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->thanhtien, $data->idnhanvien, $data->idkhoahoc, $data->tinhtranggiangday, $data->sogioday, $data->dongia)) {
+    try {
+        $data = json_decode(file_get_contents("php://input"));
+        
+        $missingFields = [];
+
+        if (!isset($data->idnhanvien)) $missingFields[] = "idnhanvien";
+        if (!isset($data->idkhoahoc)) $missingFields[] = "idkhoahoc";
+        if (!isset($data->thoigianbatdau)) $missingFields[] = "thoigianbatdau";
+        if (!isset($data->thoigianketthuc)) $missingFields[] = "thoigianketthuc";
+        if (!isset($data->dongia)) $missingFields[] = "dongia";
+
+        if (!empty($missingFields)) {
+            http_response_code(400);
+            echo json_encode([
+                "message" => "Incomplete data.",
+                "missing" => $missingFields
+            ]);
+            return;
+        }
+
         $nhanvien->idnhanvien = $data->idnhanvien;
         $nhanvien->idkhoahoc = $data->idkhoahoc;
-        $nhanvien->tinhtranggiangday = $data->tinhtranggiangday;
-        $nhanvien->sogioday = $data->sogioday;
+        $nhanvien->thoigianbatdau = $data->thoigianbatdau;
+        $nhanvien->thoigianketthuc = $data->thoigianketthuc;
         $nhanvien->dongia = $data->dongia;
-        $nhanvien->thanhtien = $data->thanhtien;
 
         if ($nhanvien->create()) {
             echo json_encode(["message" => "Record created successfully."]);
@@ -66,33 +83,51 @@ function createChiTiet($nhanvien) {
             http_response_code(500);
             echo json_encode(["message" => "Unable to create record."]);
         }
-    } else {
-        http_response_code(400);
-        echo json_encode(["message" => "Incomplete data."]);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        echo json_encode([
+            "message" => "Unexpected error occurred.",
+            "error" => $e->getMessage()
+        ]);
     }
 }
+
+
 
 function updateChiTiet($nhanvien) {
     $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->thanhtien, $data->idnhanvien, $data->idkhoahoc, $data->tinhtranggiangday, $data->sogioday, $data->dongia)) {
-        $nhanvien->idnhanvien = $data->idnhanvien;
-        $nhanvien->idkhoahoc = $data->idkhoahoc;
-        $nhanvien->tinhtranggiangday = $data->tinhtranggiangday;
-        $nhanvien->sogioday = $data->sogioday;
-        $nhanvien->dongia = $data->dongia;
-        $nhanvien->thanhtien = $data->thanhtien;
+    
+    $missingFields = [];
 
-        if ($nhanvien->update()) {
-            echo json_encode(["message" => "Record updated successfully."]);
-        } else {
-            http_response_code(500);
-            echo json_encode(["message" => "Unable to update record."]);
-        }
-    } else {
+    if (!isset($data->idnhanvien)) $missingFields[] = "idnhanvien";
+    if (!isset($data->idkhoahoc)) $missingFields[] = "idkhoahoc";
+    if (!isset($data->thoigianbatdau)) $missingFields[] = "thoigianbatdau";
+    if (!isset($data->thoigianketthuc)) $missingFields[] = "thoigianketthuc";
+    if (!isset($data->dongia)) $missingFields[] = "dongia";
+
+    if (!empty($missingFields)) {
         http_response_code(400);
-        echo json_encode(["message" => "Incomplete data."]);
+        echo json_encode([
+            "message" => "Incomplete data.",
+            "missing" => $missingFields
+        ]);
+        return;
+    }
+
+    $nhanvien->idnhanvien = $data->idnhanvien;
+    $nhanvien->idkhoahoc = $data->idkhoahoc;
+    $nhanvien->thoigianbatdau = $data->thoigianbatdau;
+    $nhanvien->thoigianketthuc = $data->thoigianketthuc;
+    $nhanvien->dongia = $data->dongia;
+
+    if ($nhanvien->update()) {
+        echo json_encode(["message" => "Record updated successfully."]);
+    } else {
+        http_response_code(500);
+        echo json_encode(["message" => "Unable to update record."]);
     }
 }
+
 
 function deleteChiTiet($nhanvien) {
     $data = json_decode(file_get_contents("php://input"));

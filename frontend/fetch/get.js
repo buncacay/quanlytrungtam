@@ -71,6 +71,17 @@ export async function fetchChiTietKhoaHoc(id) {
 }
 
 
+export async function fetchChiTietNhanVien() {
+    const url = `http://localhost/quanlytrungtam/backend/controller/ChitietnhanvienController.php`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+
+
+
 
 
 

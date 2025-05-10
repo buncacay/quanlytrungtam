@@ -61,6 +61,7 @@ function handleCreate($hoadon) {
     if (isset($data->thoigianlap, $data->idkhoahoc, $data->idhocvien,$data->thoigianlap, $data->thanhtien )) {
         $hoadon->thoigianlap = $data->thoigianlap;
         $hoadon->idkhoahoc = $data->idkhoahoc;
+        $hoadon->loai = $data->loai;
         $hoadon->idhocvien = $data->idhocvien;
         $hoadon->giamgia = !empty($data->giamgia) ? $data->giamgia : null;
         $hoadon->thanhtien =$data->thanhtien;
@@ -72,7 +73,8 @@ function handleCreate($hoadon) {
                 "idkhoahoc" => $hoadon->idkhoahoc,
                 "idhocvien" => $hoadon->idhocvien,
                 "giamgia" => $hoadon->giamgia ?? null,
-                "thanhtien" => $hoadon->thanhtien
+                "thanhtien" => $hoadon->thanhtien,
+                 "loai" => $hoadon->loai
             ];
             echo json_encode($response);
         } else {
@@ -122,18 +124,28 @@ function handleDelete($hoadon) {
 
 
 function validateInvoiceData($data) {
-    return isset($data->tenhoadon, $data->thoigianlap, $data->nguoilap, $data->soluongmua, $data->dongia, $data->giamgia, $data->thanhtien);
+    return isset(
+        $data->tenhoadon, 
+        $data->thoigianlap, 
+        $data->giamgia, 
+        $data->thanhtien, 
+        $data->idhoadon, 
+        $data->idhocvien, 
+        $data->idkhoahoc
+    );
 }
 
 function assignInvoiceData($hoadon, $data) {
     $hoadon->tenhoadon = $data->tenhoadon;
     $hoadon->thoigianlap = $data->thoigianlap;
-    $hoadon->nguoilap = $data->nguoilap;
-    $hoadon->soluongmua = $data->soluongmua;
-    $hoadon->dongia = $data->dongia;
     $hoadon->giamgia = $data->giamgia;
     $hoadon->thanhtien = $data->thanhtien;
+    $hoadon->idhoadon = $data->idhoadon;
+    $hoadon->idhocvien = $data->idhocvien;
+    $hoadon->idkhoahoc = $data->idkhoahoc;
+    $hoadon->loai = $data->loai ?? null; // nếu có dùng trường 'loai'
 }
+
 
 
 ?>

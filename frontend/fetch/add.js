@@ -14,6 +14,7 @@ export async function addKhoaHoc(data) {
         return await res.json();
     } catch (error) {
         alert("Lỗi khi thêm khóa học: " + error.message);
+        console.log(error.message);
     }
 }
 
@@ -44,9 +45,24 @@ export async function addBaiHoc() {
 }
 
 
-export async function addGiangVien(data) {
+// export async function addGiangVien(data) {
+//     try {
+//         const res = await fetch('http://localhost/quanlytrungtam/backend/controller/ChiTietNhanVienController.php', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify(data)
+//         });
+//         if (!res.ok) throw new Error('Lỗi: ' + await res.text());
+//         return await res.json();
+//     } catch (error) {
+//         alert("Lỗi khi thêm chi tiết giảng viên: " + error.message);
+//     }
+// }
+
+
+export async function addThongTinGiangVien(data) {
     try {
-        const res = await fetch('http://localhost/quanlytrungtam/backend/controller/ChiTietNhanVienController.php', {
+        const res = await fetch('http://localhost/quanlytrungtam/backend/controller/NhanVienController.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

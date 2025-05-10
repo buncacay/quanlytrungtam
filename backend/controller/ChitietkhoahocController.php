@@ -123,24 +123,38 @@ function createBaiHoc($chitiet) {
 
 
 function updateBaiHoc($chitiet) {
-    $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->idkhoahoc, $data->idbaihoc, $data->tenbaihoc, $data->link)) {
-        $chitiet->idkhoahoc = $data->idkhoahoc;
-        $chitiet->idbaihoc = $data->idbaihoc;
-        $chitiet->tenbaihoc = $data->tenbaihoc;
-        $chitiet->link = $data->link;
+    $data = json_decode(file_get_contents("php://input"), true); // decode as array
 
-        if ($chitiet->update()) {
-            echo json_encode(["message" => "Record updated successfully."]);
-        } else {
-            http_response_code(500);
-            echo json_encode(["message" => "Unable to update record."]);
-        }
-    } else {
+    if (!is_array($data)) {
         http_response_code(400);
-        echo json_encode(["message" => "Incomplete data."]);
+        echo json_encode(["message" => "Invalid JSON format."]);
+        return;
     }
+
+    foreach ($data as $lesson) {
+        if (
+            isset($lesson['idkhoahoc'], $lesson['idbaihoc'], $lesson['tenbaihoc'], $lesson['link'])
+        ) {
+            $chitiet->idkhoahoc = $lesson['idkhoahoc'];
+            $chitiet->idbaihoc = $lesson['idbaihoc'];
+            $chitiet->tenbaihoc = $lesson['tenbaihoc'];
+            $chitiet->link = $lesson['link'];
+
+            if (!$chitiet->update()) {
+                http_response_code(500);
+                echo json_encode(["message" => "Unable to update record for lesson ID " . $lesson['idbaihoc']]);
+                return;
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "Incomplete data for lesson."]);
+            return;
+        }
+    }
+
+    echo json_encode(["message" => "All records updated successfully."]);
 }
+
 
 function deleteBaiHoc($chitiet) {
     if (isset($_GET['idkhoahoc'], $_GET['idbaihoc'])) {

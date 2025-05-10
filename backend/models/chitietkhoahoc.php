@@ -71,6 +71,20 @@ INNER JOIN chitietkhoahoc on khoahoc.idkhoahoc=chitietkhoahoc.idkhoahoc  where k
         return $stmt->execute();
     }
     
+    public function deleteAllLessons() {
+        $query = "DELETE FROM chitietkhoahoc";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
+
+    public function deleteAllByCourse($idkhoahoc) {
+        $query = "DELETE FROM chitietkhoahoc WHERE idkhoahoc = :idkhoahoc";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':idkhoahoc', $idkhoahoc);
+        return $stmt->execute();
+    }
+
+
 
 }
 ?>

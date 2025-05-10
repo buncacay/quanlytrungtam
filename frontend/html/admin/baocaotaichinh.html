@@ -1,136 +1,65 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Báo cáo tài chính</title>
-    <link rel="stylesheet" href="../../css/baocaotaichinh.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo cáo tài chính</title>
+  <link rel="stylesheet" href="../../css/baocaotaichinh.css">
+  <link rel="stylesheet" href="../../css/chinh.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="finance-report-container">
-        <h1>Báo cáo tài chính</h1>
+  <div id="header"></div>
+  <div id="sidebar"></div>
 
-        <!-- Tổng quan tài chính -->
-        <div class="summary-section">
-            <h2>Tổng quan</h2>
-            <div class="summary-cards">
-                <div class="card">
-                    <h3>Doanh thu</h3>
-                    <p>12,000,000 VND</p>
-                </div>
-                <div class="card">
-                    <h3>Chi phí</h3>
-                    <p>5,000,000 VND</p>
-                </div>
-                <div class="card">
-                    <h3>Lợi nhuận</h3>
-                    <p>7,000,000 VND</p>
-                </div>
-            </div>
-        </div>
+  <div class="finance-report-container">
+    <h1>Báo cáo tài chính</h1>
 
-        <!-- Biểu đồ phân tích xu hướng -->
-        <div class="chart-section">
-            <h2>Phân tích xu hướng tài chính</h2>
-            <canvas id="financialChart"></canvas>
+    <!-- Tổng quan -->
+    <div class="summary-section">
+      <h2>Tổng quan</h2>
+      <div class="summary-cards">
+        <div class="card">
+          <h3>Doanh thu</h3>
+          <p id="doanhthu">0 VND</p>
         </div>
-
-        <!-- Chi tiết tài chính -->
-        <div class="details-section">
-            <h2>Chi tiết tài chính</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Ngày</th>
-                        <th>Loại giao dịch</th>
-                        <th>Mô tả</th>
-                        <th>Số tiền (VND)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2025-04-01</td>
-                        <td>Doanh thu</td>
-                        <td>Thanh toán học phí khóa học A</td>
-                        <td>3,000,000</td>
-                    </tr>
-                    <tr>
-                        <td>2025-04-03</td>
-                        <td>Chi phí</td>
-                        <td>Chi phí thuê phòng học</td>
-                        <td>1,000,000</td>
-                    </tr>
-                    <tr>
-                        <td>2025-04-05</td>
-                        <td>Doanh thu</td>
-                        <td>Thanh toán học phí khóa học B</td>
-                        <td>5,000,000</td>
-                    </tr>
-                    <tr>
-                        <td>2025-04-07</td>
-                        <td>Chi phí</td>
-                        <td>Mua tài liệu giảng dạy</td>
-                        <td>2,000,000</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="card">
+          <h3>Chi phí</h3>
+          <p id="chiphi">0 VND</p>
         </div>
+        <div class="card">
+          <h3>Lợi nhuận</h3>
+          <p id="loinhuan">0 VND</p>
+        </div>
+      </div>
     </div>
 
-    <script>
-    // Dữ liệu biểu đồ tài chính
-    const financialData = {
-        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4'],
-        datasets: [
-            {
-                label: 'Doanh thu',
-                data: [10000000, 12000000, 15000000, 17000000],
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 2
-            },
-            {
-                label: 'Chi phí',
-                data: [5000000, 6000000, 7000000, 8000000],
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 2
-            },
-            {
-                label: 'Lợi nhuận',
-                data: [5000000, 6000000, 8000000, 9000000],
-                backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 2
-            }
-        ]
-    };
+    <!-- Biểu đồ -->
+    <div class="chart-section">
+      <h2>Phân tích theo tháng</h2>
+      <canvas id="financialChart"></canvas>
+    </div>
 
-    // Cấu hình biểu đồ
-    const config = {
-        type: 'line',
-        data: financialData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                title: { display: true, text: 'Xu hướng tài chính theo thời gian' }
-            }
-        }
-    };
+    <!-- Bảng chi tiết -->
+    <div class="details-section">
+      <h2>Chi tiết hóa đơn</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ngày</th>
+            <th>Loại</th>
+            <th>Học viên / Diễn giải</th>
+            <th>Khóa học</th>
+            <th>Số tiền (VND)</th>
+          </tr>
+        </thead>
+        <tbody id="invoice-table-body"></tbody>
+      </table>
+    </div>
+  </div>
 
-    // Khởi tạo biểu đồ
-    window.onload = () => {
-        const canvas = document.getElementById('financialChart');
-        if (!canvas) {
-            console.error('Thẻ <canvas> với ID "financialChart" không tồn tại.');
-            return;
-        }
-        const ctx = canvas.getContext('2d');
-        new Chart(ctx, config);
-    };
-</script>
-
+  <script type="module" src="../../fetch/baocaotaichinh.js"></script>
+  <script src="../../js/app.js"></script>
 </body>
 </html>

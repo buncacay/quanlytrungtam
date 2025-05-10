@@ -1,20 +1,22 @@
 import { fetchKhoaHoc, fetchHoaDon, fetchAllHocVien } from './get.js';
 import { addHoaDon } from './add.js';
-import {RemoveHoaDon} from './delete.js';
+import { RemoveHoaDon } from './delete.js';
+import { UpdateHoaDon } from './update.js';
 
 let currentPage = 1;
 const itemsPerPage = 5;
+let isEditing = false;
+let editingId = null;
 
-document.addEventListener('DOMContentLoaded', async function (event) {
+document.addEventListener('DOMContentLoaded', async function () {
     await loadHocVienDropdown();
     await loadKhoaHocDropdownAndTable();
     await renderHoaDonTable(currentPage);
 
     const form = document.getElementById("invoiceForm");
-    form.addEventListener("submit", function(event) {
-        tao(event);
-    });
-    document.getElementById('btn').innerText = "Tạo hóa đơn";
+    form.addEventListener("submit", tao);
+
+   
 });
 
 async function loadHocVienDropdown() {
@@ -32,44 +34,13 @@ async function loadHocVienDropdown() {
 async function loadKhoaHocDropdownAndTable() {
     const khoaHocSelect = document.getElementById('course');
     const khoaHocList = await fetchKhoaHoc();
-    
+
     khoaHocList.forEach(khoahoc => {
         const option = document.createElement('option');
         option.value = khoahoc.idkhoahoc;
         option.textContent = khoahoc.tenkhoahoc;
         khoaHocSelect.appendChild(option);
     });
-
-    let courseTable = `
-        <table>
-            <thead>
-                <tr>
-                    <th>Khóa học</th>
-                    <th>Học phí</th>
-                    <th>Giảm giá/Học bổng</th>
-                    <th>Học phí sau giảm</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    khoaHocList.forEach(khoahoc => {
-        const giatien = khoahoc.giatien || 0;
-        const giamgia = khoahoc.giamgia || 0;
-        const thanhtien = giatien - (giatien * giamgia / 100);
-
-        courseTable += `
-            <tr>
-                <td>${khoahoc.tenkhoahoc}</td>
-                <td>${giatien.toLocaleString()} VND</td>
-                <td>${giamgia}%</td>
-                <td>${thanhtien.toLocaleString()} VND</td>
-            </tr>
-        `;
-    });
-
-    courseTable += `</tbody></table>`;
-    
 }
 
 async function renderHoaDonTable(page) {
@@ -82,7 +53,7 @@ async function renderHoaDonTable(page) {
     const totalPages = Math.ceil(hoaDonList.length / itemsPerPage);
 
     let invoiceTable = `
-        <table>
+        <table border="1">
             <thead>
                 <tr>
                     <th>Mã hóa đơn</th>
@@ -105,10 +76,10 @@ async function renderHoaDonTable(page) {
                 <td>${hoadon.tenkhoahoc}</td>
                 <td>${Number(hoadon.thanhtien).toLocaleString()} VND</td>
                 <td>${hoadon.thoigianlap}</td>
-                 <td>${hoadon.loai}</td>
+                <td>${hoadon.loai}</td>
                 <td>
-                    <button class ="btn-view" onclick='sua(${JSON.stringify(hoadon)})'>Sửa</button>
-                    <button class="btn-delete" onclick="xoa(${hoadon.idhoadon})">Xóa</button>
+                    <button class="btn-view" data-hoadon='${JSON.stringify(hoadon)}'>Sửa</button>
+                    <button class="btn-delete" data-id="${hoadon.idhoadon}">Xóa</button>
                 </td>
             </tr>
         `;
@@ -116,6 +87,14 @@ async function renderHoaDonTable(page) {
 
     invoiceTable += `</tbody></table>`;
     invoiceContainer.innerHTML = invoiceTable;
+
+    document.querySelectorAll('.btn-view').forEach(btn => {
+        btn.addEventListener('click', () => sua(JSON.parse(btn.dataset.hoadon)));
+    });
+
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', () => xoa(btn.dataset.id));
+    });
 
     renderPagination({
         currentPage: page,
@@ -127,33 +106,71 @@ async function renderHoaDonTable(page) {
     });
 }
 
-window.sua = function (hoadon) {
-
+async function sua(hoadon) {
+    isEditing = true;
+    editingId = hoadon.idhoadon;
 
     document.getElementById('hsinh').value = hoadon.idhocvien;
     document.getElementById('course').value = hoadon.idkhoahoc;
     document.getElementById('amount').value = hoadon.thanhtien;
     document.getElementById('date').value = hoadon.thoigianlap.split(" ")[0];
     document.getElementById('loai').value = hoadon.loai;
-    
-    const btn = document.getElementById('btn');
-    if (btn) {
-        btn.innerText = "Lưu chỉnh sửa";
-    } else {
-        console.error("Không tìm thấy nút có id 'btn'");
-    }
-};
 
-window.xoa = async function (id) {
+    document.getElementById('btn').innerText = "Lưu chỉnh sửa";
+}
+
+async function xoa(id) {
     if (await RemoveHoaDon(id)) {
         await renderHoaDonTable(currentPage);
-        alert("da xoa thanh cong");
+        alert("Đã xóa hóa đơn thành công");
+    } else {
+        alert(`Xóa hóa đơn ${id} thất bại`);
     }
-    else {
-        alert(`Xóa hóa đơn ${id} that bai`);
-    }
+}
+
+async function tao(event) {
+    event.preventDefault();
+
+    const idhocvien = document.getElementById('hsinh').value;
+    const idkhoahoc = document.getElementById('course').value;
+    const tien = document.getElementById('amount').value;
+    const date = document.getElementById('date').value;
+    const type = document.getElementById('loai').value;
+
+    const data = {
+        tenhoadon: "thanh toan",
+        thoigianlap: date,
+        thanhtien: tien,
+        idhocvien: idhocvien,
+        idkhoahoc: idkhoahoc,
+        loai: type, 
+        giamgia: 0
+    };
     
-};
+
+    try {
+        console.log(data);
+        if (isEditing && editingId) {
+            data.idhoadon = editingId;
+            await UpdateHoaDon(data);
+            alert("Cập nhật hóa đơn thành công!");
+        } else {
+            await addHoaDon(data);
+            alert("Tạo hóa đơn thành công!");
+        }
+
+        document.getElementById("invoiceForm").reset();
+        document.getElementById("btn").innerText = "Tạo hóa đơn";
+        
+        isEditing = false;
+        editingId = null;
+
+        await renderHoaDonTable(currentPage);
+    } catch (error) {
+        console.error("Lỗi:", error);
+        alert((isEditing ? "Cập nhật" : "Tạo") + " hóa đơn thất bại!");
+    }
+}
 
 function renderPagination({ currentPage, totalPages, onPageChange }) {
     const container = document.getElementById("pagination");
@@ -190,32 +207,4 @@ function renderPagination({ currentPage, totalPages, onPageChange }) {
     nextBtn.className = "pagination-button";
     nextBtn.onclick = () => onPageChange(currentPage + 1);
     container.appendChild(nextBtn);
-}
-
-async function tao(event){
-    event.preventDefault();
-
-    const idhocvien = document.getElementById('hsinh').value;
-    const idkhoahoc = document.getElementById('course').value;
-    const tien = document.getElementById('amount').value;
-    const date = document.getElementById('date').value;
-    const type = document.getElementById('loai').value;
-    console.log(type);
-    const data = {
-        tenhoadon: "thanh toan",
-        thoigianlap: date,
-        thanhtien: tien,
-        idhocvien: idhocvien,
-        idkhoahoc: idkhoahoc,
-        loai: type
-    };
-
-    try {
-        const res = await addHoaDon(data);
-        alert("Tạo hóa đơn thành công!");
-        await renderHoaDonTable(currentPage);
-    } catch (error) {
-        console.error("Lỗi khi thêm hóa đơn:", error);
-        alert("Tạo hóa đơn thất bại!");
-    }
 }

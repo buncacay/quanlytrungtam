@@ -40,7 +40,8 @@ class nhanvien {
     }
 
     public function read() {
-        $query = "SELECT * FROM " . $this->table;
+        $query = "SELECT * FROM " . $this->table . " WHERE trangthai = 1";
+
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         
@@ -54,12 +55,11 @@ class nhanvien {
                   trinhdo = :trinhdo, 
                   chungchi = :chungchi, 
                   sdt = :sdt, 
-                  diachi = :diachi, 
                   tienthuong = :tienthuong, 
                   tienphat = :tienphat, 
                   chucvu = :chucvu, 
                   tonggioday = :tonggioday, 
-                  ghichu = :ghichu 
+                  ghichu = :ghichu ,
                    trangthai = :trangthai 
                   WHERE idnhanvien = :idnhanvien";
         $stmt = $this->conn->prepare($query);
@@ -69,7 +69,7 @@ class nhanvien {
         $stmt->bindParam(':trinhdo', $this->trinhdo);
         $stmt->bindParam(':chungchi', $this->chungchi);
         $stmt->bindParam(':sdt', $this->sdt);
-        $stmt->bindParam(':diachi', $this->diachi);
+       
         $stmt->bindParam(':tienthuong', $this->tienthuong, PDO::PARAM_INT);
         $stmt->bindParam(':tienphat', $this->tienphat, PDO::PARAM_INT);
         $stmt->bindParam(':chucvu', $this->chucvu);

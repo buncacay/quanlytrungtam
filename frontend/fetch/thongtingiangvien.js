@@ -1,9 +1,12 @@
 import { fetchGiangVien } from './get.js';
 import { UpdateGiangVien } from './update.js';
-import {} from './delete.js';
+import { addThongTinGiangVien } from './add.js';
+import { RemoveNhanVien } from './delete.js'; // Đã thêm
 
 let currentPage = 1;
 const pageSize = 5;
+let isEditing = false;
+let editingId = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
     await ShowAll(currentPage);
@@ -11,7 +14,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 async function ShowAll(page = 1) {
     const data = await fetchGiangVien();
-
     const totalPages = Math.ceil(data.length / pageSize);
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
@@ -72,9 +74,13 @@ async function HienThiThongTin(page, total, data) {
     });
 }
 
-// Xử lý edit
-function edit(encodedData) {
+async function edit(encodedData) {
     const data = JSON.parse(decodeURIComponent(encodedData));
+    isEditing = true;
+    editingId = data.idnhanvien;
+
+    const btn = document.getElementById('themnhanvien');
+    btn.textContent = "Lưu chỉnh sửa";
 
     document.getElementById('name').value = data.tennhanvien || '';
     document.getElementById('trinhdo').value = data.trinhdo || '';
@@ -82,31 +88,85 @@ function edit(encodedData) {
     document.getElementById('sdt').value = data.sdt || '';
     document.getElementById('chucvu').value = data.chucvu || '';
     document.getElementById('ghichu').value = data.ghichu || '';
-
-    const formData = {
-        tennhanvien: data.tennhanvien,
-        trinhdo: data.trinhdo,
-        chungchi: data.chungchi,
-        sdt: data.sdt,
-        tienthuong: data.tienthuong,
-        tienphat: data.tienphat,
-        chucvu: data.chucvu,
-        ghichu: data.ghichu
-    };
-
-    console.log("Dữ liệu đã parse:", formData);
 }
 
+async function saveChanges(idnhanvien) {
+    const formData = {
+        idnhanvien: idnhanvien,
+        tennhanvien: document.getElementById('name').value,
+        trinhdo: document.getElementById('trinhdo').value,
+        chungchi: document.getElementById('chungchi').value,
+        sdt: document.getElementById('sdt').value,
+        chucvu: document.getElementById('chucvu').value,
+        ghichu: document.getElementById('ghichu').value,
+        tienthuong: 0,
+        tienphat: 0,
+        trangthai: 1,
+        tonggioday : 0
+    };
 
-// Xử lý remove
-async function remove(id) {
-    if (confirm("Bạn có muốn xóa giảng viên này không?")) {
-        // Gọi API xoá tại đây nếu có (ví dụ: await deleteGiangVien(id))
+    console.log(formData);
+    const result = await UpdateGiangVien(formData);
+    if (result) {
+        alert("Cập nhật thành công");
         await ShowAll(currentPage);
+        clearForm();
+        document.getElementById('themnhanvien').textContent = "Thêm nhân viên";
+        isEditing = false;
+        editingId = null;
+    } else {
+        alert("Cập nhật thất bại");
     }
 }
 
-// Render phân trang
+document.getElementById('themnhanvien').addEventListener('click', async function () {
+    if (isEditing && editingId) {
+        await saveChanges(editingId);
+    } else {
+        const formData = {
+            tennhanvien: document.getElementById('name').value,
+            trinhdo: document.getElementById('trinhdo').value,
+            chungchi: document.getElementById('chungchi').value,
+            sdt: document.getElementById('sdt').value,
+            tienthuong: 0,
+            tienphat: 0,
+            chucvu: document.getElementById('chucvu').value,
+            ghichu: document.getElementById('ghichu').value,
+            trangthai: 1,
+            tonggioday: 0
+        };
+        const kq = await addThongTinGiangVien(formData);
+        if (kq) {
+            alert("Thêm thành công");
+            await ShowAll(currentPage);
+            clearForm();
+        } else {
+            alert("Thêm thất bại");
+        }
+    }
+});
+
+async function remove(id) {
+    if (confirm("Bạn có muốn xóa giảng viên này không?")) {
+        const result = await RemoveNhanVien(id);
+        if (result) {
+            alert("Xoá thành công");
+            await ShowAll(currentPage);
+        } else {
+            alert("Xoá thất bại");
+        }
+    }
+}
+
+function clearForm() {
+    document.getElementById('name').value = '';
+    document.getElementById('trinhdo').value = '';
+    document.getElementById('chungchi').value = '';
+    document.getElementById('sdt').value = '';
+    document.getElementById('chucvu').value = '';
+    document.getElementById('ghichu').value = '';
+}
+
 function renderPagination({ current, total, onPage }) {
     const container = document.getElementById('pagination');
     container.innerHTML = '';

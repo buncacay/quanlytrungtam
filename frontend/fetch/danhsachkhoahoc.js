@@ -20,6 +20,13 @@ async function ShowAll(pages = 1) {
     
 }
 
+async function filterSchedule() {
+    const search = document.getElementById('search').value;
+    await ShowAll(1, search);  // Chuyển search vào hàm ShowAll
+}
+
+window.filterSchedule=filterSchedule;
+
 
 document.addEventListener('DOMContentLoaded', async function () {
     // alert("chao ca nha");
@@ -59,7 +66,7 @@ async function HienThiThongTin(page,total,data) {
                 <td>${khoahoc.soluongbuoi}</td>
                 <td>${khoahoc.lichhoc}</td>
                 <td>
-                    <button onclick="edit(${khoahoc.idkhoahoc})">Edit</button> 
+                    <button onclick="edit(${khoahoc.idkhoahoc}, ${khoahoc.images})">Edit</button> 
                     <button onclick="remove(${khoahoc.idkhoahoc})">Remove</button> 
                   
                 </td>
@@ -69,8 +76,8 @@ async function HienThiThongTin(page,total,data) {
     
 }
 
-function edit(id){
-    window.location.href=`taovaquanlykhoahoc.html?idkhoahoc=${id}`;
+function edit(id, images){
+    window.location.href=`taovaquanlykhoahoc.html?idkhoahoc=${id}&&images=`;
 }
 
 async function remove(id){

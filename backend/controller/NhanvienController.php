@@ -1,11 +1,15 @@
 <?php
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 require_once '../config/database.php'; 
 require_once '../models/nhanvien.php'; 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 $db = new Database();
 $conn = $db->getConnection();
@@ -47,19 +51,19 @@ function createNhanVien($nhanvien) {
 
     if (isset($data->ghichu, $data->tonggioday, $data->tienphat, $data->chucvu,
               $data->tienthuong, $data->tennhanvien, $data->trinhdo,
-              $data->sdt, $data->diachi, $data->chungchi)) {
+              $data->sdt, $data->chungchi)) {
 
         $nhanvien->tennhanvien  = $data->tennhanvien;
         $nhanvien->trinhdo      = $data->trinhdo;
         $nhanvien->sdt          = $data->sdt;
-        $nhanvien->diachi       = $data->diachi;
+       
         $nhanvien->chungchi     = $data->chungchi;
         $nhanvien->tienthuong   = $data->tienthuong;
         $nhanvien->tienphat     = $data->tienphat;
         $nhanvien->chucvu       = $data->chucvu;
         $nhanvien->tonggioday   = $data->tonggioday;
         $nhanvien->ghichu       = $data->ghichu;
-         $nhanvien->trangthai       = $data->trangthai;
+        $nhanvien->trangthai       = $data->trangthai;
 
         if ($nhanvien->create()) {
             echo json_encode(["message" => "Record created successfully."]);
@@ -78,13 +82,12 @@ function updateNhanVien($nhanvien) {
 
     if (isset($data->idnhanvien, $data->ghichu, $data->tonggioday, $data->tienphat, $data->chucvu,
               $data->tienthuong, $data->tennhanvien, $data->trinhdo,
-              $data->sdt, $data->diachi, $data->chungchi)) {
+              $data->sdt,  $data->chungchi, $data->trangthai)) {
 
         $nhanvien->idnhanvien   = $data->idnhanvien;
         $nhanvien->tennhanvien  = $data->tennhanvien;
         $nhanvien->trinhdo      = $data->trinhdo;
         $nhanvien->sdt          = $data->sdt;
-        $nhanvien->diachi       = $data->diachi;
         $nhanvien->chungchi     = $data->chungchi;
         $nhanvien->tienthuong   = $data->tienthuong;
         $nhanvien->tienphat     = $data->tienphat;
@@ -106,10 +109,8 @@ function updateNhanVien($nhanvien) {
 }
 
 function deleteNhanVien($nhanvien) {
-    $data = json_decode(file_get_contents("php://input"));
-
-    if (isset($data->idnhanvien)) {
-        $nhanvien->idnhanvien = $data->idnhanvien;
+    if (isset($_GET['idnhanvien'])) {
+        $nhanvien->idnhanvien = $_GET['idnhanvien'];
 
         if ($nhanvien->delete()) {
             echo json_encode(["message" => "Record deleted successfully."]);
@@ -119,6 +120,6 @@ function deleteNhanVien($nhanvien) {
         }
     } else {
         http_response_code(400);
-        echo json_encode(["message" => "Incomplete data."]);
+        echo json_encode(["message" => "Incomplete data: missing idnhanvien."]);
     }
 }

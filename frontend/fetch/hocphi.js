@@ -1,15 +1,17 @@
+// main.js
 import { fetchKhoaHoc } from './get.js';
 import { UpdateGiaKhoaHoc } from './update.js';
 
 let currentPage = 1;
 const pageSize = 5;
+let allCourses = []; // Dữ liệu toàn bộ khoá học để dùng lại trong edit
 
-document.addEventListener('DOMContentLoaded', async function () {
+// Khởi tạo khi DOM tải xong
+document.addEventListener('DOMContentLoaded', async () => {
     const select = document.getElementById('course');
-    const data = await fetchKhoaHoc();
+    allCourses = await fetchKhoaHoc();
 
-    // Đổ dữ liệu vào dropdown
-    data.forEach(khoahoc => {
+    allCourses.forEach(khoahoc => {
         const opt = document.createElement('option');
         opt.value = khoahoc.idkhoahoc;
         opt.textContent = khoahoc.tenkhoahoc;
@@ -23,12 +25,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 async function renderTable(page) {
     const list = document.getElementById('list');
-    const data = await fetchKhoaHoc();
-
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
-    const paginatedData = data.slice(start, end);
-    const totalPages = Math.ceil(data.length / pageSize);
+    const paginatedData = allCourses.slice(start, end);
+    const totalPages = Math.ceil(allCourses.length / pageSize);
 
     let tableHTML = `
         <table>
@@ -38,6 +38,7 @@ async function renderTable(page) {
                     <th>Học phí</th>
                     <th>Giảm giá/Học bổng</th>
                     <th>Học phí sau giảm</th>
+                    <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,12 +55,17 @@ async function renderTable(page) {
                 <td>${hocPhiGoc.toLocaleString()} VND</td>
                 <td>${giamGia}%</td>
                 <td>${hocPhiSauGiam.toLocaleString()} VND</td>
+                <td><button type="button" class="btn-edit" data-id="${khoahoc.idkhoahoc}">Sửa</button></td>
             </tr>
         `;
     });
 
-    tableHTML += `</tbody></table>`;
+    tableHTML += '</tbody></table>';
     list.innerHTML = tableHTML;
+
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', () => edit(btn.dataset.id));
+    });
 
     renderPagination({
         current: page,
@@ -71,8 +77,22 @@ async function renderTable(page) {
     });
 }
 
+function edit(id) {
+    const khoahoc = allCourses.find(kh => kh.idkhoahoc === id);
+    if (!khoahoc) {
+        alert('Không tìm thấy khoá học!');
+        return;
+    }
+
+    document.getElementById('course').value = khoahoc.idkhoahoc;
+    document.getElementById('fee').value = khoahoc.giatien;
+    document.getElementById('discount').value = khoahoc.giamgia;
+    document.getElementById('editCourseId').value = khoahoc.idkhoahoc;
+    document.getElementById('btn').innerText = 'Lưu chỉnh sửa';
+}
+
 async function handleFeeSubmit(event) {
-    event.preventDefault(); // Chặn submit form mặc định
+    event.preventDefault();
 
     const id = document.getElementById('course').value;
     const fee = parseFloat(document.getElementById('fee').value);
@@ -89,7 +109,10 @@ async function handleFeeSubmit(event) {
         const success = await UpdateGiaKhoaHoc(data);
         if (success) {
             alert("Cập nhật thành công!");
-            await renderTable(currentPage); // Reload bảng
+            allCourses = await fetchKhoaHoc(); // Reload dữ liệu
+            await renderTable(currentPage);
+            document.getElementById('btn').innerText = 'Cập nhật học phí';
+            document.getElementById('feeForm').reset();
         } else {
             alert("Cập nhật thất bại!");
         }

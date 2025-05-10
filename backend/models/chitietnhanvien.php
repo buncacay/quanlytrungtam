@@ -6,9 +6,9 @@ class ChiTietNhanVien {
     public $idnhanvien;
     public $idkhoahoc;
     public $tinhtranggiangday;
-    public $sogioday;
+    public $thoigianketthuc;
     public $dongia;
-    public $thanhtien;
+    public $thoigianbatdau;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -16,17 +16,16 @@ class ChiTietNhanVien {
 
     public function create() {
         $query = "INSERT INTO " . $this->table . " 
-                  (idnhanvien, idkhoahoc, tinhtranggiangday, sogioday, dongia, thanhtien) 
-                  VALUES (:idnhanvien, :idkhoahoc, :tinhtranggiangday, :sogioday, :dongia, :thanhtien)";
+                  (idnhanvien, idkhoahoc, thoigianketthuc, dongia, thoigianbatdau) 
+                  VALUES (:idnhanvien, :idkhoahoc, :thoigianketthuc, :dongia, :thoigianbatdau)";
         $stmt = $this->conn->prepare($query);
 
         return $stmt->execute([
             ':idnhanvien' => $this->idnhanvien,
             ':idkhoahoc' => $this->idkhoahoc,
-            ':tinhtranggiangday' => $this->tinhtranggiangday,
-            ':sogioday' => $this->sogioday,
+            ':thoigianketthuc' => $this->thoigianketthuc,
             ':dongia' => $this->dongia,
-            ':thanhtien' => $this->thanhtien
+            ':thoigianbatdau' => $this->thoigianbatdau
         ]);
     }
 
@@ -34,6 +33,7 @@ class ChiTietNhanVien {
     $query = "SELECT * 
           FROM chitietnhanvien ct
           INNER JOIN nhanvien n ON ct.idnhanvien = n.idnhanvien
+          INNER JOIN khoahoc ON khoahoc.idkhoahoc = ct.idkhoahoc
           WHERE n.trangthai = 1";
 
 
@@ -45,18 +45,17 @@ class ChiTietNhanVien {
 
     public function update() {
         $query = "UPDATE " . $this->table . " 
-                  SET tinhtranggiangday = :tinhtranggiangday, 
-                      sogioday = :sogioday, 
+                  SET  
+                      thoigianketthuc = :thoigianketthuc, 
                       dongia = :dongia, 
-                      thanhtien = :thanhtien 
+                      thoigianbatdau = :thoigianbatdau 
                   WHERE idnhanvien = :idnhanvien AND idkhoahoc = :idkhoahoc ";
         $stmt = $this->conn->prepare($query);
 
         return $stmt->execute([
-            ':tinhtranggiangday' => $this->tinhtranggiangday,
-            ':sogioday' => $this->sogioday,
+            ':thoigianketthuc' => $this->thoigianketthuc,
             ':dongia' => $this->dongia,
-            ':thanhtien' => $this->thanhtien,
+            ':thoigianbatdau' => $this->thoigianbatdau,
             ':idnhanvien' => $this->idnhanvien,
             ':idkhoahoc' => $this->idkhoahoc
         ]);

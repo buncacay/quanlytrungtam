@@ -1,29 +1,38 @@
 import {fetchGiangVien, fetchKhoaHoc, fetchChiTietKhoaHoc, fetchKhoaHocVoiId} from './get.js';
 import {addKhoaHoc, addChiTietKhoaHoc, addGiangVien} from './add.js';
+import {UpdateKhoaHoc, UpdateChiTietKhoaHoc} from './update.js';
 
 document.getElementById('course-image').addEventListener('change', function(event) {
-    HienThiAnh(event);
+   
+        HienThiAnh(event, null);
+   
+    
 });
 
-async function HienThiAnh(event) {
-    const file = event.target.files[0];
+async function HienThiAnh(event, images) { 
+    const prev = document.getElementById('preview');
 
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            const prev = document.getElementById('preview');
-            prev.src = e.target.result;
-            prev.style.display = 'block';
-        };
+    if (images) {
+        prev.src = `./upload/${images}`;
+        prev.style.display = 'block';
+    } else {
+        const file = event.target.files[0];
 
-        reader.readAsDataURL(file);
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                prev.src = e.target.result;
+                prev.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
     }
 }
 
-document.getElementById("themkhoahoc").addEventListener("click", async function (event) {
+
+async function themmoikhoahoc (event) {
   event.preventDefault();
-   alert("hiiiiiiii");
+   alert("them moi");
    alert("clicked");
     event.preventDefault();
     const ten = document.getElementById('course-name').value;
@@ -60,7 +69,7 @@ document.getElementById("themkhoahoc").addEventListener("click", async function 
     }
     
   
- event.preventDefault();
+    event.preventDefault();
     const kq = await addKhoaHoc(formData);
     console.log(kq);
     
@@ -109,18 +118,38 @@ document.getElementById("themkhoahoc").addEventListener("click", async function 
         }
         
        catch (error) {
+        console.log(error);
         alert("Lỗi khi thêm chi tiết giảng viên: " + error);
     }
     } else {
         alert("Thêm khóa học thất bại!");
     }
-});
+};
+
+document.getElementById('themkhoahoc').onclick = async (event) => {
+    event.preventDefault(); // Ngăn reload nếu là form
+
+     const urlParams = new URLSearchParams(window.location.search);
+     const idkhoahoc = urlParams.get('idkhoahoc');
+
+    if (idkhoahoc) {
+        // Có id => Cập nhật
+        await saveChanges(event, idkhoahoc);
+    } else {
+        // Không có id => Thêm mới
+        await themmoikhoahoc(event);
+    }
+};
 
 
 
 document.addEventListener('DOMContentLoaded', async function (event) {
        
-
+     const pa = new URLSearchParams(window.location.search);
+     const images = pa.get('images');
+    if (images) {
+        HienThiAnh(null, images);  // Chỉ xử lý ảnh từ server (folder upload)
+    }
    
     const data = await fetchGiangVien();
     
@@ -142,9 +171,8 @@ document.addEventListener('DOMContentLoaded', async function (event) {
 
     if (idkhoahoc) {
         console.log(("adfasdfads " , kq));
-        const submitBtn = document.getElementById('themkhoahoc');
-        submitBtn.textContent = 'Lưu chỉnh sửa';
-        submitBtn.setAttribute('onclick', 'saveChanges(event, ' + idkhoahoc + ')');
+       
+
 
         const ten = document.getElementById('course-name');
         const gv = document.getElementById('instructor');
@@ -298,3 +326,70 @@ window.remove = remove;
 window.save = save;
 window.add = add;
 
+async function saveChanges(event, idkhoahoc) {
+    event.preventDefault();
+
+    const ten = document.getElementById('course-name').value;
+    const soluongbuoi = document.getElementById('soluongbuoi').value;
+    const thoigianhoc = document.getElementById('thoigianhoc').value;
+    const lichhoc = document.getElementById('lichhoc').value;
+    const idnhanvien = document.getElementById('instructor').value;
+    const mota = document.getElementById('motakhoahoc').value;
+    const giatien = document.getElementById('giatien').value;
+    const giamgia = document.getElementById('giamgia').value;
+
+    const data = {
+        idkhoahoc: idkhoahoc,
+        tenkhoahoc: ten,
+        soluongbuoi: soluongbuoi,
+        thoigianhoc: thoigianhoc,
+        lichhoc: lichhoc,
+        mota: mota,
+        giatien: giatien,
+        giamgia: giamgia,
+        idnhanvien: idnhanvien
+    };
+
+    try {
+        
+        if (await UpdateKhoaHoc(data)) {
+            console.log(data);
+            alert("Cập nhật khóa học thành công!");
+
+            // Xử lý chi tiết bài học
+            const lessons = document.querySelectorAll('#noidungkhoahoc .lesson-item');
+            const data3 = [];
+            let d=0;
+            lessons.forEach(lesson =>{
+                const title = lesson.querySelector('.lesson-title')?.textContent.trim();
+                const link=lesson.querySelector('.lesson-link a')?.href;
+                alert(d);
+                data3.push({
+                    idkhoahoc : idkhoahoc,
+                    idbaihoc: d,
+                    tenbaihoc:title,
+                    link: link
+                });
+                d++;
+            });
+            alert("cho anh");
+            console.log("data 3" , data3);
+            if (await UpdateChiTietKhoaHoc(data3)){
+                    alert("cap nhat chi tiet thanh cong");
+                    window.location.href="danhsachkhoahoc.html"
+            }
+            
+            else {
+                alert("cap nhat chi tiet that bai");
+            }
+        
+        
+
+        } else {
+            alert("Cập nhật thất bại: " + result.message);
+        }
+
+    } catch (error) {
+        alert("Lỗi khi cập nhật khóa học: " + error.message);
+    }
+}
