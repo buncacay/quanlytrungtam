@@ -4,28 +4,75 @@ const tbody = document.getElementById('invoice-table-body');
 const doanhThuEl = document.getElementById('doanhthu');
 const chiPhiEl = document.getElementById('chiphi');
 const loiNhuanEl = document.getElementById('loinhuan');
+const monthFilter = document.getElementById('monthFilter');
+const exportBtn = document.getElementById('exportBtn');
+const paginationContainer = document.getElementById('pagination');
+const searchInput = document.getElementById('searchInput'); // 👈 thêm phần tử ô tìm kiếm
 
 const rowsPerPage = 5;
 let currentPage = 1;
 let allData = [];
+let filteredData = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     allData = await fetchHoaDon();
+    filteredData = allData;
     renderTable();
     updateSummary();
-    updateChart(allData);
+    updateChart(filteredData);
     renderPagination();
   } catch (error) {
     console.error('Lỗi khi tải dữ liệu:', error);
   }
 });
 
+monthFilter.addEventListener('change', applyFilters);
+searchInput.addEventListener('input', applyFilters); // 👈 sự kiện tìm kiếm
+
+exportBtn.addEventListener('click', () => {
+  const wsData = [
+    ['Ngày', 'Loại', 'Học viên / Diễn giải', 'Khóa học', 'Số tiền (VND)'],
+    ...filteredData.map(item => [
+      new Date(item.thoigianlap).toLocaleDateString('vi-VN'),
+      item.loai === '1' ? 'Doanh thu' : 'Chi phí',
+      item.hoten || '---',
+      item.tenkhoahoc || '---',
+      parseFloat(item.thanhtien || 0)
+    ])
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'BaoCaoTaiChinh');
+  XLSX.writeFile(wb, 'BaoCaoTaiChinh.xlsx');
+});
+
+function applyFilters() {
+  const selectedMonth = monthFilter.value;
+  const searchText = searchInput.value.toLowerCase();
+
+  filteredData = allData.filter(item => {
+    const date = new Date(item.thoigianlap);
+    const itemMonth = date.toISOString().slice(0, 7);
+    const matchesMonth = !selectedMonth || itemMonth === selectedMonth;
+    const matchesSearch =
+      !searchText ||
+      (item.hoten && item.hoten.toLowerCase().includes(searchText)) ||
+      (item.tenkhoahoc && item.tenkhoahoc.toLowerCase().includes(searchText));
+    return matchesMonth && matchesSearch;
+  });
+
+  currentPage = 1;
+  renderTable();
+  updateSummary();
+  renderPagination();
+  updateChart(filteredData);
+}
+
 function renderTable() {
   tbody.innerHTML = '';
   const start = (currentPage - 1) * rowsPerPage;
-  const end = start + rowsPerPage;
-  const pageData = allData.slice(start, end);
+  const pageData = filteredData.slice(start, start + rowsPerPage);
 
   pageData.forEach(item => {
     const row = document.createElement('tr');
@@ -48,7 +95,7 @@ function updateSummary() {
   let doanhThu = 0;
   let chiPhi = 0;
 
-  allData.forEach(item => {
+  filteredData.forEach(item => {
     const tien = parseFloat(item.thanhtien || 0);
     if (item.loai === '1') doanhThu += tien;
     else chiPhi += tien;
@@ -60,15 +107,16 @@ function updateSummary() {
 }
 
 function renderPagination() {
-  const totalPages = Math.ceil(allData.length / rowsPerPage);
-  const paginationContainer = document.getElementById('pagination');
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   paginationContainer.innerHTML = '';
+
+  if (totalPages <= 1) return;
 
   const prevBtn = document.createElement('button');
   prevBtn.textContent = 'Trang trước';
   prevBtn.disabled = currentPage === 1;
   prevBtn.onclick = () => {
-    currentPage--;
+    if (currentPage > 1) currentPage--;
     renderTable();
     renderPagination();
   };
@@ -77,7 +125,7 @@ function renderPagination() {
   nextBtn.textContent = 'Trang sau';
   nextBtn.disabled = currentPage === totalPages;
   nextBtn.onclick = () => {
-    currentPage++;
+    if (currentPage < totalPages) currentPage++;
     renderTable();
     renderPagination();
   };
@@ -101,18 +149,18 @@ function updateChart(data) {
     const isRevenue = item.loai === '1';
 
     if (!monthMap[month]) monthMap[month] = { doanhthu: 0, chiphi: 0 };
-    if (isRevenue) {
-      monthMap[month].doanhthu += tien;
-    } else {
-      monthMap[month].chiphi += tien;
-    }
+    if (isRevenue) monthMap[month].doanhthu += tien;
+    else monthMap[month].chiphi += tien;
   });
 
   const labels = Object.keys(monthMap).sort();
   const doanhThuData = labels.map(m => monthMap[m].doanhthu);
   const chiPhiData = labels.map(m => monthMap[m].chiphi);
 
-  const config = {
+  const ctx = document.getElementById('financialChart')?.getContext('2d');
+  if (!ctx) return;
+
+  new Chart(ctx, {
     type: 'bar',
     data: {
       labels,
@@ -136,8 +184,5 @@ function updateChart(data) {
         legend: { position: 'top' }
       }
     }
-  };
-
-  const ctx = document.getElementById('financialChart').getContext('2d');
-  new Chart(ctx, config);
+  });
 }

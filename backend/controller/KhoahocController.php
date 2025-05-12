@@ -86,44 +86,66 @@ function getKhoaHoc($khoahoc) {
 
 
 function createKhoaHoc($khoahoc) {
-    // Nếu gửi bằng FormData (có file) thì $_FILES sẽ có dữ liệu
+    $data = null;
+    $newFileName = null;
+    $uploadPath = null;
+
+    // Nếu có file ảnh trong FormData
     if (isset($_FILES['image'])) {
-       
-        // Lưu file ảnh
         if (!is_dir('../upload')) {
             mkdir('../upload', 0777, true);
         }
 
         $fileTmp = $_FILES['image']['tmp_name'];
-        $fileName = 'khoahoc_' . uniqid() . '.jpg';
-        $filePath = '../upload/' . $fileName;
+        $newFileName = 'khoahoc_' . uniqid() . '.jpg';
+        $uploadPath = '../upload/' . $newFileName;
 
-        if (move_uploaded_file($fileTmp, $filePath)) {
-            $khoahoc->images = $fileName;
+        if (move_uploaded_file($fileTmp, $uploadPath)) {
+            $khoahoc->images = $newFileName;
         } else {
             http_response_code(500);
             echo json_encode(["message" => "Upload ảnh thất bại."]);
             return;
         }
+    }
 
-        // Ngoài ảnh, cần đọc thêm thông tin khác từ FormData
+    // Lấy phần dữ liệu text từ FormData
+    if (isset($_POST['data'])) {
         $data = json_decode($_POST['data']);
     } else {
-        // Nếu không có file thì nhận JSON bình thường
+        // Nếu không gửi bằng FormData thì fallback sang JSON raw
         $data = json_decode(file_get_contents("php://input"));
-        $khoahoc->images = $data->images ?? null; // nếu không có cũng không lỗi
+        if ($data && isset($data->images)) {
+            $khoahoc->images = $data->images;
+        }
     }
 
-   $requiredFields = ['tenkhoahoc', 'thoigianhoc', 'soluongbuoi', 'lichhoc', 'diadiemhoc', 'giatien'];
-$missingFields = [];
-
-foreach ($requiredFields as $field) {
-    if (!isset($data->$field)) {
-        $missingFields[] = $field;
+    if (!$data) {
+        http_response_code(400);
+        echo json_encode(["message" => "Không nhận được dữ liệu khoá học."]);
+        return;
     }
-}
 
-if (empty($missingFields)) {
+    // Kiểm tra các trường bắt buộc
+    $requiredFields = ['tenkhoahoc', 'thoigianhoc', 'soluongbuoi', 'lichhoc', 'diadiemhoc', 'giatien'];
+    $missingFields = [];
+
+    foreach ($requiredFields as $field) {
+        if (!isset($data->$field)) {
+            $missingFields[] = $field;
+        }
+    }
+
+    if (!empty($missingFields)) {
+        http_response_code(400);
+        echo json_encode([
+            "message" => "Thiếu dữ liệu khoá học.",
+            "missing_fields" => $missingFields
+        ]);
+        return;
+    }
+
+    // Gán dữ liệu vào đối tượng khoá học
     $khoahoc->tenkhoahoc = $data->tenkhoahoc;
     $khoahoc->thoigianhoc = $data->thoigianhoc;
     $khoahoc->soluongbuoi = $data->soluongbuoi;
@@ -134,31 +156,27 @@ if (empty($missingFields)) {
     $khoahoc->mota = $data->mota ?? null;
 
     if ($khoahoc->create()) {
-        $response = [
-            "idkhoahoc" => $khoahoc->idkhoahoc,
-            "tenkhoahoc" => $khoahoc->tenkhoahoc,
-            "thoigianhoc" => $khoahoc->thoigianhoc,
-            "lichhoc" => $khoahoc->lichhoc,
-            "diadiemhoc" => $khoahoc->diadiemhoc,
-            "mota" => $khoahoc->mota,
-            "images" => $khoahoc->images,
-            "giatien" => $khoahoc->giatien,
-            "giamgia" => $khoahoc->giamgia
-        ];
-        echo json_encode($response);
+        echo json_encode([
+           
+           
+                "idkhoahoc" => $khoahoc->idkhoahoc,
+                "tenkhoahoc" => $khoahoc->tenkhoahoc,
+                "thoigianhoc" => $khoahoc->thoigianhoc,
+                "lichhoc" => $khoahoc->lichhoc,
+                "diadiemhoc" => $khoahoc->diadiemhoc,
+                "mota" => $khoahoc->mota,
+                "images" => $khoahoc->images,
+                "giatien" => $khoahoc->giatien,
+                "giamgia" => $khoahoc->giamgia
+            
+           
+        ]);
     } else {
         http_response_code(500);
         echo json_encode(["message" => "Không thể tạo khoá học."]);
     }
-} else {
-    http_response_code(400);
-    echo json_encode([
-        "message" => "Thiếu dữ liệu khoá học.",
-        "missing_fields" => $missingFields
-    ]);
 }
 
-}
 
 function updateKhoaHoc($khoahoc) {
     $data = json_decode(file_get_contents("php://input"));

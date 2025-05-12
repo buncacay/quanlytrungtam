@@ -3,22 +3,23 @@ import { fetchChiTietNhanVien } from './get.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const tableBody = document.getElementById('table-body');
   const selectGV = document.getElementById('filter-gv');
+  const searchInput = document.getElementById('search-khoahoc');
   const btnFilter = document.getElementById('btn-filter');
   const filterContainer = btnFilter.parentNode;
 
-  // Thêm nút Bỏ lọc
+  // Bỏ lọc
   const btnClear = document.createElement('button');
   btnClear.textContent = 'Bỏ lọc';
   btnClear.className = 'ml-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500';
   filterContainer.appendChild(btnClear);
 
-  // Container cho phân trang
   const pagination = document.createElement('div');
   pagination.className = 'flex justify-center gap-2 mt-4';
   document.querySelector('.overflow-x-auto').appendChild(pagination);
 
   const data = await fetchChiTietNhanVien();
 
+  // Lọc giảng viên
   const giangVienMap = new Map();
   data.forEach(item => {
     if (!giangVienMap.has(item.idnhanvien)) {
@@ -101,15 +102,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function applyFilter() {
     const gv = selectGV.value;
-    const start = document.getElementById('filter-start').value;
-    const end = document.getElementById('filter-end').value;
+    const search = searchInput.value.toLowerCase();
+    const monthValue = document.getElementById('filter-month')?.value;
 
     filteredData = data.filter(row => {
       const date = new Date(row.thoigianbatdau);
       const matchGV = !gv || row.idnhanvien == gv;
-      const matchStart = !start || date >= new Date(start + 'T00:00:00');
-      const matchEnd = !end || date <= new Date(end + 'T23:59:59');
-      return matchGV && matchStart && matchEnd;
+      const matchSearch = !search || (row.tenkhoahoc?.toLowerCase().includes(search) ?? false);
+      const matchMonth = !monthValue || date.toISOString().slice(0, 7) === monthValue;
+      return matchGV && matchSearch && matchMonth;
     });
 
     currentPage = 1;
@@ -117,11 +118,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   btnFilter.addEventListener('click', applyFilter);
+  searchInput.addEventListener('input', applyFilter);
 
   btnClear.addEventListener('click', () => {
-    document.getElementById('filter-start').value = '';
-    document.getElementById('filter-end').value = '';
     selectGV.value = '';
+    searchInput.value = '';
+    const monthInput = document.getElementById('filter-month');
+    if (monthInput) monthInput.value = '';
+
     filteredData = [...data];
     currentPage = 1;
     renderTablePage(currentPage);
@@ -154,6 +158,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     return d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
   }
 
-  // Khởi tạo lần đầu
   renderTablePage(currentPage);
 });

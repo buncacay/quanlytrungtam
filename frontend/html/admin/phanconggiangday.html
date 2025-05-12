@@ -15,6 +15,14 @@
               <div class="assignment-container">
         <h1>Phân công giảng dạy</h1>
         <div class="assignment-form">
+            <div class="flex gap-4 mb-4">
+                <input type="text" id="search-tennhanvien" placeholder="Tìm tên giảng viên..." class="border p-2 rounded" />
+                <input type="text" id="search-tenkhoahoc" placeholder="Tìm tên khóa học..." class="border p-2 rounded" />
+                <input type="month" id="search-thang" class="border p-2 rounded" />
+                <button id="btn-filter-assignment" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Lọc</button>
+                <button id="btn-clear-filter" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Bỏ lọc</button>
+                </div>
+
             <h2>Gán giảng viên cho lớp học</h2>
             <form id="assignmentForm">
                 <div class="form-group">

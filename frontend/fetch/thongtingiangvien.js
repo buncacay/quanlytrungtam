@@ -1,25 +1,44 @@
 import { fetchGiangVien } from './get.js';
 import { UpdateGiangVien } from './update.js';
 import { addThongTinGiangVien } from './add.js';
-import { RemoveNhanVien } from './delete.js'; // Đã thêm
+import { RemoveNhanVien } from './delete.js';
 
 let currentPage = 1;
 const pageSize = 5;
 let isEditing = false;
 let editingId = null;
+let fullData = [];
 
 document.addEventListener('DOMContentLoaded', async function () {
+    fullData = await fetchGiangVien();
     await ShowAll(currentPage);
+
+    document.getElementById("btn-search").addEventListener("click", () => ShowAll(1));
+    document.getElementById("btn-clear").addEventListener("click", () => {
+        document.getElementById("search-name").value = "";
+        document.getElementById("filter-chucvu").value = "";
+        ShowAll(1);
+    });
 });
 
-async function ShowAll(page = 1) {
-    const data = await fetchGiangVien();
-    const totalPages = Math.ceil(data.length / pageSize);
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const paginatedData = data.slice(start, end);
+function filterData() {
+    const searchValue = document.getElementById("search-name").value.toLowerCase().trim();
+    const chucvuFilter = document.getElementById("filter-chucvu").value;
 
-    await HienThiThongTin(page, totalPages, paginatedData);
+    return fullData.filter(gv => {
+        const matchesName = gv.tennhanvien.toLowerCase().includes(searchValue);
+        const matchesChucVu = !chucvuFilter || gv.chucvu === chucvuFilter;
+        return matchesName && matchesChucVu;
+    });
+}
+
+async function ShowAll(page = 1) {
+    const filtered = filterData();
+    const totalPages = Math.ceil(filtered.length / pageSize);
+    const start = (page - 1) * pageSize;
+    const paginated = filtered.slice(start, start + pageSize);
+
+    await HienThiThongTin(page, totalPages, paginated);
 }
 
 async function HienThiThongTin(page, total, data) {
@@ -79,9 +98,7 @@ async function edit(encodedData) {
     isEditing = true;
     editingId = data.idnhanvien;
 
-    const btn = document.getElementById('themnhanvien');
-    btn.textContent = "Lưu chỉnh sửa";
-
+    document.getElementById('themnhanvien').textContent = "Lưu chỉnh sửa";
     document.getElementById('name').value = data.tennhanvien || '';
     document.getElementById('trinhdo').value = data.trinhdo || '';
     document.getElementById('chungchi').value = data.chungchi || '';
@@ -92,7 +109,7 @@ async function edit(encodedData) {
 
 async function saveChanges(idnhanvien) {
     const formData = {
-        idnhanvien: idnhanvien,
+        idnhanvien,
         tennhanvien: document.getElementById('name').value,
         trinhdo: document.getElementById('trinhdo').value,
         chungchi: document.getElementById('chungchi').value,
@@ -102,13 +119,13 @@ async function saveChanges(idnhanvien) {
         tienthuong: 0,
         tienphat: 0,
         trangthai: 1,
-        tonggioday : 0
+        tonggioday: 0
     };
 
-    console.log(formData);
     const result = await UpdateGiangVien(formData);
     if (result) {
         alert("Cập nhật thành công");
+        fullData = await fetchGiangVien();
         await ShowAll(currentPage);
         clearForm();
         document.getElementById('themnhanvien').textContent = "Thêm nhân viên";
@@ -128,16 +145,18 @@ document.getElementById('themnhanvien').addEventListener('click', async function
             trinhdo: document.getElementById('trinhdo').value,
             chungchi: document.getElementById('chungchi').value,
             sdt: document.getElementById('sdt').value,
-            tienthuong: 0,
-            tienphat: 0,
             chucvu: document.getElementById('chucvu').value,
             ghichu: document.getElementById('ghichu').value,
+            tienthuong: 0,
+            tienphat: 0,
             trangthai: 1,
             tonggioday: 0
         };
+
         const kq = await addThongTinGiangVien(formData);
         if (kq) {
             alert("Thêm thành công");
+            fullData = await fetchGiangVien();
             await ShowAll(currentPage);
             clearForm();
         } else {
@@ -151,6 +170,7 @@ async function remove(id) {
         const result = await RemoveNhanVien(id);
         if (result) {
             alert("Xoá thành công");
+            fullData = await fetchGiangVien();
             await ShowAll(currentPage);
         } else {
             alert("Xoá thất bại");
@@ -204,6 +224,5 @@ function renderPagination({ current, total, onPage }) {
     container.appendChild(nextBtn);
 }
 
-// Đăng ký để dùng từ HTML
 window.edit = edit;
 window.remove = remove;

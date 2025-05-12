@@ -74,3 +74,13 @@ table tbody tr:nth-child(odd) {
 table tbody tr:nth-child(even) {
     background: #fff;
 }
+
+#pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+#pagination button {
+  padding: 5px 10px;
+}

@@ -58,8 +58,8 @@ function createChiTiet($nhanvien) {
 
         if (!isset($data->idnhanvien)) $missingFields[] = "idnhanvien";
         if (!isset($data->idkhoahoc)) $missingFields[] = "idkhoahoc";
-        if (!isset($data->thoigianbatdau)) $missingFields[] = "thoigianbatdau";
-        if (!isset($data->thoigianketthuc)) $missingFields[] = "thoigianketthuc";
+        // if (!isset($data->thoigianbatdau)) $missingFields[] = "thoigianbatdau";
+        // if (!isset($data->thoigianketthuc)) $missingFields[] = "thoigianketthuc";
         if (!isset($data->dongia)) $missingFields[] = "dongia";
 
         if (!empty($missingFields)) {
@@ -101,8 +101,8 @@ function updateChiTiet($nhanvien) {
 
     if (!isset($data->idnhanvien)) $missingFields[] = "idnhanvien";
     if (!isset($data->idkhoahoc)) $missingFields[] = "idkhoahoc";
-    if (!isset($data->thoigianbatdau)) $missingFields[] = "thoigianbatdau";
-    if (!isset($data->thoigianketthuc)) $missingFields[] = "thoigianketthuc";
+    // if (!isset($data->thoigianbatdau)) $missingFields[] = "thoigianbatdau";
+    // if (!isset($data->thoigianketthuc)) $missingFields[] = "thoigianketthuc";
     if (!isset($data->dongia)) $missingFields[] = "dongia";
 
     if (!empty($missingFields)) {

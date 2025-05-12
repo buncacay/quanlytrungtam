@@ -1,7 +1,7 @@
 import { fetchGiangVien, fetchKhoaHoc, fetchChiTietNhanVien } from './get.js';
 import { UpdateChiTietNhanVien } from './update.js';
-import {addChiTietNhanVien} from './add.js';
-import {removeChiTietNhanVien} from './delete.js';
+import { addChiTietNhanVien } from './add.js';
+import { removeChiTietNhanVien } from './delete.js';
 
 let isEditingAssignment = false;
 let editingAssignment = null;
@@ -31,13 +31,9 @@ document.addEventListener('DOMContentLoaded', async function () {
   await showAssignments();
 });
 
-// Xử lý phân công hoặc chỉnh sửa
+document.getElementById('phancong').addEventListener('click', async function (event) {
+  event.preventDefault();
 
-const btnPhanCong = document.getElementById('phancong');
-btnPhanCong.addEventListener('click', async function (event) {
-event.preventDefault();
-  alert("tr");
-   try {
   const gv = document.getElementById('teacher').value;
   const kh = document.getElementById('class').value;
   const begin = document.getElementById('begin').value;
@@ -51,8 +47,8 @@ event.preventDefault();
     thoigianketthuc: end,
     dongia: dongia
   };
-  console.log(data);
-  
+
+  try {
     if (isEditingAssignment && editingAssignment) {
       const result = await UpdateChiTietNhanVien(data);
       if (result) alert('Cập nhật phân công thành công!');
@@ -63,25 +59,33 @@ event.preventDefault();
 
     isEditingAssignment = false;
     editingAssignment = null;
-    btnPhanCong.textContent = 'Phân công';
+    document.getElementById('phancong').textContent = 'Phân công';
     await showAssignments();
-  } 
-  catch (error) {
+  } catch (error) {
     console.error('Lỗi:', error);
   }
 });
 
 async function showAssignments() {
   const container = document.getElementById('list');
-  container.innerHTML = ''; // Xóa nội dung cũ
+  container.innerHTML = '';
 
-  const assignments = await fetchChiTietNhanVien(); // Gọi API danh sách phân công
+  const assignments = await fetchChiTietNhanVien();
 
-  // Tạo bảng
+  const searchGV = document.getElementById('search-tennhanvien')?.value.toLowerCase() || '';
+  const searchKH = document.getElementById('search-tenkhoahoc')?.value.toLowerCase() || '';
+  const searchThang = document.getElementById('search-thang')?.value;
+
+  const filtered = assignments.filter(pc => {
+    const matchGV = !searchGV || (pc.tennhanvien?.toLowerCase().includes(searchGV));
+    const matchKH = !searchKH || (pc.tenkhoahoc?.toLowerCase().includes(searchKH));
+    const matchThang = !searchThang || pc.thoigianbatdau?.slice(0, 7) === searchThang;
+    return matchGV && matchKH && matchThang;
+  });
+
   const table = document.createElement('table');
   table.className = 'w-full table-auto border-collapse border border-gray-300';
 
-  // Tạo phần thead
   const thead = document.createElement('thead');
   thead.className = 'bg-gray-100';
   thead.innerHTML = `
@@ -96,14 +100,12 @@ async function showAssignments() {
   `;
   table.appendChild(thead);
 
-  // Tạo phần tbody
   const tbody = document.createElement('tbody');
   tbody.className = 'text-center';
 
-  assignments.forEach(pc => {
-    const row = document.createElement('tr');
+  filtered.forEach(pc => {
     const encoded = encodeURIComponent(JSON.stringify(pc));
-
+    const row = document.createElement('tr');
     row.innerHTML = `
       <td class="border border-gray-300 px-4 py-2">${pc.tennhanvien}</td>
       <td class="border border-gray-300 px-4 py-2">${pc.tenkhoahoc}</td>
@@ -126,7 +128,6 @@ async function showAssignments() {
   container.appendChild(table);
 }
 
-// Hàm chỉnh sửa phân công
 function editAssignment(encodedData) {
   const data = JSON.parse(decodeURIComponent(encodedData));
   isEditingAssignment = true;
@@ -142,27 +143,23 @@ function editAssignment(encodedData) {
 }
 
 async function remove(encodedData) {
-  const gv = document.getElementById('teacher').value;
-  const kh = document.getElementById('class').value;
-  const begin = document.getElementById('begin').value;
-  const end = document.getElementById('end').value;
-  const dongia = document.getElementById('dongia').value;
-
-  const data = {
-    idnhanvien: gv,
-    idkhoahoc: kh,
-    thoigianbatdau: begin,
-    thoigianketthuc: end,
-    dongia: dongia
-  };
-   const result = await removeChiTietNhanVien(data);
-      if (result) {
-        alert('Xóa thành công!');
-        await showAssignments();
-      }
-
+  const data = JSON.parse(decodeURIComponent(encodedData));
+  const result = await removeChiTietNhanVien(data);
+  if (result) {
+    alert('Xóa thành công!');
+    await showAssignments();
+  }
 }
 
-// Đăng ký cho HTML gọi từ window
+// Gán cho window để gọi từ HTML
 window.editAssignment = editAssignment;
 window.remove = remove;
+
+// Xử lý lọc
+document.getElementById('btn-filter-assignment').addEventListener('click', showAssignments);
+document.getElementById('btn-clear-filter').addEventListener('click', () => {
+  document.getElementById('search-tennhanvien').value = '';
+  document.getElementById('search-tenkhoahoc').value = '';
+  document.getElementById('search-thang').value = '';
+  showAssignments();
+});

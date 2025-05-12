@@ -66,7 +66,8 @@ async function HienThiThongTin(page,total,data) {
                 <td>${khoahoc.soluongbuoi}</td>
                 <td>${khoahoc.lichhoc}</td>
                 <td>
-                    <button onclick="edit(${khoahoc.idkhoahoc}, ${khoahoc.images})">Edit</button> 
+                    <button onclick="edit(${khoahoc.idkhoahoc}, '${khoahoc.images}')">Edit</button>
+
                     <button onclick="remove(${khoahoc.idkhoahoc})">Remove</button> 
                   
                 </td>
@@ -77,7 +78,7 @@ async function HienThiThongTin(page,total,data) {
 }
 
 function edit(id, images){
-    window.location.href=`taovaquanlykhoahoc.html?idkhoahoc=${id}&&images=`;
+    window.location.href=`taovaquanlykhoahoc.html?idkhoahoc=${id}&&images=${images}`;
 }
 
 async function remove(id){

@@ -11,7 +11,8 @@
 <body>
     <div class="course-management">
         <h2>Tạo và Quản lý Khóa Học</h2>
-        
+    
+
         <div id="header"></div>
         <div id="sidebar"></div>
         <div class="cards-container">
@@ -42,6 +43,18 @@
                 </form>
             </div>
             <div class="tong">
+                <div id="loc">
+                    <input type="text" id="search-name" placeholder="Tìm theo tên giảng viên">
+                    <select id="filter-chucvu">
+                    <option value="">Tất cả chức vụ</option>
+                    <option value="Giảng viên">Giảng viên</option>
+                    <option value="Nhân viên">Nhân viên</option>
+                    <!-- Thêm các chức vụ khác nếu cần -->
+                    </select>
+                    <button id="btn-search">Tìm kiếm</button>
+                    <button id="btn-clear">Xóa lọc</button>
+                </div>
+                 
                 <div id="giangvien">
                     
                 </div>

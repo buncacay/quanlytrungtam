@@ -13,10 +13,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     await loadKhoaHocDropdownAndTable();
     await renderHoaDonTable(currentPage);
 
-    const form = document.getElementById("invoiceForm");
-    form.addEventListener("submit", tao);
-
-   
+    document.getElementById("invoiceForm").addEventListener("submit", tao);
+    document.getElementById('btn-search').addEventListener('click', () => {
+        currentPage = 1;
+        renderHoaDonTable(currentPage);
+    });
+    document.getElementById('btn-clear').addEventListener('click', () => {
+        document.getElementById('search-tenhoadon').value = '';
+        currentPage = 1;
+        renderHoaDonTable(currentPage);
+    });
 });
 
 async function loadHocVienDropdown() {
@@ -44,7 +50,15 @@ async function loadKhoaHocDropdownAndTable() {
 }
 
 async function renderHoaDonTable(page) {
-    const hoaDonList = await fetchHoaDon();
+    let hoaDonList = await fetchHoaDon();
+    const searchKeyword = document.getElementById('search-tenhoadon')?.value.toLowerCase().trim();
+
+    if (searchKeyword) {
+        hoaDonList = hoaDonList.filter(hd =>
+            hd.tenkhoahoc?.toLowerCase().includes(searchKeyword)
+        );
+    }
+
     const invoiceContainer = document.getElementById('invoice');
 
     const startIndex = (page - 1) * itemsPerPage;
@@ -143,13 +157,11 @@ async function tao(event) {
         thanhtien: tien,
         idhocvien: idhocvien,
         idkhoahoc: idkhoahoc,
-        loai: type, 
+        loai: type,
         giamgia: 0
     };
-    
 
     try {
-        console.log(data);
         if (isEditing && editingId) {
             data.idhoadon = editingId;
             await UpdateHoaDon(data);
@@ -161,7 +173,7 @@ async function tao(event) {
 
         document.getElementById("invoiceForm").reset();
         document.getElementById("btn").innerText = "Tạo hóa đơn";
-        
+
         isEditing = false;
         editingId = null;
 

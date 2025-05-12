@@ -19,39 +19,43 @@ class KhoaHoc {
         $this->conn = $db;
     }
 
-  public function create() {
-    $query = "INSERT INTO " . $this->table . " 
-        (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc, mota, images, giatien, giamgia) 
-        VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota, :images, :giatien, :giamgia)";
-    
-    $stmt = $this->conn->prepare($query);
-
-    // Gán dữ liệu
-    $stmt->bindParam(':tenkhoahoc', $this->tenkhoahoc);
-    $stmt->bindParam(':thoigianhoc', $this->thoigianhoc);
-    $stmt->bindParam(':soluongbuoi', $this->soluongbuoi, PDO::PARAM_INT);
-    $stmt->bindParam(':lichhoc', $this->lichhoc);
-    $stmt->bindParam(':diadiemhoc', $this->diadiemhoc);
-    $stmt->bindParam(':mota', $this->mota);
-    $stmt->bindParam(':giatien', $this->giatien);
-    $stmt->bindParam(':giamgia', $this->giamgia);
-
-    // Xử lý ảnh upload
+public function create() {
+    // Nếu có ảnh từ $this->image thì xử lý, còn không thì giữ nguyên $this->images đã có
     if (isset($this->image) && is_array($this->image) && isset($this->image['tmp_name'])) {
         $originalName = basename($this->image['name']);
         $newFileName = time() . '_' . $originalName;
         $uploadPath = 'uploads/' . $newFileName;
-       
+
         if (move_uploaded_file($this->image['tmp_name'], $uploadPath)) {
-            $this->images = $newFileName; // Chỉ lưu tên file
-        } else {
-            $this->images = null;
+            $this->images = $newFileName;
         }
-    } else {
-        $this->images = null;
     }
 
-    $stmt->bindParam(':images', $this->images);
+    $query = "INSERT INTO " . $this->table . " 
+        (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc, mota, images, giatien, giamgia) 
+        VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota, :images, :giatien, :giamgia)";
+
+    $stmt = $this->conn->prepare($query);
+
+    $tenkhoahoc  = $this->tenkhoahoc;
+    $thoigianhoc = $this->thoigianhoc;
+    $soluongbuoi = $this->soluongbuoi;
+    $lichhoc     = $this->lichhoc;
+    $diadiemhoc  = $this->diadiemhoc;
+    $mota        = $this->mota;
+    $images      = $this->images;
+    $giatien     = $this->giatien;
+    $giamgia     = $this->giamgia;
+
+    $stmt->bindParam(':tenkhoahoc', $tenkhoahoc);
+    $stmt->bindParam(':thoigianhoc', $thoigianhoc);
+    $stmt->bindParam(':soluongbuoi', $soluongbuoi, PDO::PARAM_INT);
+    $stmt->bindParam(':lichhoc', $lichhoc);
+    $stmt->bindParam(':diadiemhoc', $diadiemhoc);
+    $stmt->bindParam(':mota', $mota);
+    $stmt->bindParam(':images', $images);
+    $stmt->bindParam(':giatien', $giatien);
+    $stmt->bindParam(':giamgia', $giamgia);
 
     if ($stmt->execute()) {
         $this->idkhoahoc = $this->conn->lastInsertId();
@@ -131,10 +135,9 @@ class KhoaHoc {
 
    public function getKhoaHocById() {
     $query = "SELECT * FROM khoahoc
-                  INNER JOIN chitietnhanvien 
-                  ON khoahoc.idkhoahoc = chitietnhanvien.idkhoahoc
-                  INNER JOIN nhanvien 
-                  ON nhanvien.idnhanvien = chitietnhanvien.idnhanvien WHERE khoahoc.idkhoahoc = :idkhoahoc";
+                  INNER JOIN chitietkhoahoc 
+                  ON khoahoc.idkhoahoc = chitietkhoahoc.idkhoahoc
+                  WHERE khoahoc.idkhoahoc = :idkhoahoc";
     $stmt = $this->conn->prepare($query);
 
     $stmt->bindParam(':idkhoahoc', $this->idkhoahoc, PDO::PARAM_INT);
