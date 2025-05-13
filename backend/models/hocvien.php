@@ -6,6 +6,7 @@ class hocvien {
     public $sdt;
     public $diachi;
     public $sdtph;
+    public $user;
 
     public $conn;
     public $table = "hocvien";
@@ -15,8 +16,8 @@ class hocvien {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " (hoten, ngaysinh, sdt, diachi, sdtph) 
-                  VALUES (:hoten, :ngaysinh, :sdt, :diachi, :sdtph)";
+        $query = "INSERT INTO " . $this->table . " (hoten, ngaysinh, sdt, diachi, sdtph, user) 
+                  VALUES (:hoten, :ngaysinh, :sdt, :diachi, :sdtph, :user)";
         $stmt = $this->conn->prepare($query);
     
         $success = $stmt->execute([
@@ -24,7 +25,8 @@ class hocvien {
             ':ngaysinh' => $this->ngaysinh,
             ':sdt' => $this->sdt,
             ':diachi' => $this->diachi,
-            ':sdtph' => $this->sdtph
+            ':sdtph' => $this->sdtph,
+            ':user' => $this->user
         ]);
     
         if ($success) {
@@ -58,7 +60,7 @@ class hocvien {
 
     public function update() {
         $query = "UPDATE " . $this->table . " 
-                  SET hoten = :hoten, ngaysinh = :ngaysinh, sdt = :sdt, diachi = :diachi, sdtph = :sdtph 
+                  SET hoten = :hoten, ngaysinh = :ngaysinh, sdt = :sdt, diachi = :diachi, sdtph = :sdtph, user = :user 
                   WHERE idhocvien = :idhocvien";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute([
@@ -67,7 +69,8 @@ class hocvien {
             ':sdt' => $this->sdt,
             ':diachi' => $this->diachi,
             ':sdtph' => $this->sdtph,
-            ':idhocvien' => $this->idhocvien
+            ':idhocvien' => $this->idhocvien,
+            ':user' => $this->user
         ]);
     }
 

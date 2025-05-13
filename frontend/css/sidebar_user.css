@@ -1,0 +1,136 @@
+/* Sidebar với nền Gradient */
+.sidebar {
+    width: 300px;
+    background: linear-gradient(135deg, #FF7F50, #FF6347, #FFD700); /* Gradient cam - đỏ - vàng */
+    color: #fff; /* Chữ trắng nổi bật */
+    padding: 25px;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1200;
+    overflow-y: auto;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* Logo */
+/* Logo */
+.sidebar .logo {
+    font-size: 28px; /* Nổi bật hơn */
+    font-weight: bold;
+    color: #FFFACD; /* Màu vàng nhạt tạo sự tương phản */
+    text-align: center;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 3px 5px rgba(0, 0, 0, 0.3); /* Hiệu ứng đổ bóng mềm mại */
+    animation: pulse 2s infinite; /* Hiệu ứng đập nhịp */
+}
+
+/* Animation logo */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Danh sách menu */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 20px 0; /* Khoảng cách lớn hơn giữa các mục */
+}
+
+.sidebar ul li a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    padding: 15px 20px; /* Tăng padding cho thoải mái */
+    border-radius: 12px; /* Bo góc mềm mại */
+    background: rgba(255, 255, 255, 0.9); /* Nền bán trong suốt */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+    backdrop-filter: blur(10px); /* Làm mờ nền */
+    transition: all 0.4s ease; /* Hiệu ứng chuyển đổi mượt */
+    font-size: 16px; /* Chữ lớn hơn */
+    font-weight: 500; /* Chữ đậm hơn */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hiệu ứng hover cho menu */
+.sidebar ul li a:hover {
+    background: linear-gradient(145deg, #FF7F50, #FF6347); /* Gradient màu cam và đỏ */
+    color: #fff;
+    transform: scale(1.05); /* Phóng to nhẹ */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Bóng đổ đậm hơn */
+}
+
+/* Hiệu ứng highlight dòng */
+.sidebar ul li a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: -1;
+    transform: skewX(-45deg);
+    transition: left 0.5s ease;
+}
+
+.sidebar ul li a:hover::before {
+    left: 0;
+}
+
+/* Thanh cuộn tùy chỉnh */
+.sidebar::-webkit-scrollbar {
+    width: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #FF7F50; /* Màu thanh cuộn cam */
+    border-radius: 5px;
+    border: 2px solid #ffffff; /* Viền trắng xung quanh */
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: #FF6347; /* Đậm hơn khi hover */
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background-color: #f8f9fa;
+}
+
+/* Hiệu ứng xuất hiện sidebar */
+.sidebar.open {
+    transform: translateX(0); /* Hiệu ứng trượt từ bên trái */
+    opacity: 1;
+}
+
+.sidebar.closed {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .main {
+    margin-left: 0;
+  }
+}   

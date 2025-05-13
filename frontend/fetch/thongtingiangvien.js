@@ -12,23 +12,26 @@ let fullData = [];
 document.addEventListener('DOMContentLoaded', async function () {
     fullData = await fetchGiangVien();
     await ShowAll(currentPage);
+    
 
     document.getElementById("btn-search").addEventListener("click", () => ShowAll(1));
     document.getElementById("btn-clear").addEventListener("click", () => {
         document.getElementById("search-name").value = "";
-        document.getElementById("filter-chucvu").value = "";
+        // document.getElementById("filter-chucvu").value = "";
         ShowAll(1);
     });
+
+    
 });
 
 function filterData() {
     const searchValue = document.getElementById("search-name").value.toLowerCase().trim();
-    const chucvuFilter = document.getElementById("filter-chucvu").value;
+    // const chucvuFilter = document.getElementById("filter-chucvu").value;
 
     return fullData.filter(gv => {
         const matchesName = gv.tennhanvien.toLowerCase().includes(searchValue);
-        const matchesChucVu = !chucvuFilter || gv.chucvu === chucvuFilter;
-        return matchesName && matchesChucVu;
+        // const matchesChucVu = !chucvuFilter || gv.chucvu === chucvuFilter;
+        return matchesName;
     });
 }
 

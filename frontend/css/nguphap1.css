@@ -1,0 +1,343 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(120deg, #edf2f7, #ffffff); /* Gradient tổng thể nhẹ nhàng */
+    color: #1f2937; /* Màu chữ chính */
+}
+
+.header {
+    background: linear-gradient(90deg, #fc4a1a, #f7b733); /* Gradient cam sáng đẹp */
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    z-index: 1000;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.sidebar {
+    width: 300px;
+    background: linear-gradient(135deg, #FF7F50, #FF6347, #FFD700); /* Gradient cam - đỏ - vàng */
+    color: #fff;
+    padding: 25px;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1200;
+    overflow-y: auto;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-left: 320px; /* Điều chỉnh khoảng cách sidebar */
+    position: relative;
+}
+
+.course-header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.course-header h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.05); /* Hiệu ứng watermark */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    white-space: nowrap;
+    letter-spacing: 2px;
+}
+
+.content {
+    display: flex;
+    gap: 30px;
+    background: linear-gradient(135deg, #ffffff, #f0f9ff); /* Nền gradient nhẹ nhàng */
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15); /* Bóng đổ sâu hơn */
+}
+
+.left {
+    flex: 3;
+    background: linear-gradient(135deg, #ffffff, #fffbf2); /* Gradient sáng tạo sự nổi bật */
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 1;
+}
+
+.course-description {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #4b5563;
+    line-height: 1.8;
+    background: #fffbf2;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Bóng đổ tinh tế */
+}
+
+.course-description .highlight {
+    color: #ef4444;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-list h2 {
+    margin-top: 30px;
+    font-size: 20px;
+    color: #1f2937;
+    border-left: 5px solid #3b82f6;
+    padding-left: 10px;
+}
+
+.lesson-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: linear-gradient(135deg, #e3f2fd, #ffffff); /* Gradient làm sáng mục */
+}
+
+.lesson-item:hover {
+    background-color: #f0f9ff; /* Hiệu ứng khi hover */
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-item .lesson-index {
+    font-weight: bold;
+    color: #3b82f6;
+    flex: 0 0 50px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.lesson-item .lesson-name {
+    flex: 1;
+    text-align: left;
+    color: #374151;
+}
+
+.lesson-item .free {
+    color: #16a34a;
+    font-weight: 600;
+    text-align: right;
+}
+
+.right {
+    flex: 1;
+    background: linear-gradient(135deg, #ffffff, #fffbf2); /* Gradient nhẹ tạo cảm giác mềm mại */
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+}
+
+.course-overview h3 {
+    font-size: 20px;
+    color: #1f2937;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 5px;
+}
+
+.course-overview .price {
+    color: #ef4444;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Bóng đổ đẹp */
+}
+.btn.buy-now {
+    background: #10b981;
+    color: #ffffff;
+}
+
+.btn.buy-now:hover {
+    background: #059669;
+    transform: translateY(-3px);
+}
+.lesson-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    background: linear-gradient(135deg, #ffffff, #f0f9ff); /* Nền nhẹ */
+    padding: 10px 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#search-input {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+    outline: none;
+}
+
+#search-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+}
+
+#search-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: #3b82f6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+#search-button:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}
+.discussion {
+    margin-top: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff, #f0f9ff); /* Nền sáng nhẹ */
+    border-radius: 16px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15); /* Bóng đổ đẹp */
+}
+
+.discussion h2 {
+    font-size: 20px;
+    color: #1f2937;
+    border-left: 5px solid #3b82f6;
+    padding-left: 10px;
+    margin-bottom: 20px;
+}
+
+.comment-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#comment-input {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+#comment-submit {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: #3b82f6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#comment-submit:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}
+
+.comments {
+    margin-top: 20px;
+}
+
+.comment-item, .comment-reply {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    background: #f9fafb;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.comment-reply {
+    margin-left: 20px;
+    background: #e0f2fe;
+}
+
+.timestamp {
+    font-size: 12px;
+    color: #6b7280;
+    display: block;
+    margin-top: 5px;
+}
+.lesson-link {
+    display: none;
+    margin-left: 20px;
+    padding: 10px;
+    background: #f3f4f6;
+    border-left: 3px solid #3b82f6;
+    animation: slide-down 0.3s ease-out;
+}
+
+.lesson-link a {
+    text-decoration: none;
+    color: #1d4ed8;
+    font-weight: bold;
+}
+
+.lesson-link a:hover {
+    color: #2563eb;
+}
+
+@keyframes slide-down {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

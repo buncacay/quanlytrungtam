@@ -1,113 +1,102 @@
-import { fetchKhoaHoc , fetchHocVien,  } from './get.js';
-import {addStudent, addChiTietHocVien} from './add.js';
-import {UpdateHocVien} from './update.js';
+import { fetchKhoaHoc } from './get.js';
+import { addTaiKhoan, addStudent, addThongTinGiangVien, addChiTietHocVien} from './add.js';
 
-document.getElementById('registrationForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-
-    const fullname = document.getElementById('fullname').value;
-    const phone = document.getElementById('sdt').value;
-    const date = document.getElementById('birth').value;
-    const course = document.getElementById('course').value;
-
-    const data = {
-        hoten: fullname,
-        sdt: phone,
-        ngaysinh: date
-       
-    };
-
-    // console.log("day la data ", JSON.stringify(data)); // Kiểm tra trước khi gửi
+document.addEventListener('DOMContentLoaded', async () => {
     
-    const kq = await addStudent(data);
-    // console.log("day la kq ", kq);
-    const id = kq.idhocvien;
-    console.log("id " + id);
-    const data2 = {
-        idhocvien: id,
-        idkhoahoc : course,
-        ketquahoctap : "chua co",
-        tinhtranghocphi : "chua co"
-    }
-    console.log(data2);
-    const kq2 = await addChiTietHocVien(data2);
-    console.log(kq2);
-    
-
-});
-
-document.addEventListener('DOMContentLoaded', async function () {
     const data = await fetchKhoaHoc();
     const select = document.getElementById('course');
-    data.forEach(khoahoc => {
-        const otp = document.createElement('option');
-        otp.value = khoahoc.idkhoahoc;
-        otp.textContent = khoahoc.tenkhoahoc;
-        select.appendChild(otp);
+    data.forEach(k => {
+        const option = document.createElement('option');
+        option.value = k.idkhoahoc;
+        option.textContent = k.tenkhoahoc;
+        select.appendChild(option);
     });
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
 
-    if (id) {
-        await EditHocVien(id);
-    } else {
-        alert("Thiếu ID học viên");
-    }
+    // Gắn sự kiện submit
+    document.getElementById('add-form').addEventListener('submit', handleFormSubmit);
 });
 
-async function EditHocVien(id) {
-    const formdky = document.getElementById('registrationForm');
-    formdky.innerHTML = `
-        <div class="form-group">
-            <label for="fullname">Họ và tên:</label>
-            <input type="text" id="fullname" name="fullname" placeholder="Nhập họ và tên" required>
-        </div>
-        <div class="form-group">
-            <label for="sdt">Số điện thoại:</label>
-            <input type="tel" id="sdt" name="sdt" placeholder="Nhập số điện thoại" pattern="[0-9]{10}" required>
-        </div>
-        <div class="form-group">
-            <label for="birth">Ngày sinh:</label>
-            <input type="date" id="birth" name="birth" required>
-        </div>
-        <button type="button" id="btn">Lưu chỉnh sửa</button>
-    `;
+async function handleFormSubmit(e) {
+    e.preventDefault();
 
-    const data = await fetchHocVien(id);
+    const username = document.getElementById('name').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const role = document.querySelector('input[name="role"]:checked')?.value;
 
-    const hoten = document.getElementById('fullname');
-    const sdt = document.getElementById('sdt');
-    const sn = document.getElementById('birth');
-    const btn = document.getElementById('btn');
+    if (!role) return alert("Vui lòng chọn chức vụ");
+    if (password !== confirmPassword) return alert("Mật khẩu không khớp");
 
-    hoten.value = data[0]['hoten'];
-    sdt.value = data[0]['sdt'];
-    sn.value = data[0]['ngaysinh'];
+    const taikhoanData = {
+        user: username,
+        pass: password,
+        role: role,
+        created_at: new Date().toISOString().slice(0, 10),
+        trangthai:1
+    };
+    console.log(taikhoanData);
+    const result = await addTaiKhoan(taikhoanData);
+    if (!result || !result.success) {
+        return alert("Tạo tài khoản thất bại!");
+    }
 
-    btn.addEventListener('click', async function () {
-        const dlieu = {
-            idhocvien: data[0]['idhocvien'],
-            hoten: hoten.value,
-            sdt: sdt.value,
-            ngaysinh: sn.value
-        };
+    // Tiếp tục tạo thông tin học viên hoặc giảng viên
+    if (role === 'student') {
+        await handleaddStudent(username);
+    } else if (role === 'teacher') {
+        await handleAddNhanVien(username);
+    }
 
-        try {
-            const success = await UpdateHocVien(dlieu);
-            if (success) {
-                alert("Đã lưu thông tin sau khi chỉnh sửa");
-                // Ví dụ chuyển hướng:
-                window.location.href = "danhsachhocvien.html";
-            }
-        } catch (err) {
-            alert("Lỗi khi cập nhật: " + err.message);
-        }
-    });
+    alert("Tạo tài khoản thành công!");
+    window.location.reload();
 }
 
+async function handleaddStudent(user) {
+    const hoten = document.getElementById('fullname').value;
+    const sdt = document.getElementById('sdt-student').value;
+    const ngaysinh = document.getElementById('birth').value;
+    const idkhoahoc = document.getElementById('course').value;
 
+    const hv = {
+        hoten : hoten,
+        sdt : sdt,
+        ngaysinh: ngaysinh,
+        user : user
+    };
 
+    const res = await addStudent(hv);
+    if (res && res.idhocvien) {
+        const ct = {
+            idhocvien: res.idhocvien,
+            idkhoahoc :idkhoahoc,
+            ketquahoctap: "Chưa có",
+            tinhtranghocphi: "Chưa đóng"
+        };
+        await addChiTietHocVien(ct);
+    }
+}
 
+async function handleAddNhanVien(user) {
+    const tennhanvien = document.getElementById('teacher-name').value;
+    const trinhdo = document.getElementById('trinhdo').value;
+    const chungchi = document.getElementById('chungchi').value;
+    const sdt = document.getElementById('sdt-teacher').value;
+    const chucvu = document.getElementById('chucvu').value;
+    const ghichu = document.getElementById('ghichu').value;
 
+    const nv = {
+        tennhanvien,
+        trinhdo,
+        chungchi,
+        sdt,
+        chucvu,
+        ghichu,
+        diachi: "",
+        tienthuong: 0,
+        tienphat: 0,
+        tonggioday: 0,
+        user
+    };
 
-
+    await addThongTinGiangVien(nv);
+}

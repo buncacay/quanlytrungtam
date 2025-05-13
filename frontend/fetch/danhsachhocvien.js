@@ -1,12 +1,26 @@
-import { fetchAllHocVien } from './get.js';
+import { fetchAllHocVien, fetchKhoaHoc } from './get.js';
 
 let currentPage = 1;
 let totalPages = 1;
 const limit = 5;
 
 document.addEventListener('DOMContentLoaded', async function () {
-    await showAll(currentPage);
+  const courseSelect = document.getElementById('filter-khoahoc');
+  courseSelect.innerHTML = '';
+
+  const khoahocList = await fetchKhoaHoc();
+  console.log(khoahocList);
+
+  khoahocList.forEach(khoahoc => {
+    const opt = document.createElement('option');
+    opt.textContent = khoahoc.tenkhoahoc;
+    opt.value = khoahoc.idkhoahoc;
+    courseSelect.appendChild(opt);
+  });
+
+  await showAll(currentPage);
 });
+
 
 async function showAll(page = 1) {
     try {

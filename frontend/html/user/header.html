@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Đăng ký & Đăng nhập</title>
+    <link rel="stylesheet" href="../../css/header_user.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="actions">
+                <button class="btn" onclick="showModal('register')">Đăng ký</button>
+                <button class="btn" onclick="showModal('login')">Đăng nhập</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="register" class="modal-form hidden">
+                <h2>Đăng ký</h2>
+                <form>
+                    <label for="username">Tên đăng nhập</label>
+                    <input type="text" id="username" placeholder="Nhập tên đăng nhập">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" placeholder="Nhập mật khẩu">
+                    <button type="submit" class="btn">Đăng ký</button>
+                </form>
+            </div>
+            <div id="login" class="modal-form hidden">
+                <h2>Đăng nhập</h2>
+                <form>
+                    <label for="username-login">Tên đăng nhập</label>
+                    <input type="text" id="username-login" placeholder="Nhập tên đăng nhập">
+                    <label for="password-login">Mật khẩu</label>
+                    <input type="password" id="password-login" placeholder="Nhập mật khẩu">
+                    <button type="submit" class="btn">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showModal(formId) {
+            document.getElementById('modal').style.display = 'flex';
+            document.querySelectorAll('.modal-form').forEach(form => form.classList.add('hidden'));
+            document.getElementById(formId).classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

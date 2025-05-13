@@ -109,3 +109,14 @@ button:hover {
     color: white;
     border-color: #2980b9;
 }
+
+.filter-bar {
+  margin-bottom: 20px;
+}
+
+.filter-bar input,
+.filter-bar select,
+.filter-bar button {
+  padding: 8px;
+  margin-right: 10px;
+}

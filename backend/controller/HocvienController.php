@@ -74,6 +74,7 @@ function createHocVien($hocvien) {
         $hocvien->hoten = $data->hoten;
         $hocvien->ngaysinh = $data->ngaysinh;
         $hocvien->sdt = $data->sdt;
+        $hocvien->user = $data->user;
         $hocvien->sdtph = !empty($data->sdtph) ? $data->sdtph : null;
         $hocvien->diachi = !empty($data->diachi) ? $data->diachi : null;
 
@@ -84,7 +85,8 @@ function createHocVien($hocvien) {
                 "ngaysinh" => $hocvien->ngaysinh,
                 "sdt" => $hocvien->sdt,
                 "sdtph" => $hocvien->sdtph,
-                "diachi" => $hocvien->diachi
+                "diachi" => $hocvien->diachi,
+                "user" => $hocvien->user
             ];
             echo json_encode($response);
         } else {
@@ -104,6 +106,7 @@ function updateHocVien($hocvien) {
         $hocvien->hoten = $data->hoten;
         $hocvien->ngaysinh = $data->ngaysinh;
         $hocvien->sdt = $data->sdt;
+        $hocvien->user = $data->user;
         $hocvien->diachi = isset($data->diachi) ? $data->diachi : null;
         $hocvien->sdtph = isset($data->sdtph) ? $data->sdtph : null;
 

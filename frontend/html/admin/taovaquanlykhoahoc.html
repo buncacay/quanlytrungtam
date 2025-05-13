@@ -20,24 +20,18 @@
                 <h3>Thêm Khóa Học</h3>
                 <img id="preview" src="../../images/anhgiangvien.png" style="display:block; width:200px;">
                 <form id="add-course-form">
-
                     <label for="images">Ảnh khóa học: </label>
                     <input type="file" name="course-image" id="course-image"  accept="image/*">
 
-                    
                     <label for="course-name">Tên khóa học:</label>
                     <input type="text" id="course-name" name="course-name" placeholder="Nhập tên khóa học">
-    
-                    <!-- <label for="instructor">Giảng viên:</label>
-                    <select id="instructor" name="instructor">
-                    </select> -->
-    
+
                     <label for="soluongbuoi">Số lượng buổi:</label>
                     <input type="text" id="soluongbuoi" name="schedule" placeholder="Nhập số lượng buổi (vd: 12)">
-    
+
                     <label for="thoigianhoc">Thời gian học:</label>
                     <input type="text" id="thoigianhoc" name="materials" placeholder="Nhập thời gian học (vd: 18h - 20h)">
-    
+
                     <label for="lichhoc">Lịch học</label>
                     <input type="text" id="lichhoc" name="schedule" placeholder="Nhập lịch học (vd: Thứ 2, 4, 6)">
 
@@ -46,12 +40,8 @@
 
                     <label for="giamgia">Giảm giá</label>
                     <input type="text" id="giamgia" name="schedule" placeholder="Giảm giá khóa học (nếu có)">
-
                 </form>
                 <button id="themkhoahoc" type="button">Thêm khóa học</button>
-
-                
-
             </div>
             <div class="tong">
                 <div id="course-list-section">
@@ -59,11 +49,11 @@
                         <label for="motakhoahoc">📝 Mô tả khóa học</label>
                         <textarea id="motakhoahoc" placeholder="Nhập mô tả cho khóa học..."></textarea>
                     </div>
-            
+
                     <div class="add-content-button">
                         <button id="btn" onclick="add(event)">➕ Thêm nội dung khóa học</button>
                     </div>
-            
+
                     <div id="noidungkhoahoc">
                         <div class="lesson-item">
                             <span class="lesson-title">📘 Bài 1: Học bảng chữ cái</span>
@@ -75,27 +65,88 @@
                                 👉 <a href="https://example.com/bai-1" target="_blank">Mở bài học</a>
                             </div>
                         </div>
-                        
-                        
                     </div>
-                    
-                    
-                    
-                    
                 </div>
             </div>
-            
-                <div id="pagination">
-                </div>
+
+            <!-- Danh sách học viên -->
+            <div class="student-list-section">
+                <h3>📋 Danh sách học viên</h3>
+                <table id="student-table" border="1" style="width:100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>ID Học viên</th>
+                            <th>Họ tên</th>
+                            <th>Điểm số</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-table-body">
+                        <tr>
+                            <td>HV001</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>8.5</td>
+                            <td>
+                                <button onclick="editStudent(this)">✏️</button>
+                                <button onclick="deleteStudent(this)">🗑️</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            
+
+            <!-- Danh sách giảng viên -->
+            <div class="instructor-list-section" style="margin-top: 30px;">
+                <h3>👨‍🏫 Danh sách giảng viên</h3>
+                <table id="instructor-table" border="1" style="width:100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Họ tên</th>
+                            <th>Thời gian dạy</th>
+                            <th>Ngày dạy</th>
+                             <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="instructor-table-body">
+                        <tr>
+                            <td>Trần Thị B</td>
+                            <td>18h00 - 20h00</td>
+                            <td>Thứ 2, 4, 6</td>
+                              <td>
+                                <button onclick="editStudent(this)">✏️</button>
+                                <button onclick="deleteStudent(this)">🗑️</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="pagination">
+            </div>
         </div>
-        
     </div>
-    
+
     <script src="../../js/app.js"></script>
     <script type="module" src="../../fetch/taovaquanlykhoahoc.js"></script>
 
-   
+    <script>
+        // JavaScript cho thao tác "Sửa/Xóa" học viên
+        function editStudent(button) {
+            const row = button.closest("tr");
+            const nameCell = row.children[1];
+            const scoreCell = row.children[2];
+            const newName = prompt("Nhập tên mới:", nameCell.textContent);
+            const newScore = prompt("Nhập điểm số mới:", scoreCell.textContent);
+            if (newName !== null) nameCell.textContent = newName;
+            if (newScore !== null) scoreCell.textContent = newScore;
+        }
+
+        function deleteStudent(button) {
+            if (confirm("Bạn có chắc muốn xóa học viên này?")) {
+                const row = button.closest("tr");
+                row.remove();
+            }
+        }
+    </script>
 </body>
 </html>

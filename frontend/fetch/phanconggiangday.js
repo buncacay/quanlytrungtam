@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   const teacher = document.getElementById('teacher');
   const course = document.getElementById('class');
 
+  // Load danh sách giảng viên
   teacher.innerHTML = '';
   const gv = await fetchGiangVien();
   gv.forEach(giaovien => {
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     teacher.appendChild(opt);
   });
 
+  // Load danh sách khóa học
   course.innerHTML = '';
   const khoahoc = await fetchKhoaHoc();
   khoahoc.forEach(kh => {
@@ -72,15 +74,18 @@ async function showAssignments() {
 
   const assignments = await fetchChiTietNhanVien();
 
-  const searchGV = document.getElementById('search-tennhanvien')?.value.toLowerCase() || '';
-  const searchKH = document.getElementById('search-tenkhoahoc')?.value.toLowerCase() || '';
+  const keyword = document.getElementById('search-keyword')?.value.toLowerCase() || '';
   const searchThang = document.getElementById('search-thang')?.value;
 
   const filtered = assignments.filter(pc => {
-    const matchGV = !searchGV || (pc.tennhanvien?.toLowerCase().includes(searchGV));
-    const matchKH = !searchKH || (pc.tenkhoahoc?.toLowerCase().includes(searchKH));
+    const matchKeyword =
+      !keyword ||
+      pc.tennhanvien?.toLowerCase().includes(keyword) ||
+      pc.tenkhoahoc?.toLowerCase().includes(keyword);
+
     const matchThang = !searchThang || pc.thoigianbatdau?.slice(0, 7) === searchThang;
-    return matchGV && matchKH && matchThang;
+
+    return matchKeyword && matchThang;
   });
 
   const table = document.createElement('table');
@@ -113,12 +118,8 @@ async function showAssignments() {
       <td class="border border-gray-300 px-4 py-2">${pc.thoigianketthuc}</td>
       <td class="border border-gray-300 px-4 py-2">${pc.dongia}</td>
       <td class="border border-gray-300 px-4 py-2">
-        <button onclick="editAssignment('${encoded}')" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-          Sửa
-        </button>
-        <button onclick="remove('${encoded}')" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-          Xóa
-        </button>
+        <button onclick="editAssignment('${encoded}')" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Sửa</button>
+        <button onclick="remove('${encoded}')" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Xóa</button>
       </td>
     `;
     tbody.appendChild(row);
@@ -151,15 +152,14 @@ async function remove(encodedData) {
   }
 }
 
-// Gán cho window để gọi từ HTML
+// Gắn lên window để gọi từ HTML onclick
 window.editAssignment = editAssignment;
 window.remove = remove;
 
 // Xử lý lọc
 document.getElementById('btn-filter-assignment').addEventListener('click', showAssignments);
 document.getElementById('btn-clear-filter').addEventListener('click', () => {
-  document.getElementById('search-tennhanvien').value = '';
-  document.getElementById('search-tenkhoahoc').value = '';
+  document.getElementById('search-keyword').value = '';
   document.getElementById('search-thang').value = '';
   showAssignments();
 });
