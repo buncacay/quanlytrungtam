@@ -2,67 +2,92 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f6f9;
+    background-color: #fdf8f3; /* Màu nền ánh cam nhạt */
 }
 
 .fee-container {
-    max-width: 1200px;
+    max-width: 1300px; /* Giữ chiều rộng tối đa là 1300px */
+    width: 100%; /* Đảm bảo chiều rộng chiếm 100% nếu không bị giới hạn */
     margin: 20px auto;
-    padding: 20px;
+    padding: 30px; /* Tăng padding để tạo không gian thoáng hơn */
     background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    height: auto;
+    max-height: 800px;
+    overflow-y: auto;
 }
 
 h1 {
     text-align: center;
-    color: #2c3e50;
+    color: #d35400;
+    font-size: 2.4em; /* Tăng kích thước tiêu đề */
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
 .fee-form, .fee-list {
     margin: 20px 0;
-    padding: 20px;
-    background-color: #fafafa;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 25px; /* Tăng padding cho form và danh sách */
+    background-color: #fff7e6;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .fee-form h2, .fee-list h2 {
-    color: #34495e;
+    color: #e67e22;
     margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 1.6em; /* Tăng kích thước tiêu đề nhỏ */
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* Tăng khoảng cách giữa các nhóm form */
 }
 
 label {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
+    color: #d35400;
 }
 
 input, select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
+    padding: 12px; /* Tăng padding cho input và select */
+    border: 1px solid #e5a174;
+    border-radius: 8px;
+    font-size: 16px; /* Tăng kích thước font cho input */
+    background-color: #fffaf0;
+    color: #2c3e50;
+    transition: border-color 0.2s ease;
+    margin-bottom: 15px; /* Tăng khoảng cách giữa các ô nhập */
+}
+
+input:focus, select:focus {
+    border-color: #e67e22;
+    outline: none;
 }
 
 .btn-submit {
     display: inline-block;
-    padding: 10px 20px;
-    background-color: #3498db;
+    padding: 14px 28px; /* Tăng padding cho nút */
+    background-color: #e67e22;
     color: #ffffff;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px; /* Tăng kích thước chữ nút */
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
 }
 
 .btn-submit:hover {
-    background-color: #2980b9;
+    background-color: #d35400;
+    transform: translateY(-2px);
 }
 
 table {
@@ -72,22 +97,22 @@ table {
 }
 
 table thead {
-    background-color: #3498db;
+    background-color: #e67e22;
     color: #ffffff;
 }
 
 table th, table td {
-    padding: 10px;
+    padding: 12px;
     text-align: left;
-    border: 1px solid #ddd;
+    border: 1px solid #e5e5e5;
 }
 
 table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #fff3e0;
 }
 
 table tbody tr:hover {
-    background-color: #e6f7ff;
+    background-color: #ffe0b3;
 }
 
 /* Pagination */
@@ -100,21 +125,32 @@ table tbody tr:hover {
 }
 
 .pagination-button {
-    padding: 8px 14px;
+    padding: 10px 16px;
     background-color: #ecf0f1;
-    color: #2c3e50;
+    color: #d35400;
     border: 1px solid #bdc3c7;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .pagination-button:hover {
-    background-color: #d0d7de;
+    background-color: #ffe0b3;
 }
 
 .pagination-button.active {
-    background-color: #3498db;
+    background-color: #d35400;
     color: white;
-    border-color: #2980b9;
+    border-color: #e67e22;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    .fee-container {
+        padding: 20px;
+    }
+
+    .btn-submit {
+        width: 100%;
+    }
 }

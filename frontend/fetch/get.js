@@ -55,6 +55,15 @@ export async function fetchKhoaHocVoiId(id) {
     console.log(data);
     return data;
 }
+
+export async function fetchDiemSovoiIdHocvien(id) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/DiemsoController.php?idhocvien=${id}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
 // pages = 1, limit = 5
 export async function fetchKhoaHocPhanTrang(pages, limit) {
     const url = `http://localhost/quanlytrungtam/backend/controller/KhoaHocController.php?pages=${pages}&limit=${limit}`;
@@ -97,6 +106,15 @@ export async function fetchChiTietKhoaHoc(id) {
 
 export async function fetchDiem(id) {
     const url = `http://localhost/quanlytrungtam/backend/controller/DiemsoController.php?idkhoahoc=${id}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+
+export async function fetchDiemvoihocvien(id) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/DiemsoController.php?idhocvien=${id}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(await res.text());
     const data = await res.json();

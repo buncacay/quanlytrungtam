@@ -41,7 +41,7 @@ class diemso {
 
     // Lấy điểm theo ID học viên
     public function readByHocVien($idhocvien) {
-        $query = "SELECT * FROM " . $this->table . " WHERE idhocvien = :idhocvien";
+        $query = "SELECT * FROM " . $this->table . " INNER JOIN khoahoc ON khoahoc.idkhoahoc = diemso.idkhoahoc INNER JOIN hocvien ON hocvien.idhocvien = diemso.idhocvien WHERE diemso.idhocvien = :idhocvien";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':idhocvien', $idhocvien);
         $stmt->execute();

@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function handleFormSubmit(e) {
+    try {
     e.preventDefault();
 
     const username = document.getElementById('name').value;
@@ -36,19 +37,27 @@ async function handleFormSubmit(e) {
     };
     console.log(taikhoanData);
     const result = await addTaiKhoan(taikhoanData);
+    console.log(result);
     if (!result || !result.success) {
         return alert("Tạo tài khoản thất bại!");
     }
 
     // Tiếp tục tạo thông tin học viên hoặc giảng viên
+    alert(role);
     if (role === 'student') {
+        alert("chao ca nha");
         await handleaddStudent(username);
     } else if (role === 'teacher') {
         await handleAddNhanVien(username);
     }
 
     alert("Tạo tài khoản thành công!");
-    window.location.reload();
+    
+    }
+    catch (error){
+        alert(error);
+    }
+  
 }
 
 async function handleaddStudent(user) {
@@ -63,6 +72,8 @@ async function handleaddStudent(user) {
         ngaysinh: ngaysinh,
         user : user
     };
+    console.log(hv);
+
 
     const res = await addStudent(hv);
     if (res && res.idhocvien) {

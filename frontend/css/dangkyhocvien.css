@@ -1,6 +1,7 @@
+/* Nền và cấu trúc chung */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif; /* Phông chữ Poppins để thống nhất */
+    background-color: #f8f9fa; /* Nền sáng nhẹ */
     margin: 0;
     padding: 0;
     display: flex;
@@ -9,51 +10,108 @@ body {
     height: 100vh;
 }
 
+/* Định dạng container đăng ký */
 .register-container {
     background-color: #fff;
-    padding: 20px;
+    padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
+    max-width: 450px; /* Tăng kích thước container để nhìn thoải mái hơn */
+    border: 2px solid #FF8C00; /* Viền cam nhẹ để phù hợp với header/sidebar */
+    box-sizing: border-box; /* Đảm bảo tính toán chiều rộng đúng */
 }
 
+/* Tiêu đề đăng ký */
 h2 {
     text-align: center;
-    color: #007bff;
+    color: #FF7043; /* Cam nhạt pha đỏ */
+    font-size: 28px; /* Tăng kích thước chữ cho tiêu đề */
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Các nhóm form */
+.form-group {
     margin-bottom: 20px;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
+/* Label */
 label {
     display: block;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 16px;
 }
 
+/* Input và Select */
 input, select {
+    width: 100%; /* Đảm bảo chiều rộng luôn chiếm 100% container */
+    padding: 12px;
+    border: 2px solid #FFDDC1; /* Cam nhạt pha vàng */
+    border-radius: 8px;
+    font-size: 16px;
+    color: #333;
+    background: #FFF0D5; /* Cam nhạt pha vàng */
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* Đảm bảo tính toán đúng chiều rộng */
+}
+
+/* Hiệu ứng khi focus vào input */
+input:focus, select:focus {
+    border-color: #FF8A00; /* Cam pha vàng đậm */
+    background: white;
+    box-shadow: 0 0 8px rgba(255, 138, 0, 0.2);
+}
+
+/* Nút đăng ký */
+button {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
+    padding: 12px;
+    background-color: #FF8A00; /* Cam đậm */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Nút hover */
+button:hover {
+    background-color: #FF7043; /* Cam nhạt pha đỏ */
+    transform: scale(1.05); /* Tăng nhẹ kích thước nút khi hover */
+    box-shadow: 0 4px 10px rgba(255, 138, 0, 0.3);
+}
+
+/* Hiệu ứng cho quên mật khẩu hoặc các liên kết khác */
+.forgot-password {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.forgot-password a {
+    color: #FF7043; /* Cam nhạt pha đỏ */
+    text-decoration: none;
     font-size: 14px;
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+.forgot-password a:hover {
+    color: #FF8A00; /* Cam đậm khi hover */
+    text-decoration: underline;
 }
 
-button:hover {
-    background-color: #0056b3;
+/* Responsive */
+@media (max-width: 768px) {
+    .register-container {
+        padding: 20px;
+        width: 90%;
+    }
+    h2 {
+        font-size: 24px;
+    }
 }
-

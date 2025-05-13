@@ -5,121 +5,155 @@ import { removeChiTietNhanVien } from './delete.js';
 
 let isEditingAssignment = false;
 let editingAssignment = null;
+let idKhoaHocFromURL = null;
 
-document.addEventListener('DOMContentLoaded', async function () {
-  const teacher = document.getElementById('teacher');
-  const course = document.getElementById('class');
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+  idKhoaHocFromURL = params.get('idkhoahoc');
 
-  // Load danh sách giảng viên
-  teacher.innerHTML = '';
-  const gv = await fetchGiangVien();
-  gv.forEach(giaovien => {
-    const opt = document.createElement('option');
-    opt.textContent = giaovien.tennhanvien;
-    opt.value = giaovien.idnhanvien;
-    teacher.appendChild(opt);
-  });
-
-  // Load danh sách khóa học
-  course.innerHTML = '';
-  const khoahoc = await fetchKhoaHoc();
-  khoahoc.forEach(kh => {
-    const opt = document.createElement('option');
-    opt.textContent = kh.tenkhoahoc;
-    opt.value = kh.idkhoahoc;
-    course.appendChild(opt);
-  });
+  if (!idKhoaHocFromURL) {
+    renderAssignmentForm();
+    await populateDropdowns();
+  }
 
   await showAssignments();
 });
 
-document.getElementById('phancong').addEventListener('click', async function (event) {
-  event.preventDefault();
+function renderAssignmentForm() {
+  const container = document.getElementById('phancong');
+  container.innerHTML = `
+    <h2>Gán giảng viên cho lớp học</h2>
+    <form id="assignmentForm">
+      <div class="form-group">
+        <label for="teacher">Chọn giảng viên:</label>
+        <select id="teacher" name="teacher" required></select>
+      </div>
+      <div class="form-group">
+        <label for="class">Chọn lớp học:</label>
+        <select id="class" name="class" required></select>
+      </div>
+      <div class="form-group">
+        <label for="dongia">Đơn giá</label>
+        <input type="number" id="dongia" required />
 
-  const gv = document.getElementById('teacher').value;
-  const kh = document.getElementById('class').value;
-  const begin = document.getElementById('begin').value;
-  const end = document.getElementById('end').value;
-  const dongia = document.getElementById('dongia').value;
+        <label for="begin">Giờ bắt đầu</label>
+        <input type="datetime-local" id="begin" required />
 
+        <label for="end">Giờ kết thúc</label>
+        <input type="datetime-local" id="end" required />
+      </div>
+      <button type="button" class="btn-submit" id="btnPhanCong">Phân công</button>
+    </form>
+  `;
+
+  document.getElementById('btnPhanCong').addEventListener('click', handleAssignmentSubmit);
+}
+
+async function populateDropdowns() {
+  try {
+    const teacherSelect = document.getElementById('teacher');
+    const classSelect = document.getElementById('class');
+
+    const giangVienList = await fetchGiangVien();
+    giangVienList.forEach(gv => {
+      const option = document.createElement('option');
+      option.value = gv.idnhanvien;
+      option.textContent = gv.tennhanvien;
+      teacherSelect.appendChild(option);
+    });
+
+    const khoaHocList = await fetchKhoaHoc();
+    khoaHocList.forEach(kh => {
+      const option = document.createElement('option');
+      option.value = kh.idkhoahoc;
+      option.textContent = kh.tenkhoahoc;
+      classSelect.appendChild(option);
+    });
+  } catch (err) {
+    console.error('Lỗi khi tải danh sách:', err);
+  }
+}
+
+async function handleAssignmentSubmit() {
   const data = {
-    idnhanvien: gv,
-    idkhoahoc: kh,
-    thoigianbatdau: begin,
-    thoigianketthuc: end,
-    dongia: dongia
+    idnhanvien: document.getElementById('teacher').value,
+    idkhoahoc: document.getElementById('class').value,
+    thoigianbatdau: document.getElementById('begin').value,
+    thoigianketthuc: document.getElementById('end').value,
+    dongia: document.getElementById('dongia').value,
   };
 
   try {
     if (isEditingAssignment && editingAssignment) {
-      const result = await UpdateChiTietNhanVien(data);
-      if (result) alert('Cập nhật phân công thành công!');
+      await UpdateChiTietNhanVien({ ...editingAssignment, ...data });
+      alert('Cập nhật phân công thành công!');
     } else {
-      const result = await addChiTietNhanVien(data);
-      if (result) alert('Phân công thành công!');
+      await addChiTietNhanVien(data);
+      alert('Phân công thành công!');
     }
 
-    isEditingAssignment = false;
-    editingAssignment = null;
-    document.getElementById('phancong').textContent = 'Phân công';
+    clearForm();
     await showAssignments();
-  } catch (error) {
-    console.error('Lỗi:', error);
+  } catch (err) {
+    console.error('Lỗi phân công:', err);
+    alert('Đã có lỗi xảy ra khi phân công.');
   }
-});
+}
+
+function clearForm() {
+  document.getElementById('assignmentForm').reset();
+  document.getElementById('btnPhanCong').textContent = 'Phân công';
+  isEditingAssignment = false;
+  editingAssignment = null;
+}
 
 async function showAssignments() {
   const container = document.getElementById('list');
   container.innerHTML = '';
 
-  const assignments = await fetchChiTietNhanVien();
+  const allAssignments = await fetchChiTietNhanVien();
 
-  const keyword = document.getElementById('search-keyword')?.value.toLowerCase() || '';
-  const searchThang = document.getElementById('search-thang')?.value;
+  const keyword = document.getElementById('search-keyword')?.value?.toLowerCase() || '';
+  const searchThang = document.getElementById('search-thang')?.value || '';
 
-  const filtered = assignments.filter(pc => {
-    const matchKeyword =
-      !keyword ||
-      pc.tennhanvien?.toLowerCase().includes(keyword) ||
-      pc.tenkhoahoc?.toLowerCase().includes(keyword);
+  // 👉 Nếu có idkhoahoc trên URL, chỉ lấy phân công của khóa học đó
+  const filtered = allAssignments.filter(item => {
+    const matchKhoaHoc = !idKhoaHocFromURL || item.idkhoahoc === idKhoaHocFromURL;
+    const matchKeyword = !keyword || item.tennhanvien?.toLowerCase().includes(keyword) || item.tenkhoahoc?.toLowerCase().includes(keyword);
+    const matchThang = !searchThang || item.thoigianbatdau?.slice(0, 7) === searchThang;
 
-    const matchThang = !searchThang || pc.thoigianbatdau?.slice(0, 7) === searchThang;
-
-    return matchKeyword && matchThang;
+    return matchKhoaHoc && matchKeyword && matchThang;
   });
 
   const table = document.createElement('table');
-  table.className = 'w-full table-auto border-collapse border border-gray-300';
+  table.className = 'table-auto w-full border border-gray-300';
 
   const thead = document.createElement('thead');
-  thead.className = 'bg-gray-100';
   thead.innerHTML = `
     <tr>
-      <th class="border border-gray-300 px-4 py-2">Tên giảng viên</th>
-      <th class="border border-gray-300 px-4 py-2">Tên khóa học</th>
-      <th class="border border-gray-300 px-4 py-2">Thời gian bắt đầu</th>
-      <th class="border border-gray-300 px-4 py-2">Thời gian kết thúc</th>
-      <th class="border border-gray-300 px-4 py-2">Đơn giá</th>
-      <th class="border border-gray-300 px-4 py-2">Thao tác</th>
+      <th class="border px-4 py-2">Tên giảng viên</th>
+      <th class="border px-4 py-2">Tên khóa học</th>
+      <th class="border px-4 py-2">Bắt đầu</th>
+      <th class="border px-4 py-2">Kết thúc</th>
+      <th class="border px-4 py-2">Đơn giá</th>
+      <th class="border px-4 py-2">Thao tác</th>
     </tr>
   `;
   table.appendChild(thead);
 
   const tbody = document.createElement('tbody');
-  tbody.className = 'text-center';
-
-  filtered.forEach(pc => {
-    const encoded = encodeURIComponent(JSON.stringify(pc));
+  filtered.forEach(item => {
+    const encoded = encodeURIComponent(JSON.stringify(item));
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td class="border border-gray-300 px-4 py-2">${pc.tennhanvien}</td>
-      <td class="border border-gray-300 px-4 py-2">${pc.tenkhoahoc}</td>
-      <td class="border border-gray-300 px-4 py-2">${pc.thoigianbatdau}</td>
-      <td class="border border-gray-300 px-4 py-2">${pc.thoigianketthuc}</td>
-      <td class="border border-gray-300 px-4 py-2">${pc.dongia}</td>
-      <td class="border border-gray-300 px-4 py-2">
-        <button onclick="editAssignment('${encoded}')" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Sửa</button>
-        <button onclick="remove('${encoded}')" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Xóa</button>
+      <td class="border px-4 py-2">${item.tennhanvien}</td>
+      <td class="border px-4 py-2">${item.tenkhoahoc}</td>
+      <td class="border px-4 py-2">${item.thoigianbatdau}</td>
+      <td class="border px-4 py-2">${item.thoigianketthuc}</td>
+      <td class="border px-4 py-2">${item.dongia}</td>
+      <td class="border px-4 py-2">
+        <button onclick="editAssignment('${encoded}')" class="bg-blue-500 text-white px-3 py-1 rounded">Sửa</button>
+        <button onclick="removeAssignment('${encoded}')" class="bg-red-500 text-white px-3 py-1 rounded">Xóa</button>
       </td>
     `;
     tbody.appendChild(row);
@@ -129,41 +163,32 @@ async function showAssignments() {
   container.appendChild(table);
 }
 
-function editAssignment(encodedData) {
-  const data = JSON.parse(decodeURIComponent(encodedData));
-  isEditingAssignment = true;
+window.editAssignment = function (encoded) {
+  const data = JSON.parse(decodeURIComponent(encoded));
   editingAssignment = data;
+  isEditingAssignment = true;
 
   document.getElementById('teacher').value = data.idnhanvien;
   document.getElementById('class').value = data.idkhoahoc;
+  document.getElementById('dongia').value = data.dongia;
   document.getElementById('begin').value = data.thoigianbatdau;
   document.getElementById('end').value = data.thoigianketthuc;
-  document.getElementById('dongia').value = data.dongia;
 
-  document.getElementById('phancong').textContent = 'Lưu chỉnh sửa';
-}
+  document.getElementById('btnPhanCong').textContent = '💾 Lưu chỉnh sửa';
+};
 
-async function remove(encodedData) {
-  document.getElementById('teacher').value = "";
-  document.getElementById('class').value = "";
-  document.getElementById('begin').value = "";
-  document.getElementById('end').value = "";
-  document.getElementById('dongia').value = "";
-  const data = JSON.parse(decodeURIComponent(encodedData));
-  const result = await removeChiTietNhanVien(data);
-  if (result) {
-    alert('Xóa thành công!');
-    await showAssignments();
-  }
-}
+window.removeAssignment = async function (encoded) {
+  const data = JSON.parse(decodeURIComponent(encoded));
+  if (!confirm('Bạn có chắc muốn xóa phân công này không?')) return;
 
-// Gắn lên window để gọi từ HTML onclick
-window.editAssignment = editAssignment;
-window.remove = remove;
+  await removeChiTietNhanVien(data);
+  alert('Đã xóa phân công.');
+  await showAssignments();
+};
 
-// Xử lý lọc
-document.getElementById('btn-filter-assignment').addEventListener('click', showAssignments);
-document.getElementById('btn-clear-filter').addEventListener('click', () => {
+// Lọc
+document.getElementById('btn-filter-assignment')?.addEventListener('click', showAssignments);
+document.getElementById('btn-clear-filter')?.addEventListener('click', () => {
   document.getElementById('search-keyword').value = '';
   document.getElementById('search-thang').value = '';
   showAssignments();

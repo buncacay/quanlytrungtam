@@ -1,74 +1,97 @@
+/* Nền và cấu trúc chung */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #f4f7fc;
+    background-color: #f4f7fc; /* Nền nhẹ nhàng */
     color: #333;
 }
 
+/* Tiêu đề khóa học */
 .course-registration h1 {
     text-align: center;
-    color: #007bff;
+    color: #FF8C00; /* Màu cam chủ đạo */
     margin-bottom: 20px;
+    font-size: 36px;  /* Tăng kích thước để nổi bật */
+    font-weight: 700;  /* Làm cho tiêu đề đậm hơn */
+    text-transform: uppercase; /* Chữ hoa để nổi bật */
 }
 
+/* Danh sách khóa học */
 .course-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 30px;
     justify-content: center;
+    margin-top: 40px;
 }
 
+/* Thẻ khóa học */
 .course-card {
     background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    width: 300px;
-    transition: transform 0.3s;
+    width: 320px;
+    transition: transform 0.3s, box-shadow 0.3s ease-in-out;
+    padding: 10px;
+    border: 1px solid #ddd; /* Thêm đường viền nhẹ để tạo sự phân biệt */
 }
 
+/* Hiệu ứng hover cho thẻ khóa học */
 .course-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-12px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Tăng hiệu ứng shadow khi hover */
 }
 
+/* Hình ảnh trong thẻ khóa học */
 .course-card img {
     width: 100%;
-    height: 150px;
+    height: 180px;  /* Tăng chiều cao hình ảnh để dễ nhìn */
     object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #f2f2f2; /* Viền nhẹ cho hình ảnh */
 }
 
+/* Chi tiết khóa học */
 .course-details {
     padding: 15px;
 }
 
 .course-details h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #007bff;
+    font-size: 22px;  /* Tăng kích thước font */
+    margin-bottom: 12px;
+    color: #FF8C00;  /* Giữ màu cam chủ đạo */
 }
 
+/* Mô tả khóa học */
 .course-details p {
     font-size: 14px;
     margin: 5px 0;
+    line-height: 1.6;
+    color: #666; /* Màu xám nhạt cho các đoạn văn */
 }
 
+/* Nút đăng ký khóa học */
 .register-button {
     display: block;
     width: 100%;
-    padding: 10px;
+    padding: 14px;
     text-align: center;
-    background-color: #007bff;
+    background-color: #FF8C00;  /* Màu cam chủ đạo */
     color: white;
     border: none;
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 12px 12px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
+    font-size: 18px;  /* Lớn hơn để dễ nhìn */
+    transition: background-color 0.3s ease;
+    border-top: 2px solid #ff7043; /* Tạo đường viền cam nhạt phía trên */
 }
 
+/* Hiệu ứng hover cho nút đăng ký */
 .register-button:hover {
-    background-color: #0056b3;
+    background-color: #FF7043;  /* Cam nhạt pha đỏ khi hover */
+    transform: translateY(-3px);  /* Di chuyển nhẹ khi hover */
 }
 
 /* Modal styles */
@@ -84,39 +107,48 @@ body {
     align-items: center;
 }
 
+/* Nội dung modal */
 .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 450px;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd; /* Thêm viền cho modal để làm nổi bật */
 }
 
+/* Tiêu đề modal */
 .modal-content h2 {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     color: #333;
+    font-size: 24px;
 }
 
+/* Nút đóng modal */
 .close-button {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 15px;
     cursor: pointer;
-    font-size: 20px;
-    color: #555;
+    font-size: 24px;
+    color: #FF8C00;  /* Màu cam nổi bật */
 }
 
+/* Nút xác nhận trong modal */
 .confirm-button {
-    padding: 10px 20px;
-    background-color: #007bff;
+    padding: 14px 24px;
+    background-color: #FF8C00;  /* Màu cam chủ đạo */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    border: 1px solid #FF7043; /* Thêm viền cho nút xác nhận */
 }
 
+/* Hiệu ứng hover cho nút xác nhận */
 .confirm-button:hover {
-    background-color: #0056b3;
+    background-color: #FF7043;  /* Cam nhạt pha đỏ khi hover */
 }

@@ -1,13 +1,14 @@
 import { addDiem } from './add.js';
 import { UpdateDiem } from './update.js';
 import { RemoveDiem } from './delete.js';
-import { fetchDiem, fetchAllHocVien, fetchKhoaHoc } from './get.js';
+import { fetchDiem, fetchAllHocVien, fetchKhoaHoc, fetchDiemvoihocvien } from './get.js';
 
 let currentPage = 1;
 let totalPages = 1;
 let allScores = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
+   
     loadDropdownData();
 
     document.getElementById('studentId').addEventListener('change', () => tryFetchScores(1));
@@ -46,24 +47,33 @@ async function loadDropdownData() {
 
 async function tryFetchScores(page = 1) {
     const params = new URLSearchParams(window.location.search);
-    const idkhoahoc = params.get("idkhoahoc") || document.getElementById('courseId').value;
+    const idkhoahoc = params.get("idkhoahoc") || document.getElementById('courseId')?.value;
+    const idhocvien = params.get('idhocvien');
 
-    if (!idkhoahoc) return;
+    let res = []; // <-- khai báo bên ngoài
 
     try {
-        const res = await fetchDiem(idkhoahoc);
-        allScores = res;
+        if (idhocvien) {
+            res = await fetchDiemvoihocvien(idhocvien); // <-- đúng tham số
+        } else if (idkhoahoc) {
+            res = await fetchDiem(idkhoahoc);
+        } else {
+            console.warn('Không có idkhoahoc hoặc idhocvien để lấy điểm.');
+            return;
+        }
 
-        totalPages = Math.ceil(allScores.length / 10);
-        currentPage = page;
+        const allScores = res || [];
+        const totalPages = Math.ceil(allScores.length / 5);
+        const currentPage = page;
 
-        const paginated = paginateData(allScores, page, 10);
+        const paginated = paginateData(allScores, page, 5);
         renderScores(paginated);
-        renderPagination(totalPages, page);
+        renderPagination(totalPages, currentPage);
     } catch (err) {
         console.error('Lỗi khi lấy điểm:', err);
     }
 }
+
 
 function paginateData(data, page, limit) {
     const start = (page - 1) * limit;
@@ -79,6 +89,7 @@ function renderScores(data) {
         const tr = document.createElement('tr');
 
         tr.innerHTML = `
+            <td>${item.tenkhoahoc}</td>
             <td>${item.hoten}</td>
             <td>${item.kythi}</td>
             <td>${item.diemso}</td>
@@ -186,7 +197,7 @@ function renderPagination(totalPages, current) {
 
         btn.addEventListener('click', () => {
             currentPage = i;
-            const paginated = paginateData(allScores, currentPage, 10);
+            const paginated = paginateData(allScores, currentPage, 5);
             renderScores(paginated);
             renderPagination(totalPages, currentPage);
         });

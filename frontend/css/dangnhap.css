@@ -1,60 +1,176 @@
+/* Thêm phông chữ Poppins làm mặc định */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* Nền gradient */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #BCFEFE;
-    text-align: center;
+    font-family: 'Poppins', sans-serif; /* Áp dụng phông chữ Poppins */
     margin: 0;
     padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #FFEDD5, #FFB18D); /* Cam nhạt pha vàng, tạo nền ấm áp */
+    text-align: center;
+    color: #333;
 }
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #FF8C00; /* Cam đậm */
+    color: white;
+    padding: 20px;
+    font-size: 28px; /* Tăng kích thước chữ */
+    font-weight: 700; /* Phông chữ đậm */
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 2px; /* Tăng khoảng cách giữa các chữ */
+    z-index: 1000;
+    border-bottom: 4px solid #FF7043; /* Đường viền dưới để làm nổi bật */
+    font-family: 'Poppins', sans-serif; /* Phông chữ Poppins */
+    transition: all 0.3s ease;
+}
+
+/* Hiệu ứng khi hover vào header */
+.header:hover {
+    background: #FF7043; /* Đổi màu khi hover */
+    transform: scale(1.05); /* Phóng to một chút khi hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ khi hover */
+}
+
+/* Thêm hiệu ứng để làm chữ nổi bật hơn khi di chuột vào */
+.header span {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.header span:before {
+    content: '';
+    position: absolute;
+    background: #fff;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    transition: all 0.3s ease;
+}
+
+.header span:hover:before {
+    transform: translateX(0);
+}
+
+/* Hộp đăng nhập */
 .container {
+    margin-top: 120px; /* Đảm bảo có khoảng cách đủ từ header */
+}
+
+.login-box {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-box:hover {
+    transform: translateY(-8px); /* Hiệu ứng di chuyển nhẹ khi hover */
+    box-shadow: 0 15px 30px rgba(255, 138, 0, 0.3); /* Cam đậm nhẹ */
+}
+
+/* Tiêu đề */
+h2 {
+    color: #FF7043; /* Cam nhạt pha đỏ */
+    font-size: 26px;
+    font-weight: 600; /* Phông chữ đậm */
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+/* Input */
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 15px 0;
+    border: 2px solid #FFDDC1; /* Cam nhạt pha vàng */
+    border-radius: 12px; /* Bo góc tròn hơn */
+    background: #FFF0D5; /* Cam nhạt pha vàng nhẹ */
+    color: #333;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: #FF8C00; /* Cam pha vàng đậm */
+    box-shadow: 0 0 12px rgba(255, 138, 0, 0.4); /* Bóng đổ nhẹ khi focus */
+    background: white;
+}
+
+/* Nút bấm */
+.btn {
+    background: linear-gradient(90deg, #FF8C00, #FF7043); /* Cam chuyển với cam nhạt pha vàng */
+    color: white;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: 600; /* Phông chữ đậm */
+    border: none;
+    border-radius: 30px; /* Góc tròn mạnh hơn */
+    width: 100%; /* Đảm bảo nút bấm chiếm 100% chiều rộng của phần tử chứa */
+    box-sizing: border-box; /* Bao gồm padding và border vào chiều rộng */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    box-shadow: 0 5px 20px rgba(255, 112, 67, 0.3);
+}
+
+/* Nút bấm hover */
+.btn:hover {
+    background: linear-gradient(90deg, #FF7043, #FF8C00); /* Hiệu ứng chuyển màu khi hover */
+    box-shadow: 0 10px 25px rgba(255, 112, 67, 0.4);
+    transform: scale(1.05); /* Tăng nhẹ kích thước khi hover */
+}
+
+/* Quên mật khẩu */
+.forgot-password {
+    margin-top: 15px;
+}
+
+.forgot-password a {
+    color: #FF7043;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600; /* Phông chữ đậm */
+    transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+    color: #FF8C00; /* Cam pha vàng đậm */
+    text-decoration: underline;
+}
+
+/* Thêm khoảng cách hợp lý cho các phần tử trong form */
+form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
+    gap: 20px; /* Khoảng cách đều giữa các phần tử */
 }
-.header {
-    background-color: #2D99AE;
-    color: white;
-    padding: 15px;
-    font-size: 18px;
-    text-align: center;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-}
-.logo {
-    margin: 20px;
-}
-.login-box {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-.btn {
-    background-color: #2D99AE;
-    color: black;
-    padding: 10px;
-    border: none;
-    width: 100%;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.btn:hover {
-    background-color: #0C5776;
-}
-.forgot-password {
-    margin-top: 10px;
-}
-.forgot-password a {
-    color: red;
-    text-decoration: none;
+
+/* Responsive */
+@media (max-width: 768px) {
+    .login-box {
+        padding: 30px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
 }

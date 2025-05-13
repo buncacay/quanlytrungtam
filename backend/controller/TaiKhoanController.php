@@ -88,10 +88,10 @@ function createTaiKhoan($taikhoan) {
     // Gọi hàm create
     if ($taikhoan->create()) {
         http_response_code(201); // Created
-        echo json_encode(["message" => "Tài khoản đã được tạo."]);
+        echo json_encode(["message" => "tai khoan da duoc tao"]);
     } else {
         http_response_code(500);
-        echo json_encode(["message" => "Không thể tạo tài khoản."]);
+        echo json_encode(["message" => "khong the tao tai khoan"]);
     }
 }
 

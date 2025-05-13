@@ -1,27 +1,38 @@
-/* Main content */
 .main {
-    margin-top: 60px; /* Dưới header */
-    margin-left: 250px; /* Tránh tràn vào sidebar bên trái */
+    margin-top: 80px; /* Dưới header */
+    margin-left: 300px; /* Tránh tràn vào sidebar bên trái */
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: #fff7f0; /* Nền màu cam nhạt */
     box-sizing: border-box; /* Bao gồm padding trong kích thước */
-    min-height: calc(100vh - 60px); /* Chiều cao tối thiểu để tràn khớp viewport */
+    min-height: calc(100vh - 60px); /* Chiều cao tối thiểu để khớp viewport */
     overflow-y: auto; /* Thêm thanh cuộn nếu nội dung dài */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Căn trên cho nội dung */
+    align-items: center; 
+    position: relative; /* Hoặc static */
+    z-index: 1;/* Căn giữa theo chiều ngang */
 }
-
+.main h1 {
+    font-size: 3rem; /* Cỡ chữ lớn hơn */
+    font-weight: bold;
+    color: #9c4221; /* Màu cam đậm */
+    margin-bottom: 20px; /* Khoảng cách giữa h1 và các phần tử dưới */
+    text-align: center; /* Căn giữa văn bản */
+}
 /* Cards layout trong Main */
 .cards-container {
     display: flex;
     justify-content: space-around;
-    gap: 20px;
+    gap: 30px; /* Tăng khoảng cách giữa các card */
     padding: 20px;
     flex-wrap: wrap; /* Card không bị tràn ngang */
 }
 
 .card {
-    width: 200px;
-    height: 200px;
-    background: #fff;
+    width: 300px; /* Chiều rộng của card lớn hơn */
+    height: 300px; /* Chiều cao của card lớn hơn */
+    background: #ffe4c4; /* Nền ánh cam nhạt */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,14 +40,18 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
     font-weight: bold;
-    transition: transform 0.3s;
+    color: #9c4221; /* Màu cam đậm cho text */
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+    background: #f6ad55; /* Nền cam sáng khi hover */
+    color: #fff; /* Text màu trắng khi hover */
 }
+
 /* Submenu Styles */
 .submenu {
     display: none;
@@ -46,4 +61,138 @@
 
 .sidebar li:hover > .submenu {
     display: block;
+}
+
+/* Nút Lọc */
+button {
+    background-color: #ed8936; /* Màu cam đậm */
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #dd6b20; /* Cam đậm hơn khi hover */
+    transform: translateY(-2px); /* Hiệu ứng nút nổi lên */
+}
+
+/* Select và Input */
+select, input {
+    border: 1px solid #f6ad55; /* Viền cam nhạt */
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    width: 100%;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    box-sizing: border-box;
+    background-color: #fffaf0; /* Nền cam rất nhạt */
+}
+
+select:focus, input:focus {
+    border-color: #ed8936; /* Cam đậm hơn khi focus */
+    outline: none;
+    background-color: #ffe4c4; /* Nền ánh cam khi focus */
+}
+
+/* Header */
+h2 {
+    font-size: 2rem;
+    color: #c05621; /* Cam đậm */
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* Cards thống kê */
+.bg-gray-100 {
+    background-color: #fef1e0; /* Cam nhạt */
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.text-sm {
+    font-size: 0.875rem;
+    color: #c05621; /* Cam đậm */
+}
+
+.text-2xl {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #9c4221; /* Màu cam đậm */
+}
+
+/* Thay thế toàn bộ xanh dương bằng cam */
+.text-blue-600, .text-blue-400, .text-blue-800 {
+    color: #ed8936; /* Cam đậm */
+}
+
+.bg-blue-600, .bg-blue-400, .bg-blue-800 {
+    background-color: #ed8936; /* Cam đậm */
+}
+
+/* Bảng dữ liệu */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #fbd38d; /* Viền cam nhạt */
+    font-size: 0.875rem;
+    color: #9c4221; /* Màu chữ cam đậm */
+}
+
+table thead {
+    background-color: #ed8936; /* Cam đậm */
+    color: #fff; /* Chữ trắng */
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #fffaf0; /* Nền cam nhạt cho dòng chẵn */
+}
+
+table tbody tr:hover {
+    background-color: #fef1e0; /* Nền cam sáng hơn khi hover */
+}
+
+/* Đảm bảo giao diện responsive */
+@media (max-width: 768px) {
+    .cards-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    select, input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    table th, table td {
+        font-size: 0.75rem;
+    }
+
+    .text-2xl {
+        font-size: 1.5rem;
+    }
 }

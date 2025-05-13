@@ -21,26 +21,26 @@ $diem = new diemso($conn);
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
-    case 'GET':
-       if ( isset($_GET['idkhoahoc'])) {
-            // $idhocvien = intval($_GET['idhocvien']);
-            $idkhoahoc = intval($_GET['idkhoahoc']);
-
-            $data = $diem->showById($idkhoahoc); // OK sau khi sửa
-            echo json_encode($data);
-        } else {
-            if ( isset($_GET['idhocvien'])) {
-            // $idhocvien = intval($_GET['idhocvien']);
-            $idkhoahoc = intval($_GET['idhocvien']);
-
-            $data = $diem->readByHocVien($idhocvien); // OK sau khi sửa
-            }
-            else {
-            echo json_encode($data);
-            $data = $diem->readAll();
-            echo json_encode($data);
-        }
-        break;
+  
+case 'GET':
+    // Kiểm tra xem có idkhoahoc không
+    if (isset($_GET['idkhoahoc'])) {
+        $idkhoahoc = intval($_GET['idkhoahoc']); // Lấy idkhoahoc từ GET
+        $data = $diem->showById($idkhoahoc); // Truy vấn dữ liệu theo idkhoahoc
+        echo json_encode($data); // Trả về kết quả dưới dạng JSON
+    } 
+    // Nếu không có idkhoahoc, kiểm tra idhocvien
+    else if (isset($_GET['idhocvien'])) {
+        $idhocvien = intval($_GET['idhocvien']); // Lấy idhocvien từ GET
+        $data = $diem->readByHocVien($idhocvien); // Truy vấn dữ liệu theo idhocvien
+        echo json_encode($data); // Trả về kết quả dưới dạng JSON
+    } 
+    // Nếu không có cả idkhoahoc và idhocvien, lấy tất cả dữ liệu
+    else {
+        $data = $diem->readAll(); // Lấy tất cả dữ liệu
+        echo json_encode($data); // Trả về kết quả dưới dạng JSON
+    }
+    break;
 
     case 'POST':
         createDiem($diem);

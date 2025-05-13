@@ -1,55 +1,30 @@
-/* --- Reset & nền chung --- */
+/* --- Reset & Nền chung --- */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f6f9;
+    background-color: #f9fafb;
 }
 
-/* --- Tổng layout chính --- */
+/* --- Layout chính --- */
 .course-management {
     max-width: 1200px;
-    margin: auto;
+    margin: 30px auto;
     padding: 20px;
     background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* --- Tiêu đề chung --- */
 h2, h3 {
     text-align: center;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
 }
 
-/* --- Phần lọc (Tìm kiếm) --- */
-.filter-section {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: center;
-}
-
-.filter-section input[type="text"] {
-    padding: 10px;
-    width: 50%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.filter-section button {
-    padding: 10px 20px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.filter-section button:hover {
-    background: #0056b3;
-}
-
-/* --- Khung chia bên trái/phải --- */
+/* --- Cards Container --- */
 .cards-container {
     display: flex;
     flex-wrap: wrap;
@@ -62,169 +37,114 @@ h2, h3 {
     flex: 1;
     min-width: 350px;
     background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    transition: transform 0.3s;
+}
+
+.form-section:hover {
+    transform: translateY(-5px);
 }
 
 .form-section label {
     display: block;
-    margin-top: 15px;
+    margin-top: 20px;
     font-weight: bold;
-    color: #333;
+    color: #444;
 }
 
 .form-section input,
 .form-section select {
     width: 100%;
     padding: 10px;
-    margin-top: 5px;
+    margin-top: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .form-section button {
     margin-top: 20px;
     width: 100%;
-    padding: 10px;
-    background-color: #1e88e5;
+    padding: 12px;
+    background-color: #FF9800;
     border: none;
     color: white;
     font-size: 16px;
     font-weight: bold;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .form-section button:hover {
-    background-color: #1565c0;
-}
-
-/* --- Bảng danh sách khóa học --- */
-.tong {
-    flex: 2;
-    min-width: 600px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-}
-
-.course-list {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-.course-list th,
-.course-list td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
-}
-
-.course-list th {
-    background-color: #f1f1f1;
-    color: #333;
-}
-
-#course-list-section {
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 8px;
-    background: #fafafa;
-}
-
-/* --- Phân trang --- */
-#pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-#pagination button {
-    padding: 8px 14px;
-    font-size: 14px;
-    background-color: #e0e0e0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-#pagination button.active,
-#pagination button:hover {
-    background-color: #1e88e5;
-    color: white;
-}
-
-#pagination button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+    background-color: #E65100;
+    transform: scale(1.03);
 }
 
 /* --- Mô tả khóa học --- */
 #mota textarea {
     width: 100%;
-    height: 100px;
+    height: 120px;
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 8px;
     border: 1px solid #ccc;
     resize: vertical;
-    font-size: 14px;
+    font-size: 15px;
+    margin-top: 10px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 /* --- Thêm nội dung khóa học --- */
 .add-content-button {
-    margin: 15px 0;
+    margin: 20px 0;
+    text-align: center;
 }
 
 .add-content-button button {
-    padding: 10px 20px;
-    background-color: #43a047;
+    padding: 10px 25px;
+    background-color: #FF9800;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 15px;
+    transition: background-color 0.3s;
 }
 
 .add-content-button button:hover {
-    background-color: #388e3c;
+    background-color: #E65100;
 }
 
-/* --- Bài học (Lesson Items) --- */
+/* --- Danh sách bài học --- */
 #noidungkhoahoc {
     margin-top: 20px;
 }
 
 .lesson-item {
-    border: 1px solid #ccc;
-    padding: 12px;
-    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
     border-radius: 8px;
     background-color: #f9f9f9;
     position: relative;
     overflow: hidden;
-    transition: max-height 0.4s ease, background-color 0.3s ease;
-    max-height: 20px;
-    height: 60px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, background-color 0.3s;
 }
 
-.lesson-item.expanded {
-    max-height: 300px;
-    background-color: #eef6ff;
+.lesson-item:hover {
+    transform: translateY(-3px);
+    background-color: #FFF3E0;
 }
 
 .lesson-actions {
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 15px;
+    top: 15px;
 }
 
 .lesson-actions button {
@@ -232,22 +152,25 @@ h2, h3 {
     background: none;
     border: none;
     font-size: 18px;
+    color: #FF9800;
     cursor: pointer;
+    transition: transform 0.2s, color 0.3s;
+}
+
+.lesson-actions button:hover {
+    color: #E65100;
+    transform: scale(1.2);
 }
 
 .lesson-link {
-    opacity: 0;
     margin-top: 10px;
     margin-left: 20px;
     font-size: 15px;
-    color: #007bff;
-    transition: opacity 0.3s ease;
+    color: #FF9800;
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-.lesson-item.expanded .lesson-link {
-    opacity: 1;
-}
-
-.lesson-item:not(.expanded):not(.editing) .lesson-link {
-    display: none;
+.lesson-link:hover {
+    color: #E65100;
 }

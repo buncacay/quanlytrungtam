@@ -12,14 +12,15 @@ body {
     max-width: 1200px;
     margin: auto;
     background-color: #ffffff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1); /* Bóng đổ mạnh hơn */
+    border-radius: 15px;
 }
 
 .course-management h2 {
     text-align: center;
     color: #333;
     margin-bottom: 30px;
+    font-size: 28px; /* Tăng kích thước font */
 }
 
 .cards-container {
@@ -30,16 +31,22 @@ body {
 
 .form-section {
     flex: 1;
-    min-width: 300px;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #f9fbfd;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    min-width: 320px;
+    padding: 25px;
+    border-radius: 15px;
+    background-color: #fff9f1; /* Màu nền sáng và nhẹ */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Bóng đổ mềm mại */
+    transition: transform 0.3s ease-in-out; /* Hiệu ứng khi hover */
+}
+
+.form-section:hover {
+    transform: scale(1.02); /* Tăng kích thước nhẹ khi hover */
 }
 
 .form-section h3 {
     margin-bottom: 20px;
-    color: #007bff;
+    color: #ff7043; /* Màu cam cho tiêu đề */
+    font-size: 24px;
 }
 
 .form-section form {
@@ -56,26 +63,38 @@ body {
 
 .form-section input,
 .form-section select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 12px;
+    border: 1px solid #ff7043; /* Màu cam cho viền input */
+    border-radius: 8px; /* Bo góc mạnh hơn */
     font-size: 14px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-section input:focus,
+.form-section select:focus {
+    border-color: #ff5722; /* Màu cam đậm khi focus */
+    box-shadow: 0 0 8px rgba(255, 87, 34, 0.6); /* Hiệu ứng bóng khi focus */
 }
 
 .form-section button {
     margin-top: 20px;
     padding: 12px;
-    background-color: #007bff;
+    background-color: #ff7043; /* Màu cam cho nút */
     border: none;
-    border-radius: 5px;
+    border-radius: 8px; /* Bo góc mạnh */
     color: white;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .form-section button:hover {
-    background-color: #0056b3;
+    background-color: #ff5722; /* Tông cam đậm hơn khi hover */
+    transform: translateY(-2px); /* Nâng nút lên khi hover */
+}
+
+.form-section button:active {
+    transform: translateY(1px); /* Tạo hiệu ứng nhấn */
 }
 
 /* Danh sách khóa học */
@@ -89,8 +108,8 @@ body {
 #course-list-section {
     background-color: #fff;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    border-radius: 15px; /* Bo góc mạnh */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
     margin-bottom: 20px;
 }
 
@@ -103,65 +122,30 @@ body {
 }
 
 #pagination button {
-    padding: 8px 16px;
-    border: 1px solid #ccc;
-    background-color: #f5f5f5;
+    padding: 10px 20px;
+    border: 1px solid #ff7043; /* Màu cam cho viền */
+    background-color: #fff;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 14px;
-    transition: 0.3s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #pagination button:hover:not(.active) {
-    background-color: #e2e6ea;
+    background-color: #ffe0b2; /* Màu nền nhẹ khi hover */
+    transform: translateY(-2px); /* Hiệu ứng nhấc lên khi hover */
 }
 
 #pagination button.active {
-    background-color: #007bff;
+    background-color: #ff7043;
     color: white;
-    border-color: #007bff;
+    border-color: #ff7043;
+    transform: translateY(-2px); /* Tạo hiệu ứng khi nút active */
 }
 
 #pagination button:disabled {
-    background-color: #e9ecef;
+    background-color: #f1f1f1;
     cursor: not-allowed;
-}
-#course-list-section table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
-#course-list-section thead {
-    background-color: #007bff;
-    color: white;
-    text-align: center;
-}
-
-#course-list-section th,
-#course-list-section td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-#course-list-section tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-#course-list-section tbody tr:hover {
-    background-color: #eef5ff;
-    transition: background-color 0.2s ease;
-}
-
-#course-list-section h3 {
-    margin-bottom: 10px;
-    color: #333;
-    text-align: center;
 }
 
 /* Bảng danh sách giảng viên */
@@ -179,34 +163,36 @@ body {
 }
 
 .course-list th {
-    background-color: #4CAF50;
+    background-color: #ff7043; /* Màu cam cho tiêu đề bảng */
     color: white;
     font-weight: bold;
+    border-radius: 8px;
 }
 
 .course-list tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #ffe0b2; /* Màu nền nhẹ cho các hàng chẵn */
 }
 
 .course-list tr:hover {
-    background-color: #e0f7fa;
+    background-color: #ffccbc; /* Màu nền đậm hơn khi hover */
     transition: background-color 0.3s ease;
 }
 
 /* Nút thao tác */
 .course-list button {
-    padding: 6px 10px;
-    margin: 2px;
+    padding: 8px 12px;
+    margin: 4px;
     border: none;
-    background-color: #2196F3;
+    background-color: #ff7043; /* Nút màu cam */
     color: white;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 8px; /* Bo góc cho nút */
     font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
 .course-list button:hover {
-    background-color: #0b7dda;
+    background-color: #ff5722; /* Tông cam đậm hơn khi hover */
 }
 
 /* Phân trang */
@@ -216,27 +202,30 @@ body {
 }
 
 .pagination-button {
-    background-color: #f1f1f1;
-    border: 1px solid #bbb;
-    padding: 8px 12px;
-    margin: 0 2px;
+    background-color: #fff;
+    border: 1px solid #ff7043;
+    padding: 10px 15px;
+    margin: 0 4px;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 8px; /* Bo góc cho phân trang */
     font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .pagination-button:hover {
-    background-color: #ddd;
+    background-color: #ffe0b2; /* Màu nền nhẹ khi hover */
+    transform: translateY(-2px); /* Hiệu ứng nhấc lên khi hover */
 }
 
 .pagination-button.active {
-    background-color: #4CAF50;
+    background-color: #ff7043;
     color: white;
     font-weight: bold;
+    transform: translateY(-2px); /* Tạo hiệu ứng khi nút active */
 }
 
 .pagination-button:disabled {
-    background-color: #eee;
+    background-color: #f1f1f1;
     color: #999;
     cursor: not-allowed;
 }

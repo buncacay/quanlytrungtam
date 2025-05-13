@@ -13,8 +13,8 @@
     <h2>📊 Quản lý Bảng Điểm</h2>
     <div id="header"></div>
     <div id="sidebar"></div>
-
-    <!-- Form nhập điểm -->
+    <div id="class-main">
+  <!-- Form nhập điểm -->
     <div id="form-section">
         <label for="courseId">ID Khóa học:</label>
         <select id="courseId">
@@ -47,7 +47,8 @@
     <table>
         <thead>
             <tr>
-                <th>ID Học viên</th>
+                <th>Tên khóa học</th>
+                <th>Tên Học viên</th>
                 
                 <th>Kỳ thi</th>
                 <th>Điểm số</th>
@@ -61,6 +62,8 @@
     </table>
     <div id="pagination"></div>
 
+    </div>
+  
     <!-- Kết nối các script -->
     <script src="../../js/app.js"></script>
     <script type="module" src="../../fetch/diemso.js"></script>

@@ -22,29 +22,7 @@
           <button id="btn-clear-filter" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Bỏ lọc</button>
         </div>
 
-        <h2>Gán giảng viên cho lớp học</h2>
-        <form id="assignmentForm">
-          <div class="form-group">
-            <label for="teacher">Chọn giảng viên:</label>
-            <select id="teacher" name="teacher" required></select>
-          </div>
-          <div class="form-group">
-            <label for="class">Chọn lớp học:</label>
-            <select id="class" name="class" required></select>
-          </div>
-          <div class="form-group">
-            <label for="dongia">Đơn giá</label>
-            <input type="number" id="dongia" class="mt-1 p-2 border w-full rounded" />
-
-            <label for="begin">Giờ bắt đầu</label>
-            <input type="datetime-local" id="begin" class="mt-1 p-2 border w-full rounded" />
-
-            <label for="end">Giờ kết thúc</label>
-            <input type="datetime-local" id="end" class="mt-1 p-2 border w-full rounded" />
-          </div>
-
-          <button type="button" class="btn-submit" id="phancong">Phân công</button>
-        </form>
+        <div id="phancong"></div>
       </div>
 
       <div class="assignment-list" id="list">
