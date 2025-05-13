@@ -6,11 +6,36 @@ export async function fetchGiangVien() {
     const res = await fetch('http://localhost/quanlytrungtam/backend/controller/NhanVienController.php');
     if (!res.ok) throw new Error(await res.text());
     const data = await res.json();
-   
+    console.log(data);
     return data;
 }
 
+export async function fetchChiTiethocvien(id) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/chitiethocvienController.php?idhocvien=${id}`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
 
+export async function fetchChiTiethocvienKhongid() {
+    const url = `http://localhost/quanlytrungtam/backend/controller/chitiethocvienController.php`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+
+export async function fetchChiTiethocvienVoiIdKhocHoc(id) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/chitiethocvienController.php?idkhoahoc=${id}`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
 
 
 export async function fetchKhoaHoc() {
@@ -70,6 +95,14 @@ export async function fetchChiTietKhoaHoc(id) {
     return data;
 }
 
+export async function fetchDiem(id) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/DiemsoController.php?idkhoahoc=${id}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
 
 export async function fetchChiTietNhanVien() {
     const url = `http://localhost/quanlytrungtam/backend/controller/ChitietnhanvienController.php`;

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tạo và Quản lý Khóa Học</title>
     <link rel="stylesheet" href="../../css/taovaquanlykhoahoc.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../../css/chinh.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="course-management">
@@ -15,27 +15,38 @@
         <div id="header"></div>
         <div id="sidebar"></div>
         
-            
-      
-            <div class="tong">
-                <div class="filter-section">
-            <input type="text" placeholder="Tìm kiếm theo tên khóa học hoặc tên giảng viên" id="search">
-            <button onclick="filterSchedule()">Tìm kiếm</button>
-                 </div>
-                <div id="course-list-section">
-                    
-                </div>
-                <div id="pagination">
-                </div>
+        <div class="tong">
+            <div class="filter-section">
+                <input type="text" placeholder="Tìm kiếm theo tên khóa học hoặc tên giảng viên" id="search">
+
+                <label for="startDate">Từ ngày:</label>
+                <input type="date" id="startDate">
+
+                <label for="endDate">Đến ngày:</label>
+                <input type="date" id="endDate">
+
+                <label for="status">Trạng thái:</label>
+                <select id="status">
+                    <option value="">-- Tất cả --</option>
+                    <option value="0">Đã xóa</option>
+                    <option value="1">Đang học</option>
+                    <option value="2">Đã xong</option>
+                </select>
+
+                <button onclick="filterSchedule()">🔍 Tìm kiếm</button>
             </div>
-            
-       
-        
+
+            <div id="course-list-section">
+                <!-- Kết quả danh sách khóa học -->
+            </div>
+
+            <div id="pagination">
+                <!-- Phân trang nếu có -->
+            </div>
+        </div>
     </div>
-    
+
     <script src="../../js/app.js"></script>
     <script type="module" src="../../fetch/danhsachkhoahoc.js"></script>
-
-   
 </body>
 </html>

@@ -30,7 +30,19 @@ switch ($method) {
                     http_response_code(404);
                     echo json_encode(["message" => "khong co hoc vien nha."]);
                 }
-            } else {
+
+            } else 
+            if (isset($_GET['idkhoahoc']))   {
+                $id = $_GET['idkhoahoc'];
+                $result = $hocvien->getByIdkhoahoc($id);
+                if ($result) {
+                    echo json_encode($result);
+                } else {
+                    http_response_code(404);
+                    echo json_encode(["message" => "khong co hoc vien nha."]);
+                }
+            }
+            else{
                 $result = $hocvien->read();
                 echo json_encode($result);
             }

@@ -40,6 +40,26 @@ export async function addTaiKhoan(data) {
     }
 }
 
+export async function addDiem(data) {
+   
+    try {
+        const res = await fetch('http://localhost/quanlytrungtam/backend/controller/DiemsoController.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:JSON.stringify(data)
+        });
+        if (!res.ok) {
+            const err = await res.text();
+            alert(err);
+            throw new Error('Lỗi: ' + err);
+        }
+        // return await res.json();
+        return await res.text();
+    } catch (error) {
+        alert("Lỗi khi thêm khóa học: " + error.message);
+        console.log(error.message);
+    }
+}
 
 
 export async function addBaiHoc() {

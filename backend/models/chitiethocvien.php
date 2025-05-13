@@ -30,7 +30,7 @@ class ChiTietHocVien {
     }
 
     public function read() {
-        $query = "SELECT * FROM " . $this->table;
+        $query ="SELECT * FROM " . $this->table . " inner join khoahoc on khoahoc.idkhoahoc = chitiethocvien.idkhoahoc inner join hocvien on hocvien.idhocvien = chitiethocvien.idhocvien";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -64,7 +64,17 @@ class ChiTietHocVien {
     }
 
     public function getById($idhocvien){
-        $query = "SELECT * FROM " . $this->table . " WHERE idhocvien = :idhocvien";
+        $query = "SELECT * FROM " . $this->table . " inner join khoahoc on khoahoc.idkhoahoc = chitiethocvien.idkhoahoc WHERE idhocvien = :idhocvien";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':idhocvien', $idhocvien, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results ?: null;
+    }
+
+     public function getByIdkhoahoc($idhocvien){
+        $query = "SELECT * FROM " . $this->table . " inner join khoahoc on khoahoc.idkhoahoc = chitiethocvien.idkhoahoc inner join hocvien on hocvien.idhocvien = chitiethocvien.idhocvien WHERE khoahoc.idkhoahoc = :idhocvien";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':idhocvien', $idhocvien, PDO::PARAM_INT);
         $stmt->execute();

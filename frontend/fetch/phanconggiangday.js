@@ -95,7 +95,7 @@ async function showAssignments() {
   thead.className = 'bg-gray-100';
   thead.innerHTML = `
     <tr>
-      <th class="border border-gray-300 px-4 py-2">Tên nhân viên</th>
+      <th class="border border-gray-300 px-4 py-2">Tên giảng viên</th>
       <th class="border border-gray-300 px-4 py-2">Tên khóa học</th>
       <th class="border border-gray-300 px-4 py-2">Thời gian bắt đầu</th>
       <th class="border border-gray-300 px-4 py-2">Thời gian kết thúc</th>
@@ -144,6 +144,11 @@ function editAssignment(encodedData) {
 }
 
 async function remove(encodedData) {
+  document.getElementById('teacher').value = "";
+  document.getElementById('class').value = "";
+  document.getElementById('begin').value = "";
+  document.getElementById('end').value = "";
+  document.getElementById('dongia').value = "";
   const data = JSON.parse(decodeURIComponent(encodedData));
   const result = await removeChiTietNhanVien(data);
   if (result) {

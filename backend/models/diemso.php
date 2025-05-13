@@ -77,5 +77,21 @@ class diemso {
         $stmt->bindParam(':id', $this->id);
         return $stmt->execute();
     }
+
+  public function showById($idkhoahoc) {
+    $this->idkhoahoc = $idkhoahoc;
+   
+
+    $query = "SELECT * FROM " . $this->table . " inner join hocvien on hocvien.idhocvien = diemso.idhocvien WHERE idkhoahoc = :idkhoahoc ";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':idkhoahoc', $this->idkhoahoc, PDO::PARAM_INT);
+    // $stmt->bindParam(':idhocvien', $this->idhocvien, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+
+
 }
 ?>

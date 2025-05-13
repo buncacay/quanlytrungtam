@@ -147,24 +147,35 @@ document.addEventListener('DOMContentLoaded', async function (event) {
    
     const data = await fetchGiangVien();
     
-    // console.log("giang vien " , data);
-    // const select = document.getElementById('instructor');
-    // select.innerHTML = "";
-    // data.forEach(nhanvien => {
-    //     const option = document.createElement('option');
-    //     option.value = nhanvien.idnhanvien;
-    //     option.textContent = nhanvien.tennhanvien;
-    //     select.appendChild(option);
-    // });
+  
     const urlParams = new URLSearchParams(window.location.search);
     const idkhoahoc = urlParams.get('idkhoahoc');
     alert(idkhoahoc);
     const kq = await fetchKhoaHocVoiId(idkhoahoc);
 
-    // alert(idkhoahoc);
-      
+   
+   if (idkhoahoc) {
+    const chitietdanhsach = document.getElementById('chitiet');
+    chitietdanhsach.innerHTML = `
+        <!-- Danh sách học viên -->
+        <div class="student-list-section">
+            <h3>📋 Danh sách học viên</h3>
+            <!-- Gán giá trị idkhoahoc vào URL -->
+            <a href="danhsachhocvien.html?idkhoahoc=${idkhoahoc}">Xem chi tiết</a>
+        </div>
 
-    if (idkhoahoc) {
+        <!-- Danh sách giảng viên -->
+        <div class="instructor-list-section" style="margin-top: 30px;">
+            <h3>👨‍🏫 Danh sách giảng viên</h3>
+            <!-- Gán giá trị idkhoahoc vào URL -->
+            <a href="phanconggiangday.html?idkhoahoc=${idkhoahoc}">Xem chi tiết</a>
+        </div>`;
+
+
+            
+           
+
+            
         document.getElementById('themkhoahoc').textContent="Lưu chỉnh sửa";
         console.log(("adfasdfads " , kq));
        
@@ -211,6 +222,8 @@ document.addEventListener('DOMContentLoaded', async function (event) {
         })
 
     }
+   
+    
 });
 
 

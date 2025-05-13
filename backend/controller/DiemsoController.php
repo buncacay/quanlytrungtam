@@ -22,11 +22,21 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        if (isset($_GET['idhocvien'])) {
-            $id = intval($_GET['idhocvien']);
-            $data = $diem->readByHocVien($id);
+       if ( isset($_GET['idkhoahoc'])) {
+            // $idhocvien = intval($_GET['idhocvien']);
+            $idkhoahoc = intval($_GET['idkhoahoc']);
+
+            $data = $diem->showById($idkhoahoc); // OK sau khi sửa
             echo json_encode($data);
         } else {
+            if ( isset($_GET['idhocvien'])) {
+            // $idhocvien = intval($_GET['idhocvien']);
+            $idkhoahoc = intval($_GET['idhocvien']);
+
+            $data = $diem->readByHocVien($idhocvien); // OK sau khi sửa
+            }
+            else {
+            echo json_encode($data);
             $data = $diem->readAll();
             echo json_encode($data);
         }
@@ -61,7 +71,16 @@ function createDiem($diem) {
         $diem->ghichu = isset($data->ghichu) ? $data->ghichu : null;
 
         if ($diem->create()) {
-            echo json_encode(["message" => "Score record created successfully."]);
+            $response = [
+                "idkhoahoc" => $diem->idkhoahoc,
+                "kythi" => $diem->kythi,
+               
+                "idhocvien" => $diem->idhocvien,
+                "diemso" => $diem->diemso,
+                "ghichu" => $diem->ghichu,
+                 "id" => $diem->id
+            ];
+            echo json_encode($response);
         } else {
             http_response_code(500);
             echo json_encode(["message" => "Failed to create score record."]);

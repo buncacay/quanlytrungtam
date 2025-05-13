@@ -91,9 +91,8 @@ class hocvien {
         //           INNER JOIN hoadon hd ON hd.idhocvien = h.idhocvien
         //           WHERE c.idhocvien = :id";
     
-        $query = "SELECT * FROM chitiethocvien c 
-                    INNER JOIN khoahoc kh ON kh.idkhoahoc = c.idkhoahoc 
-                    INNER JOIN hocvien h ON c.idhocvien = h.idhocvien 
+        $query = "SELECT * FROM hocvien c 
+                     
                     WHERE c.idhocvien = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);

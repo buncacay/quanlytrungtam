@@ -35,13 +35,32 @@
             <button onclick="themkhoahoc()">Thêm Khóa học</button>
         </div>
        </div>
+        <!-- Bảng hiển thị điểm số -->
+    
       
         
         
         
       
     </div>
-
+    <div id="diemhocvien">
+        <table>
+        <thead>
+            <tr>
+                <th>ID Học viên</th>
+                
+                <th>Kỳ thi</th>
+                <th>Điểm số</th>
+                <th>Ghi chú</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody id="scoreTableBody">
+            <!-- Dữ liệu điểm số sẽ hiển thị ở đây -->
+        </tbody>
+    </table>
+    <div id="pagination"></div>
+    </div>
     <script src="../../js/app.js"></script>
     <script type="module" src="../../fetch/tthocvien.js"></script>
 </body>
