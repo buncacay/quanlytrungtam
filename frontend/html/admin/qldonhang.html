@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý thông tin học viên</title>
+    <link rel="stylesheet" href="../../css/qldonhang.css">
+    <link rel="stylesheet" href="../../css/chinh.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="header"></div>
+    <div id="sidebar"></div>
+
+    <div class="cards-container">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên tài khoản</th>
+                    <th>Tên khóa học</th>
+                    <th>Trạng thái</th>
+                    <th>Cập nhật</th>
+                </tr>
+            </thead>
+            <tbody id="hocvien-body">
+                <!-- Dữ liệu mẫu -->
+                <tr>
+                    <td>1</td>
+                    <td>nguyenvana</td>
+                    <td>HTML Cơ bản</td>
+                    <td>
+                        <select>
+                            <option>Chờ phê duyệt</option>
+                            <option>Đã xác nhận</option>
+                        </select>
+                    </td>
+                    <td><button>Cập nhật</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="diem"></div>
+
+    <!-- Scripts -->
+    <script src="../../js/app.js"></script>
+    <script type="module" src="../../fetch/tthocvien.js"></script>
+
+    <!-- Thêm script thêm dữ liệu mẫu -->
+    <script>
+        // Ví dụ: thêm một dòng dữ liệu mới sau 2 giây (mô phỏng fetch từ JS)
+        setTimeout(() => {
+            const tbody = document.getElementById("hocvien-body");
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>2</td>
+                <td>tranthib</td>
+                <td>Javascript Nâng cao</td>
+                <td>
+                    <select>
+                        <option>Chờ phê duyệt</option>
+                        <option>Đã xác nhận</option>
+                    </select>
+                </td>
+                <td><button>Cập nhật</button></td>
+            `;
+            tbody.appendChild(row);
+        }, 2000);
+    </script>
+</body>
+</html>

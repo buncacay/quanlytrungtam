@@ -68,12 +68,7 @@ switch ($method) {
         // Không có 'user' thì cập nhật thông thường
         $updateResult = updateNhanVien($nhanvien);
 
-        if ($updateResult) {
-            echo json_encode($updateResult);
-        } else {
-            http_response_code(500);
-            echo json_encode(["message" => "Cập nhật nhân viên thất bại"]);
-        }
+       
     }
     break;
 

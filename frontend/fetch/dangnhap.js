@@ -1,18 +1,21 @@
 import {fetchTaiKhoan} from './get.js';
 
-document.getElementById('login').addEventListener('click', async function(){
+document.getElementById('login').addEventListener('click', async function () {
     const user = document.getElementById('user').value;
     const pass = document.getElementById('pass').value;
 
     const res = await fetchTaiKhoan(user);
-    if (res.password === pass && res.role===3) {
-        alert("Dang nhap thanh cong");
-        
-            window.location.href = "index.html";
-        
-    }
-    else {
-        alert("Dang nhap that bai");
+    const account = res && res.length > 0 ? res[0] : null;
 
+    if (!account) {
+        alert("Tài khoản không tồn tại");
+        return;
+    }
+
+    if (account.password === pass && account.role === "3") {
+        alert("Đăng nhập thành công");
+        window.location.href = "index.html?login=true";
+    } else {
+        alert("Đăng nhập thất bại");
     }
 });

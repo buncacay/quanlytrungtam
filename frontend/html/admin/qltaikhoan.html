@@ -119,6 +119,7 @@
             </div>
         </div>
     </div>
+    
 
     <!-- JavaScript -->
     <script>
@@ -140,14 +141,10 @@
         if ($('#student').is(':checked')) {
             $('#student-form').slideDown(); // Hiển thị form học sinh
             $('#teacher-form').slideUp();  // Ẩn form giảng viên
-        } else if ($('#teacher').is(':checked')) {
+        } else  {
             $('#teacher-form').slideDown(); // Hiển thị form giảng viên
             $('#student-form').slideUp();  // Ẩn form học sinh
-        } else {
-            // Ẩn tất cả nếu không chọn gì (ví dụ: radio admin)
-            $('#student-form').slideUp();
-            $('#teacher-form').slideUp();
-        }
+        } 
     }
 
     // Kiểm tra form ban đầu khi load trang

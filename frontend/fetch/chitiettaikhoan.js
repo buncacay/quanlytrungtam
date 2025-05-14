@@ -98,30 +98,31 @@ async function renderTaiKhoan(data) {
     const results = await Promise.all(fetchPromises.filter(p => p !== null));
 
     // Xử lý kết quả và hiển thị
-    for (const item of results) {
-        if (!item || !item.userData) continue;
+ for (const item of results) {
+    if (!item || !item.userData) continue;
+console.log("uia ", item.userData[0].tennhanvien);  // Kiểm tra dữ liệu của user
 
-        const acc = item.acc;
-        const role = acc.role;
-        const chucVuText = getChucVuText(role);
-        const tenNguoiDung = item.isHocVien ? item.userData.hoten : item.userData.tennhanvien;
-        const id = item.isHocVien ? item.userData.idhocvien : item.userData.idnhanvien; // Lấy ID từ dữ liệu
+    const acc = item.acc;
+    const role = acc.role;  // Đây là giá trị 'role' mà bạn cần chuyển thành tên chức vụ
+    const chucVuText = getChucVuText(role);  // Lấy tên chức vụ từ hàm getChucVuText
+    const tenNguoiDung = item.isHocVien ? item.userData[0].hoten : item.userData[0].tennhanvien;
+    const id = item.isHocVien ? item.userData[0].idhocvien : item.userData[0].idnhanvien; // Lấy ID từ dữ liệu
+    console.log(id);
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${id}</td> <!-- Hiển thị ID -->
+        <td>${tenNguoiDung}</td>
+        <td>${acc.username}</td>
+        <td>${chucVuText}</td> <!-- Hiển thị chức vụ -->
+        <td>
+            <button onclick="editTaiKhoan('${acc.username}', ${role})">Sửa</button>
+            <button onclick="removeTaiKhoan('${acc.username}')">Xóa</button>
+           
+        </td>
+    `;
+    tbody.appendChild(row);
+}
 
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${id}</td> <!-- Hiển thị ID -->
-            <td>${tenNguoiDung}</td>
-            <td>${acc.username}</td>
-            <td>${chucVuText}</td>
-          
-            <td>
-                <button onclick="editTaiKhoan('${acc.username}', ${role})">Sửa</button>
-                <button onclick="removeTaiKhoan('${acc.username}')">Xóa</button>
-                <button onclick="chitiet('${id}')">Xem</button> <!-- Sử dụng ID ở đây -->
-            </td>
-        `;
-        tbody.appendChild(row);
-    }
 }
 
 // Sửa tài khoản: chuyển sang trang qltaikhoan.html

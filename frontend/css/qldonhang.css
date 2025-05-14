@@ -1,0 +1,30 @@
+/* Giả định: Header nằm trên cùng, chiếm chiều cao 60px */
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #333;
+    color: white;
+    z-index: 1000;
+}
+
+/* Sidebar bên trái, rộng 200px */
+#sidebar {
+    position: fixed;
+    top: 60px; /* dưới header */
+    left: 0;
+    width: 200px;
+    height: calc(100% - 60px);
+    background-color: #444;
+    color: white;
+    z-index: 999;
+}
+
+/* Phần chứa nội dung chính */
+.cards-container {
+    margin-top: 60px; /* tránh header */
+    margin-left: 200px; /* tránh sidebar */
+    padding: 20px;
+}
