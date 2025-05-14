@@ -96,5 +96,18 @@ class Hoadon {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ? $result : null;
     }
+    
+   public function showByIdhocvien($id) {
+    $query = "SELECT * FROM " . $this->table . " WHERE idhocvien = :id and trangthai = 1";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([':id' => $id]);
+
+    // Dùng fetchAll để lấy tất cả kết quả
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Kiểm tra nếu có dữ liệu trả về
+    return $result ? $result : null;
+}
+
 }
 ?>

@@ -1,143 +1,163 @@
-import { fetchKhoaHoc, fetchTaiKhoan, fetchTaiKhoanHocvien, fetchTaiKhoanGiangVien } from './get.js';
-import { addTaiKhoan, addStudent, addThongTinGiangVien, addChiTietHocVien} from './add.js';
+import { fetchAllTaiKhoan, fetchTaiKhoanHocvien, fetchTaiKhoanGiangVien } from './get.js';
+import { RemoveTaiKhoan } from './delete.js';
 
+let currentPage = 1;
+let totalPages = 1;
+let currentFilteredData = [];
 
+// Khi trang vừa load
 document.addEventListener('DOMContentLoaded', async () => {
-    // const params = URLSearchParams(window.location.search);
-    // const role = params.get['role'];
-    // const user = params.get['user'];
-    // const res = await fetchTaiKhoan(user);
-    // document.getElementById('name').value = res.username;
-    // document.getElementById('password').value = res.password;
-    // document.getElementById('confirm-password').value = res.password;
-    // document.querySelector('input[name="role"]:checked')?.value = res.role;
-    // const data = await fetchKhoaHoc();
-    // if (role==0){
-    //     const huhu = await fetchTaiKhoanHocvien(user);
-    //    document.getElementById('fullname').value = user.hoten;
-    //    document.getElementById('sdt-student').value;
-    //    document.getElementById('birth').value;
-    // }
-    // const select = document.getElementById('course');
-    // data.forEach(k => {
-    //     const option = document.createElement('option');
-    //     option.value = k.idkhoahoc;
-    //     option.textContent = k.tenkhoahoc;
-    //     select.appendChild(option);
-    // });
-
-    // Gắn sự kiện submit
-    document.getElementById('add-form').addEventListener('submit', handleFormSubmit);
+    await loadTaiKhoan();
+    document.getElementById('search-name').addEventListener('input', filterTaiKhoan);
+    document.getElementById('role-filter').addEventListener('change', filterTaiKhoan);
 });
 
-async function handleFormSubmit(e) {
-    try {
-        e.preventDefault();
+// Tải danh sách tài khoản từ API
+async function loadTaiKhoan(page = 1) {
+    currentPage = page;
+    const response = await fetchAllTaiKhoan(); // giả định trả về toàn bộ
+    currentFilteredData = response.data;
 
-        const username = document.getElementById('name').value.trim();
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm-password').value;
-        const role = document.querySelector('input[name="role"]:checked')?.value;
+    totalPages = Math.ceil(currentFilteredData.length / 5);
+    const paginated = paginate(currentFilteredData, page, 5);
+    renderTaiKhoan(paginated);
+    renderPagination(page, totalPages);
+}
 
-        if (!role) return alert("Vui lòng chọn chức vụ");
-        if (!username || !password) return alert("Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu");
-        if (password !== confirmPassword) return alert("Mật khẩu không khớp");
+// Lọc theo tên + chức vụ
+function filterTaiKhoan() {
+    const search = document.getElementById('search-name').value.toLowerCase();
+    const role = document.getElementById('role-filter').value;
 
-        const taikhoanData = {
-            user: username,
-            pass: password,
-            role: role,
-            created_at: new Date().toISOString().slice(0, 10),
-            trangthai: 1
-        };
-        console.log(taikhoanData);
-        const response = await addTaiKhoan(taikhoanData);
+    const filtered = currentFilteredData.filter(acc => {
+        const matchName = acc.hoten.toLowerCase().includes(search);
+        const matchRole = role ? acc.chucvu === role : true;
+        return matchName && matchRole;
+    });
 
-        // Nếu user đã tồn tại
-        if (response.status === 409) {
-            const res = await response.json();
-            alert(res.message || "Tên đăng nhập đã tồn tại");
-            return;
-        }
+    totalPages = Math.ceil(filtered.length / 5);
+    const paginated = paginate(filtered, 1, 5);
+    renderTaiKhoan(paginated);
+    renderPagination(1, totalPages);
+}
 
-        // Nếu lỗi khác
-        if (!response.ok) {
-            const res = await response.json();
-            alert(res.message || "Đã xảy ra lỗi khi tạo tài khoản");
-            return;
-        }
+// Phân trang mảng
+function paginate(array, page, size) {
+    const start = (page - 1) * size;
+    return array.slice(start, start + size);
+}
 
-        // Nếu thành công
-        const result = await response.json();
-        console.log(result);
-
-        if (role === 'student') {
-            await handleaddStudent(username);
-        } else if (role === 'teacher' || role==='admin') {
-            await handleAddNhanVien(username);
-        }
-
-        alert("Tạo tài khoản thành công!");
-        // Có thể reset form tại đây nếu cần
-        // document.getElementById('add-form').reset();
-
-    } catch (error) {
-        console.error("Lỗi:", error);
-        alert("Đã xảy ra lỗi hệ thống.");
+// Lấy tên chức vụ
+function getChucVuText(role) {
+    switch (parseInt(role)) {
+        case 0: return 'Học sinh';
+        case 1: return 'Giảng viên';
+        case 3: return 'Quản trị viên';
+        default: return 'Không xác định';
     }
 }
 
+// Render danh sách tài khoản
+async function renderTaiKhoan(data) {
+    const tbody = document.getElementById('account-list');
+    tbody.innerHTML = '';
 
-async function handleaddStudent(user) {
-    const hoten = document.getElementById('fullname').value;
-    const sdt = document.getElementById('sdt-student').value;
-    const ngaysinh = document.getElementById('birth').value;
-    // const idkhoahoc = document.getElementById('course').value;
+    // Tạo danh sách promise gọi API cho từng tài khoản
+    const fetchPromises = data.map(acc => {
+        if (!acc.role || !acc.username) return null;
 
-    const hv = {
-        hoten : hoten,
-        sdt : sdt,
-        ngaysinh: ngaysinh,
-        user : user
-    };
-    console.log(hv);
+        const isHocVien = parseInt(acc.role) === 0;
+        const fetchFunc = isHocVien ? fetchTaiKhoanHocvien : fetchTaiKhoanGiangVien;
 
+        return fetchFunc(acc.username)
+            .then(res => ({
+                acc,
+                userData: res && res[0] ? res[0] : null,
+                isHocVien
+            }))
+            .catch(error => {
+                console.error(`Lỗi khi fetch tài khoản ${acc.username}:`, error);
+                return null;
+            });
+    });
 
-    const res = await addStudent(hv);
-    // if (res && res.idhocvien) {
-    //     const ct = {
-    //         idhocvien: res.idhocvien,
-    //         idkhoahoc :idkhoahoc,
-    //         ketquahoctap: "Chưa có",
-    //         tinhtranghocphi: "Chưa đóng"
-    //     };
-        
-    //     await addChiTietHocVien(ct);
-    // }
+    // Đợi tất cả promise hoàn tất
+    const results = await Promise.all(fetchPromises.filter(p => p !== null));
+
+    // Xử lý kết quả và hiển thị
+    for (const item of results) {
+        if (!item || !item.userData) continue;
+
+        const acc = item.acc;
+        const role = acc.role;
+        const chucVuText = getChucVuText(role);
+        const tenNguoiDung = item.isHocVien ? item.userData.hoten : item.userData.tennhanvien;
+        const id = item.isHocVien ? item.userData.idhocvien : item.userData.idnhanvien; // Lấy ID từ dữ liệu
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${id}</td> <!-- Hiển thị ID -->
+          <td>${tenNguoiDung}</td>
+          <td>${acc.username}</td>
+          <td>${chucVuText}</td>
+          <td>
+            <button onclick="editTaiKhoan('${acc.username}', ${role})">Sửa</button>
+            <button onclick="removeTaiKhoan('${acc.username}')">Xóa</button>
+            <button onclick="chitiet('${id}')">Xem</button> <!-- Sử dụng ID ở đây -->
+          </td>
+        `;
+        tbody.appendChild(row);
+    }
 }
 
-async function handleAddNhanVien(user) {
-    const tennhanvien = document.getElementById('teacher-name').value;
-    const trinhdo = document.getElementById('trinhdo').value;
-    const chungchi = document.getElementById('chungchi').value;
-    const sdt = document.getElementById('sdt-teacher').value;
-   
-    const ghichu = document.getElementById('ghichu').value;
+// Render phân trang
+function renderPagination(current, total) {
+    const container = document.getElementById('pagination');
+    container.innerHTML = '';
 
-    const nv = {
-        tennhanvien,
-        trinhdo,
-        chungchi,
-        sdt,
-        chucvu : document.querySelector('input[name="role"]:checked')?.value,
-        ghichu,
-        diachi: "",
-        tienthuong: 0,
-        tienphat: 0,
-        tonggioday: 0,
-        user,
-        trangthai : 1
-    };
-    console.log(nv);
-    await addThongTinGiangVien(nv);
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = '« Trước';
+    prevBtn.disabled = current === 1;
+    prevBtn.onclick = () => loadTaiKhoan(current - 1);
+    container.appendChild(prevBtn);
+
+    for (let i = 1; i <= total; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.className = (i === current) ? 'active' : '';
+        btn.onclick = () => loadTaiKhoan(i);
+        container.appendChild(btn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'Sau »';
+    nextBtn.disabled = current === total;
+    nextBtn.onclick = () => loadTaiKhoan(current + 1);
+    container.appendChild(nextBtn);
 }
+
+// Xóa tài khoản
+async function removeTaiKhoan(id) {
+    if (confirm('Bạn có chắc chắn muốn xóa tài khoản này?')) {
+        const result = await RemoveTaiKhoan(id);
+        if (result) {
+            alert('Đã xóa thành công');
+            await loadTaiKhoan(currentPage);
+        } else {
+            alert('Xóa thất bại!');
+        }
+    }
+}
+window.removeTaiKhoan = removeTaiKhoan;
+
+// Sửa tài khoản: chuyển sang trang qltaikhoan.html
+function editTaiKhoan(id, role) {
+    window.location.href = `qltaikhoan.html?user=${id}&role=${role}`;
+}
+window.editTaiKhoan = editTaiKhoan;
+
+// Xem chi tiết tài khoản
+function chitiet(id) {
+    window.location.href = `tthocvien.html?id=${id}`;
+}
+window.chitiet = chitiet;

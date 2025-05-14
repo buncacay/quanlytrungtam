@@ -15,7 +15,23 @@ export async function UpdateHocVien(data) {
     alert("Cập nhật thành công!");
     return true;
 }
+export async function UpdateNhanVien(data) {
+    alert("Đang gửi dữ liệu cập nhật...");
+    const res = await fetch("http://localhost/quanlytrungtam/backend/controller/nhanviencontroller.php", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
 
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
+
+    alert("Cập nhật thành công!");
+    return true;
+}
 
 
 export async function UpdateGiaKhoaHoc(data){

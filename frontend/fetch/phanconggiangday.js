@@ -55,7 +55,8 @@ async function populateDropdowns() {
     const classSelect = document.getElementById('class');
 
     const giangVienList = await fetchGiangVien();
-    giangVienList.forEach(gv => {
+    console.log(giangVienList);
+    giangVienList[0].forEach(gv => {
       const option = document.createElement('option');
       option.value = gv.idnhanvien;
       option.textContent = gv.tennhanvien;

@@ -73,6 +73,7 @@ switch ($method) {
         break;
 
     case 'PUT':
+        
         updateHocVien($hocvien);
         break;
 

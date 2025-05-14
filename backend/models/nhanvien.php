@@ -83,6 +83,38 @@ class nhanvien {
         return $stmt->execute();
     }
 
+      public function updateByUser() {
+        $query = "UPDATE " . $this->table . " SET 
+                  tennhanvien = :tennhanvien, 
+                  trinhdo = :trinhdo, 
+                  chungchi = :chungchi, 
+                  sdt = :sdt, 
+                  tienthuong = :tienthuong, 
+                  tienphat = :tienphat, 
+                  chucvu = :chucvu, 
+                  tonggioday = :tonggioday, 
+                  ghichu = :ghichu ,
+                   trangthai = :trangthai
+                  WHERE  user = :user ";
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':tennhanvien', $this->tennhanvien);
+        $stmt->bindParam(':trinhdo', $this->trinhdo);
+        $stmt->bindParam(':chungchi', $this->chungchi);
+        $stmt->bindParam(':sdt', $this->sdt);
+       
+        $stmt->bindParam(':tienthuong', $this->tienthuong, PDO::PARAM_INT);
+        $stmt->bindParam(':tienphat', $this->tienphat, PDO::PARAM_INT);
+        $stmt->bindParam(':chucvu', $this->chucvu);
+        $stmt->bindParam(':tonggioday', $this->tonggioday, PDO::PARAM_INT);
+        $stmt->bindParam(':ghichu', $this->ghichu);
+        $stmt->bindParam(':idnhanvien', $this->idnhanvien, PDO::PARAM_INT);
+         $stmt->bindParam(':trangthai', $this->trangthai);
+         $stmt->bindParam(':user', $this->user);
+        return $stmt->execute();
+    }
+
     public function delete() {
    $query = "UPDATE " . $this->table . " SET trangthai = 0 WHERE idnhanvien = :idnhanvien";
 

@@ -81,7 +81,7 @@ class taikhoan {
                     password = :password, 
                     role = :role,
                     trangthai = :trangthai
-                  WHERE id = :id";
+                  WHERE username = :username ";
         
         $stmt = $this->conn->prepare($query);
 

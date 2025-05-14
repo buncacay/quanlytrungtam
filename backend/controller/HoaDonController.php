@@ -30,7 +30,19 @@ switch ($method) {
                 echo json_encode([]);
 
             }
-        } else {
+        } else  
+        if (isset($_GET['idhocvien'])) {
+            $id = $_GET['idhocvien'];
+            $result = $hoadon->showByIdhocvien($id);
+            if ($result) {
+                echo json_encode($result);
+            } else {
+                // http_response_code(404);
+                echo json_encode([]);
+
+            }
+        }
+        else{
             echo json_encode($hoadon->read());
         }
         break;

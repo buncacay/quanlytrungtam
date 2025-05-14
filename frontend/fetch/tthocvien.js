@@ -2,7 +2,7 @@
 import {
   fetchKhoaHoc,
   fetchHocVien,
-  fetchHoaDonWithId,
+  fetchHoaDonWithIdhocvien,
   fetchChiTiethocvien,
   fetchDiemSovoiIdHocvien
 } from './get.js';
@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     alert("Không tìm thấy ID học viên.");
     return;
   }
+  
 
   const data = await fetchHocVien(id);
   if (!data || data.length === 0) {
@@ -35,10 +36,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // ======================= Thông tin =======================
-
+let user  ="";
 async function HienThiThongTin(data) {
   const hocvien = data[0];
-  document.getElementById('student-info').innerHTML = `
+  user = hocvien.user;
+    document.getElementById('student-info').innerHTML = `
     <h2>Thông tin học viên</h2>
     <p><strong>Họ và tên:</strong> ${hocvien.hoten}</p>
     <p><strong>Mã học viên:</strong> ${hocvien.idhocvien}</p>
@@ -47,12 +49,39 @@ async function HienThiThongTin(data) {
 
   khoahocDaDangKy = data.map(item => item.idkhoahoc).filter(Boolean);
 
-  const hoadon = await fetchHoaDonWithId(hocvien.idhocvien);
+  const hoadon = await fetchHoaDonWithIdhocvien(hocvien.idhocvien);
   HienThiHoaDon(hoadon);
 
   const chitiethocvien = await fetchChiTiethocvien(hocvien.idhocvien);
   if (chitiethocvien?.length > 0) {
     HienThiKhoaHoc(chitiethocvien);
+    const divdiem= document.getElementById('diem');
+  divdiem.innerHTML=`
+    <!-- Điểm số -->
+    <div id="diemhocvien" class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3 class="mb-0">📊 Điểm số của học viên</h3>
+            <button onclick="themDiem()" class="btn btn-primary">Chỉnh sửa điểm</button>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>Tên khóa học</th>
+                    <th>Tên học viên</th>
+                    <th>Kỳ thi</th>
+                    <th>Điểm số</th>
+                    <th>Ghi chú</th>
+                  
+                </tr>
+            </thead>
+            <tbody id="scoreTableBody">
+                <!-- Dữ liệu điểm số sẽ hiển thị ở đây -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Phân trang -->
+    <div id="pagination" class="text-center my-3"></div>`;
   } else {
     document.getElementById('student-khoc').innerHTML = `
       <h3>📘 Chi tiết khóa học</h3>
@@ -229,15 +258,19 @@ function createPaginationButton(text, enabled, onClick) {
 
 // ======================= Gắn hàm toàn cục =======================
 window.themkhoahoc = themkhoahoc;
-window.remove = async function () {
-  if (confirm("Bạn có chắc muốn xóa học viên?")) {
-    alert("Xóa học viên đang được phát triển.");
-  }
-};
-window.edit = () => window.location.href = `dangkyhocvien.html?id=${id}`;
+// window.remove = async function () {
+//   if (confirm("Bạn có chắc muốn xóa học viên?")) {
+//     await 
+//   }
+// };
+
+async function editHoaDon(id){
+window.location.href=`hoadon.html?idhoadon=${id}`;
+}
+window.edit = () => window.location.href = `qltaikhoan.html?user=${user}&role=0`;
 window.editkhoahoc = id => alert("Edit khóa học: " + id);
 window.removekhoahoc = id => alert("Remove khóa học: " + id);
-window.editHoaDon = id => alert("Edit hóa đơn: " + id);
+window.editHoaDon = editHoaDon;
 window.removeHoaDon = id => alert("Remove hóa đơn: " + id);
 window.showMoreHoaDon = id => alert("Chi tiết thêm hóa đơn: " + id);
 window.themDiem = themDiem;

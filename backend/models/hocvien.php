@@ -75,6 +75,10 @@ class hocvien {
     }
 
     public function delete() {
+        $query1 = "DELETE FROM hoadon WHERE idhocvien = :idhocvien";
+        $stmt1 = $this->conn->prepare($query1);
+        $stmt1->execute([':idhocvien' => $this->idhocvien]);
+
         $query1 = "DELETE FROM chitiethocvien WHERE idhocvien = :idhocvien";
         $stmt1 = $this->conn->prepare($query1);
         $stmt1->execute([':idhocvien' => $this->idhocvien]);
@@ -111,6 +115,22 @@ class hocvien {
     // Fetch all rows
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+   public function updateByUser() {
+        $query = "UPDATE " . $this->table . " 
+                  SET hoten = :hoten, ngaysinh = :ngaysinh, sdt = :sdt, diachi = :diachi, sdtph = :sdtph  
+                  WHERE user = :user";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute([
+            ':hoten' => $this->hoten,
+            ':ngaysinh' => $this->ngaysinh,
+            ':sdt' => $this->sdt,
+            ':diachi' => $this->diachi,
+            ':sdtph' => $this->sdtph,
+            ':idhocvien' => $this->idhocvien,
+            ':user' => $this->user
+        ]);
+    }
     
 }
 ?>

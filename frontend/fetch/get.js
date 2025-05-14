@@ -212,3 +212,13 @@ export async function fetchHoaDonWithId(id){
     const data = await res.json();
     return data;
 }
+
+export async function fetchHoaDonWithIdhocvien(id){
+    const res = await fetch(`http://localhost/quanlytrungtam/backend/controller/HoaDonController.php?idhocvien=${id}`);
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
+
+    const data = await res.json();
+    return data;
+}

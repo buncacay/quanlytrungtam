@@ -118,18 +118,33 @@ function createTaiKhoan($taikhoan) {
     }
 }
 
-// Cập nhật tài khoản
 function updateTaiKhoan($taikhoan) {
     $data = json_decode(file_get_contents("php://input"));
 
-    if (isset($data->id, $data->user, $data->pass, $data->role)) {
-        $taikhoan->idtaikhoan = $data->id;
+    // Kiểm tra dữ liệu bắt buộc
+    $missing_fields = [];
+    if (empty($data->user)) $missing_fields[] = "user";
+    if (empty($data->pass)) $missing_fields[] = "pass";
+    if (!isset($data->role) || $data->role === '') $missing_fields[] = "role";
+
+    if (!empty($missing_fields)) {
+        http_response_code(400);
+        echo json_encode([
+            "message" => "Dữ liệu không đầy đủ",
+            "missing_fields" => $missing_fields
+        ]);
+        return;
+    }
+
+    if (isset( $data->user, $data->pass)) {
+       
         $taikhoan->user = $data->user;
         $taikhoan->pass = $data->pass;
         $taikhoan->role = $data->role;
         $taikhoan->trangthai = isset($data->trangthai) ? $data->trangthai : 1;
 
         if ($taikhoan->update()) {
+            http_response_code(200);
             echo json_encode(["message" => "Tài khoản đã được cập nhật."]);
         } else {
             http_response_code(500);

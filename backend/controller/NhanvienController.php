@@ -38,7 +38,7 @@ switch ($method) {
         }
     } else {
         // Nếu không có tham số 'user', gọi getNhanVien để lấy tất cả nhân viên
-        $result = $nhanvien->getNhanVien();  // Gọi hàm getNhanVien để lấy dữ liệu
+        $result = $nhanvien->read();  // Gọi hàm getNhanVien để lấy dữ liệu
         echo json_encode([
              $result
         ]);
@@ -51,9 +51,33 @@ switch ($method) {
         createNhanVien($nhanvien);
         break;
 
-    case 'PUT':
-        updateNhanVien($nhanvien);
-        break;
+  case 'PUT':
+    if (isset($_GET['user'])) {
+        $user = $_GET['user'];
+
+        // Gọi updateByUser và xử lý kết quả
+        $result = $nhanvien->updateByUser($user);
+
+        if ($result) {
+            echo json_encode($result);
+        } else {
+            http_response_code(500);
+            echo json_encode(["message" => "Cập nhật theo user thất bại"]);
+        }
+    } else {
+        // Không có 'user' thì cập nhật thông thường
+        $updateResult = updateNhanVien($nhanvien);
+
+        if ($updateResult) {
+            echo json_encode($updateResult);
+        } else {
+            http_response_code(500);
+            echo json_encode(["message" => "Cập nhật nhân viên thất bại"]);
+        }
+    }
+    break;
+
+
 
     case 'DELETE':
         deleteNhanVien($nhanvien);

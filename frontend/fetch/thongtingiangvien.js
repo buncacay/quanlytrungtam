@@ -1,4 +1,4 @@
-import { fetchGiangVien } from './get.js';
+import { fetchGiangVien, fetchTaiKhoan } from './get.js';
 import { UpdateGiangVien } from './update.js';
 import { addThongTinGiangVien } from './add.js';
 import { RemoveNhanVien } from './delete.js';
@@ -11,6 +11,7 @@ let fullData = [];
 
 document.addEventListener('DOMContentLoaded', async function () {
     fullData = await fetchGiangVien();
+    console.log(fullData);
     await ShowAll(currentPage);
     
 
@@ -28,7 +29,7 @@ function filterData() {
     const searchValue = document.getElementById("search-name").value.toLowerCase().trim();
     // const chucvuFilter = document.getElementById("filter-chucvu").value;
 
-    return fullData.filter(gv => {
+    return fullData[0].filter(gv => {
         const matchesName = gv.tennhanvien.toLowerCase().includes(searchValue);
         // const matchesChucVu = !chucvuFilter || gv.chucvu === chucvuFilter;
         return matchesName;
@@ -97,18 +98,25 @@ async function HienThiThongTin(page, total, data) {
 }
 
 async function edit(encodedData) {
+    alert("clgv");
     const data = JSON.parse(decodeURIComponent(encodedData));
     isEditing = true;
     editingId = data.idnhanvien;
-
-    document.getElementById('themnhanvien').textContent = "Lưu chỉnh sửa";
-    document.getElementById('name').value = data.tennhanvien || '';
-    document.getElementById('trinhdo').value = data.trinhdo || '';
-    document.getElementById('chungchi').value = data.chungchi || '';
-    document.getElementById('sdt').value = data.sdt || '';
-    document.getElementById('chucvu').value = data.chucvu || '';
-    document.getElementById('ghichu').value = data.ghichu || '';
+    const user = data.user;
+    const res = await fetchTaiKhoan(user);
+    console.log("anh iu em ", res[0].role);
+    // document.getElementById('themnhanvien').textContent = "Lưu chỉnh sửa";
+    // document.getElementById('name').value = data.tennhanvien || '';
+    // document.getElementById('trinhdo').value = data.trinhdo || '';
+    // document.getElementById('chungchi').value = data.chungchi || '';
+    // document.getElementById('sdt').value = data.sdt || '';
+    // document.getElementById('chucvu').value = data.chucvu || '';
+    // document.getElementById('ghichu').value = data.ghichu || '';
+   
+    window.location.href=`qltaikhoan.html?user=${user}&role=${res[0].role}`
 }
+window.edit=edit;
+window.remove=remove;
 
 async function saveChanges(idnhanvien) {
     const formData = {

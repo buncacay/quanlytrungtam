@@ -149,6 +149,9 @@ async function remove(id) {
         if (result) {
             await ShowAll(currentPage); // Refresh trang hiện tại
         }
+        else {
+            alert("cai cai moe j");
+        }
     }
 }
 window.remove = remove;

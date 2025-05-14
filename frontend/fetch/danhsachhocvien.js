@@ -4,47 +4,66 @@ let currentPage = 1;
 let totalPages = 1;
 const limit = 5;
 let selectedCourseId = "";
-let fullData = []; // dữ liệu tất cả học viên đã fetch
+let fullData = []; // Dữ liệu tất cả học viên đã fetch
+let uniqueStudents = []; // Dữ liệu học viên duy nhất (không trùng lặp)
 
 document.addEventListener('DOMContentLoaded', async function () {
     const params = new URLSearchParams(window.location.search);
     const idkhoahoc = params.get('idkhoahoc');
 
     const courseSelect = document.getElementById('filter-khoahoc');
-    courseSelect.innerHTML = `<option value="">-- Tất cả khóa học --</option>`;
     const khoahocList = await fetchKhoaHoc();
 
-    khoahocList.forEach(khoahoc => {
-        const opt = document.createElement('option');
-        opt.textContent = khoahoc.tenkhoahoc;
-        opt.value = khoahoc.idkhoahoc;
-        courseSelect.appendChild(opt);
-    });
+    // khoahocList.forEach(khoahoc => {
+    //     const opt = document.createElement('option');
+    //     opt.textContent = khoahoc.tenkhoahoc;
+    //     opt.value = khoahoc.idkhoahoc;
+    //     courseSelect.appendChild(opt);
+    // });
 
     // Lấy dữ liệu học viên theo ID khóa học nếu có
     fullData = idkhoahoc
         ? await fetchChiTiethocvienVoiIdKhocHoc(idkhoahoc)
         : await fetchChiTiethocvienKhongid();
 
+    // Lọc và nhóm dữ liệu học viên duy nhất theo ID học viên
+    uniqueStudents = groupByUniqueStudents(fullData);
+
     if (idkhoahoc) {
         selectedCourseId = idkhoahoc;
         courseSelect.value = idkhoahoc;
     }
 
-    courseSelect.addEventListener('change', function () {
-        selectedCourseId = this.value;
-        currentPage = 1;
-        filterAndShow();
-    });
-
+    // courseSelect.addEventListener('change', function () {
+    //     selectedCourseId = this.value;
+    //     currentPage = 1;
+    //     filterAndShow();
+    // });
+    currentPage = 1;
     filterAndShow();
 });
 
+// Hàm nhóm và lọc học viên duy nhất
+function groupByUniqueStudents(data) {
+    const uniqueHocVien = [];
+    const seenIds = new Set();
+
+    data.forEach(item => {
+        if (!seenIds.has(item.idhocvien)) {
+            seenIds.add(item.idhocvien);
+            uniqueHocVien.push(item);
+        }
+    });
+
+    return uniqueHocVien;
+}
+
+// Hàm lọc và hiển thị danh sách học viên
 function filterAndShow() {
-    let filtered = fullData;
+    let filtered = uniqueStudents;
 
     if (selectedCourseId) {
-        filtered = fullData.filter(student => student.idkhoahoc === selectedCourseId);
+        filtered = uniqueStudents.filter(student => student.idkhoahoc === selectedCourseId);
     }
 
     totalPages = Math.ceil(filtered.length / limit);
@@ -54,13 +73,14 @@ function filterAndShow() {
     renderPagination(currentPage, totalPages);
 }
 
+// Hàm render bảng học viên
 function renderTable(students) {
     const container = document.getElementById('student-all');
     if (!students.length) {
         container.innerHTML = `<p style="font-style: italic; color: gray;">Không tìm thấy học viên nào.</p>`;
         return;
     }
-    console.log(students);
+
     const rows = students.map(student => `
         <tr>
             <td>${student.idhocvien}</td>
@@ -83,6 +103,7 @@ function renderTable(students) {
     `;
 }
 
+// Hàm render phân trang
 function renderPagination(currentPage, totalPages) {
     const container = document.getElementById("pagination");
     container.innerHTML = "";
@@ -109,6 +130,7 @@ function renderPagination(currentPage, totalPages) {
     container.appendChild(nextBtn);
 }
 
+// Hàm tạo nút phân trang
 function createPaginationButton(text, enabled, onClick) {
     const btn = document.createElement("button");
     btn.textContent = text;
@@ -118,6 +140,7 @@ function createPaginationButton(text, enabled, onClick) {
     return btn;
 }
 
+// Hàm thay đổi trang
 function changePage(page) {
     currentPage = page;
     filterAndShow();

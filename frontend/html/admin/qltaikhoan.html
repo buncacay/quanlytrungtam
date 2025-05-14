@@ -122,17 +122,45 @@
 
     <!-- JavaScript -->
     <script>
-        $(document).ready(function () {
-            $('input[name="role"]').change(function () {
-                if ($('#student').is(':checked')) {
-                    $('#student-form').slideDown();
-                    $('#teacher-form').slideUp();
-                } else{
-                    $('#teacher-form').slideDown();
-                    $('#student-form').slideUp();
-                }
-            });
-        });
+   
+  $(document).ready(function () {
+    var res = { role: 0 }; // Giá trị giả định là 0 (Học sinh)
+
+    // Gán giá trị cho radio button dựa trên res.role
+    if (res.role === 0) {
+        $('#student').prop('checked', true); // Gán checked cho radio học sinh
+    } else if (res.role === 1) {
+        $('#teacher').prop('checked', true); // Gán checked cho radio giảng viên
+    } else if (res.role === 3) {
+        $('#admin').prop('checked', true); // Gán checked cho radio quản trị viên
+    }
+
+    // Kiểm tra và hiển thị form tương ứng khi radio đã được chọn
+    function toggleForm() {
+        if ($('#student').is(':checked')) {
+            $('#student-form').slideDown(); // Hiển thị form học sinh
+            $('#teacher-form').slideUp();  // Ẩn form giảng viên
+        } else if ($('#teacher').is(':checked')) {
+            $('#teacher-form').slideDown(); // Hiển thị form giảng viên
+            $('#student-form').slideUp();  // Ẩn form học sinh
+        } else {
+            // Ẩn tất cả nếu không chọn gì (ví dụ: radio admin)
+            $('#student-form').slideUp();
+            $('#teacher-form').slideUp();
+        }
+    }
+
+    // Kiểm tra form ban đầu khi load trang
+    toggleForm();
+
+    // Khi người dùng thay đổi radio
+    $('input[name="role"]').change(function () {
+        toggleForm();  // Cập nhật lại form khi radio được thay đổi
+    });
+});
+
+
+
     </script>
 
     <script src="../../js/app.js"></script>
