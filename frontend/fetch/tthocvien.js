@@ -8,6 +8,7 @@ import {
 } from './get.js';
 
 import { addChiTietHocVien } from './add.js';
+import {RemoveHoaDon, removeChiTietHocvien} from './delete.js';
 
 let id = "";
 let khoahocDaDangKy = [];
@@ -119,7 +120,6 @@ function HienThiHoaDon(hoadon) {
             <td>
               <button onclick="editHoaDon(${h.idhoadon})">Edit</button>
               <button onclick="removeHoaDon(${h.idhoadon})">Remove</button>
-              <button onclick="showMoreHoaDon(${h.idhoadon})">Show more</button>
             </td>
           </tr>`).join('')}
       </tbody>
@@ -144,8 +144,9 @@ function HienThiKhoaHoc(data) {
             <td>${kh.idkhoahoc}</td>
             <td>${kh.tenkhoahoc}</td>
             <td>
-              <button onclick="editkhoahoc(${kh.idkhoahoc})">Edit</button>
-              <button onclick="removekhoahoc(${kh.idkhoahoc})">Remove</button>
+          <button onclick="editkhoahoc(${kh.idkhoahoc}, '${kh.images}')">Edit</button>
+
+              <button onclick="removekhoahoc(${kh.idkhoahoc}, ${id})">Remove</button>
             </td>
           </tr>`).join('')}
       </tbody>
@@ -258,19 +259,42 @@ function createPaginationButton(text, enabled, onClick) {
 
 // ======================= Gắn hàm toàn cục =======================
 window.themkhoahoc = themkhoahoc;
-// window.remove = async function () {
-//   if (confirm("Bạn có chắc muốn xóa học viên?")) {
-//     await 
-//   }
-// };
+async function editkhoahoc(id, image){
+  window.location.href=`taovaquanlykhoahoc.html?idkhoahoc=${id}&&images=${image}`
+}
 
+
+async function removeHoaDon(id) {
+  const confirmDelete = confirm("Bạn có chắc chắn muốn xóa hóa đơn này?");
+  if (!confirmDelete) return; // Người dùng chọn 'Hủy'
+
+  const res = await RemoveHoaDon(id);
+  if (res) {
+    alert("Xóa thành công");
+    await renderHoaDonTable(currentPage); // Nếu muốn load lại bảng sau khi xóa
+  } else {
+    alert("Xóa thất bại");
+  }
+}
+
+async function removekhoahoc(idkhoahoc, idhocvien){
+   const confirmDelete = confirm("Bạn có chắc chắn muốn xóa học viên khỏi khóa học này?");
+  if (!confirmDelete) return; // Người dùng chọn 'Hủy'
+
+  const res = await removeChiTietHocvien(idkhoahoc, idhocvien);
+  if (res) {
+    alert("Xóa thành công");
+    await renderHoaDonTable(currentPage); // Nếu muốn load lại bảng sau khi xóa
+  } else {
+    alert("Xóa thất bại");
+  }
+}
 async function editHoaDon(id){
 window.location.href=`hoadon.html?idhoadon=${id}`;
 }
 window.edit = () => window.location.href = `qltaikhoan.html?user=${user}&role=0`;
-window.editkhoahoc = id => alert("Edit khóa học: " + id);
-window.removekhoahoc = id => alert("Remove khóa học: " + id);
+window.editkhoahoc = editkhoahoc;
+window.removekhoahoc = removekhoahoc;
 window.editHoaDon = editHoaDon;
-window.removeHoaDon = id => alert("Remove hóa đơn: " + id);
-window.showMoreHoaDon = id => alert("Chi tiết thêm hóa đơn: " + id);
+window.removeHoaDon = removeHoaDon;
 window.themDiem = themDiem;

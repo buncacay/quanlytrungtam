@@ -117,22 +117,21 @@ function updateChiTiet($hocvien) {
 }
 
 function deleteChiTiet($hocvien) {
-    $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->idhocvien, $data->idkhoahoc)) {
-        $hocvien->idhocvien = $data->idhocvien;
-        $hocvien->idkhoahoc = $data->idkhoahoc;
-     
+   
+if (isset($_GET['idhocvien'], $_GET['idkhoahoc'])) {
+    $hocvien->idhocvien = $_GET['idhocvien'];
+    $hocvien->idkhoahoc = $_GET['idkhoahoc'];
 
-        if ($hocvien->delete()) {
-            echo json_encode(["message" => "Record deleted successfully."]);
-        } else {
-            http_response_code(500);
-            echo json_encode(["message" => "Unable to delete record."]);
-        }
+    if ($hocvien->delete()) {
+        echo json_encode(["message" => "Record deleted successfully."]);
     } else {
-        http_response_code(400);
-        echo json_encode(["message" => "Incomplete data."]);
+        http_response_code(500);
+        echo json_encode(["message" => "Unable to delete record."]);
     }
+} else {
+    http_response_code(400);
+    echo json_encode(["message" => "Missing parameters."]);
+}
 }
 
 

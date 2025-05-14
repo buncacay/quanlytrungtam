@@ -1,4 +1,4 @@
-import { fetchKhoaHoc, fetchHoaDon, fetchAllHocVien } from './get.js';
+import { fetchKhoaHoc, fetchHoaDon, fetchAllHocVien, fetchHoaDonWithId } from './get.js';
 import { addHoaDon } from './add.js';
 import { RemoveHoaDon } from './delete.js';
 import { UpdateHoaDon } from './update.js';
@@ -9,10 +9,19 @@ let isEditing = false;
 let editingId = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
+
+
     await loadHocVienDropdown();
+
     await loadKhoaHocDropdownAndTable();
     await renderHoaDonTable(currentPage);
-
+  const urlParams = new URLSearchParams(window.location.search);
+const idhoadon = urlParams.get('idhoadon');
+if (idhoadon) {
+    const res = await fetchHoaDonWithId(idhoadon);
+    console.log(res);
+    await sua(res); 
+}
     document.getElementById("invoiceForm").addEventListener("submit", tao);
     document.getElementById('btn-search').addEventListener('click', () => {
         currentPage = 1;

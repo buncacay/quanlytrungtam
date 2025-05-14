@@ -93,3 +93,25 @@ export async function removeChiTietNhanVien(data) {
         console.error('Lỗi:', err);
     }
 }
+
+export async function removeChiTietHocvien(data) {
+    try {
+        const res = await fetch('http://localhost/quanlytrungtam/backend/controller/ChitiethocvienController.php?idhocvien=50&idkhoahoc=197', {
+            method: 'DELETE',
+           
+        });
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error('Lỗi từ server:', errorText);
+            throw new Error(errorText);
+        }
+
+        const result = await res.json();
+        
+        
+        return result;
+    } catch (err) {
+        console.error('Lỗi:', err);
+    }
+}
