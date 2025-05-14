@@ -14,14 +14,15 @@ class nhanvien {
     public $chucvu;
     public $tonggioday;
     public $ghichu;
+    public $user;
 
     public function __construct($db) {
         $this->conn = $db;
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " (tennhanvien, trinhdo, chungchi, sdt, diachi, tienthuong, tienphat, chucvu, tonggioday, ghichu,trangthai) 
-                  VALUES (:tennhanvien, :trinhdo, :chungchi, :sdt, :diachi, :tienthuong, :tienphat, :chucvu, :tonggioday, :ghichu, 1)";
+        $query = "INSERT INTO " . $this->table . " (tennhanvien, trinhdo, chungchi, sdt, diachi, tienthuong, tienphat, chucvu, tonggioday, ghichu,trangthai,user) 
+                  VALUES (:tennhanvien, :trinhdo, :chungchi, :sdt, :diachi, :tienthuong, :tienphat, :chucvu, :tonggioday, :ghichu, 1, :user)";
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
@@ -35,7 +36,7 @@ class nhanvien {
         $stmt->bindParam(':chucvu', $this->chucvu);
         $stmt->bindParam(':tonggioday', $this->tonggioday, PDO::PARAM_INT);
         $stmt->bindParam(':ghichu', $this->ghichu);
-
+        $stmt->bindParam(':user', $this->user);
         return $stmt->execute();
     }
 
@@ -60,7 +61,8 @@ class nhanvien {
                   chucvu = :chucvu, 
                   tonggioday = :tonggioday, 
                   ghichu = :ghichu ,
-                   trangthai = :trangthai 
+                   trangthai = :trangthai,
+                   user = :user 
                   WHERE idnhanvien = :idnhanvien";
         $stmt = $this->conn->prepare($query);
 
@@ -77,7 +79,7 @@ class nhanvien {
         $stmt->bindParam(':ghichu', $this->ghichu);
         $stmt->bindParam(':idnhanvien', $this->idnhanvien, PDO::PARAM_INT);
          $stmt->bindParam(':trangthai', $this->trangthai);
-
+         $stmt->bindParam(':user', $this->user);
         return $stmt->execute();
     }
 

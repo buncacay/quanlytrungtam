@@ -51,7 +51,7 @@ function createNhanVien($nhanvien) {
 
     if (isset($data->ghichu, $data->tonggioday, $data->tienphat, $data->chucvu,
               $data->tienthuong, $data->tennhanvien, $data->trinhdo,
-              $data->sdt, $data->chungchi)) {
+              $data->sdt, $data->chungchi, $data->user)) {
 
         $nhanvien->tennhanvien  = $data->tennhanvien;
         $nhanvien->trinhdo      = $data->trinhdo;
@@ -65,6 +65,7 @@ function createNhanVien($nhanvien) {
         $nhanvien->ghichu       = $data->ghichu;
         $nhanvien->trangthai       = $data->trangthai;
 
+        $nhanvien->user       = $data->user;
         if ($nhanvien->create()) {
             echo json_encode(["message" => "Record created successfully."]);
         } else {
@@ -95,6 +96,7 @@ function updateNhanVien($nhanvien) {
         $nhanvien->tonggioday   = $data->tonggioday;
         $nhanvien->ghichu       = $data->ghichu;
         $nhanvien->trangthai       = $data->trangthai;
+        $nhanvien->user       = $data->user;
 
         if ($nhanvien->update()) {
             echo json_encode(["message" => "Record updated successfully."]);

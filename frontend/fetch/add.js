@@ -20,25 +20,15 @@ export async function addKhoaHoc(data) {
 }
 
 export async function addTaiKhoan(data) {
-   
-    try {
-        const res = await fetch('http://localhost/quanlytrungtam/backend/controller/TaikhoanController.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:JSON.stringify(data)
-        });
-        if (!res.ok) {
-            const err = await res.text();
-            alert(err);
-            throw new Error('Lỗi: ' + err);
-        }
-        // return await res.json();
-        return await res.text();
-    } catch (error) {
-        alert("Lỗi khi thêm khóa học: " + error.message);
-        console.log(error.message);
-    }
+    return fetch('http://localhost/quanlytrungtam/backend/controller/TaiKhoanController.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
 }
+
 
 export async function addDiem(data) {
    
@@ -97,10 +87,10 @@ export async function addThongTinGiangVien(data) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
-        if (!res.ok) throw new Error('Lỗi: ' + await res.text());
+        if (!res.ok) console.log('Lỗi: ' + await res.text());
         return await res.json();
     } catch (error) {
-        alert("Lỗi khi thêm chi tiết giảng viên: " + error.message);
+        console.log("Lỗi khi thêm chi tiết giảng viên: " + error.message);
     }
 }
 

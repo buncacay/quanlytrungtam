@@ -18,47 +18,61 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function handleFormSubmit(e) {
     try {
-    e.preventDefault();
+        e.preventDefault();
 
-    const username = document.getElementById('name').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm-password').value;
-    const role = document.querySelector('input[name="role"]:checked')?.value;
+        const username = document.getElementById('name').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        const role = document.querySelector('input[name="role"]:checked')?.value;
 
-    if (!role) return alert("Vui lòng chọn chức vụ");
-    if (password !== confirmPassword) return alert("Mật khẩu không khớp");
+        if (!role) return alert("Vui lòng chọn chức vụ");
+        if (!username || !password) return alert("Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu");
+        if (password !== confirmPassword) return alert("Mật khẩu không khớp");
 
-    const taikhoanData = {
-        user: username,
-        pass: password,
-        role: role,
-        created_at: new Date().toISOString().slice(0, 10),
-        trangthai:1
-    };
-    console.log(taikhoanData);
-    const result = await addTaiKhoan(taikhoanData);
-    console.log(result);
-    if (!result || !result.success) {
-        return alert("Tạo tài khoản thất bại!");
+        const taikhoanData = {
+            user: username,
+            pass: password,
+            role: role,
+            created_at: new Date().toISOString().slice(0, 10),
+            trangthai: 1
+        };
+
+        const response = await addTaiKhoan(taikhoanData);
+
+        // Nếu user đã tồn tại
+        if (response.status === 409) {
+            const res = await response.json();
+            alert(res.message || "Tên đăng nhập đã tồn tại");
+            return;
+        }
+
+        // Nếu lỗi khác
+        if (!response.ok) {
+            const res = await response.json();
+            alert(res.message || "Đã xảy ra lỗi khi tạo tài khoản");
+            return;
+        }
+
+        // Nếu thành công
+        const result = await response.json();
+        console.log(result);
+
+        if (role === 'student') {
+            await handleaddStudent(username);
+        } else if (role === 'teacher') {
+            await handleAddNhanVien(username);
+        }
+
+        alert("Tạo tài khoản thành công!");
+        // Có thể reset form tại đây nếu cần
+        // document.getElementById('add-form').reset();
+
+    } catch (error) {
+        console.error("Lỗi:", error);
+        alert("Đã xảy ra lỗi hệ thống.");
     }
-
-    // Tiếp tục tạo thông tin học viên hoặc giảng viên
-    alert(role);
-    if (role === 'student') {
-        alert("chao ca nha");
-        await handleaddStudent(username);
-    } else if (role === 'teacher') {
-        await handleAddNhanVien(username);
-    }
-
-    alert("Tạo tài khoản thành công!");
-    
-    }
-    catch (error){
-        alert(error);
-    }
-  
 }
+
 
 async function handleaddStudent(user) {
     const hoten = document.getElementById('fullname').value;

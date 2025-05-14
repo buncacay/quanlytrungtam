@@ -57,18 +57,11 @@ function createTaiKhoan($taikhoan) {
         return;
     }
 
-    // Kiểm tra xem các trường dữ liệu bắt buộc có được cung cấp không
+    // Kiểm tra dữ liệu bắt buộc
     $missing_fields = [];
-
-    if (empty($data->user)) {
-        $missing_fields[] = "user";
-    }
-    if (empty($data->pass)) {
-        $missing_fields[] = "pass";
-    }
-    if (empty($data->role)) {
-        $missing_fields[] = "role";
-    }
+    if (empty($data->user)) $missing_fields[] = "user";
+    if (empty($data->pass)) $missing_fields[] = "pass";
+    if (empty($data->role)) $missing_fields[] = "role";
 
     if (!empty($missing_fields)) {
         http_response_code(400);
@@ -79,21 +72,34 @@ function createTaiKhoan($taikhoan) {
         return;
     }
 
-    // Gán giá trị nếu đầy đủ
+    // Gán giá trị
     $taikhoan->user = $data->user;
     $taikhoan->pass = $data->pass;
     $taikhoan->role = $data->role;
     $taikhoan->date = date('Y-m-d H:i:s');
 
+    // Kiểm tra trùng user
+    if ($taikhoan->exists()) {
+        http_response_code(409); // Conflict
+        echo json_encode(["message" => "Tên đăng nhập đã tồn tại"]);
+        return;
+    }
+
     // Gọi hàm create
     if ($taikhoan->create()) {
         http_response_code(201); // Created
-        echo json_encode(["message" => "tai khoan da duoc tao"]);
+        echo json_encode([
+            "role" => $taikhoan->role ?? null,
+            "pass" => $taikhoan->pass ?? null,
+            "user" => $taikhoan->user ?? null,
+            "created_at" => $taikhoan->date ?? null,
+        ]);
     } else {
         http_response_code(500);
-        echo json_encode(["message" => "khong the tao tai khoan"]);
+        echo json_encode(["message" => "Không thể tạo tài khoản"]);
     }
 }
+
 
 
 // Cập nhật tài khoản
