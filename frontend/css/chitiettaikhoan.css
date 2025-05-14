@@ -1,0 +1,22 @@
+/* Phần chính của trang */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Bọc toàn bộ nội dung (ngoài sidebar & header) */
+.cards-container {
+    margin-left: 300px; /* bù lại chiều rộng của sidebar */
+    padding: 100px 30px 30px 30px; /* 100px để tránh che bởi header */
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .cards-container {
+        margin-left: 0;
+        padding: 120px 15px 30px 15px;
+    }
+}

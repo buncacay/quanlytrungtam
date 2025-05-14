@@ -3,82 +3,83 @@ import { fetchKhoaHocPhanTrang } from './get.js';
 
 let currentPage = 1;
 let totalPages = 1;
+let currentFilteredData = []; // Dữ liệu hiện tại (gốc hoặc đã lọc)
 
-// Gọi ban đầu khi load trang
+// Load dữ liệu ban đầu
 document.addEventListener('DOMContentLoaded', async function () {
-    await ShowAll();
+    await ShowAll(); // Gọi hiển thị khi trang load
 });
 
-// Thêm phần tìm kiếm
+// Gắn sự kiện lọc
 document.getElementById('search').addEventListener('input', async function () {
     await filterSchedule();
 });
-
 document.getElementById('startDate').addEventListener('input', async function () {
     await filterSchedule();
 });
-
 document.getElementById('endDate').addEventListener('input', async function () {
     await filterSchedule();
 });
-
 document.getElementById('status').addEventListener('change', async function () {
     await filterSchedule();
 });
 
-// Lấy dữ liệu lọc từ giao diện
-async function ShowAll(page = 1, filters = {}) {
-    const response = await fetchKhoaHocPhanTrang(page, 5, filters);
-
-    const students = response.data;
-    currentPage = response.page || 1;
-    totalPages = Math.ceil(response.total / 5) || 1;
-
-    await HienThiThongTin(currentPage, totalPages, students);
-}
-
+// Lấy bộ lọc từ form
 function getFilters() {
-    const search = document.getElementById('search')?.value || '';  // Tìm kiếm theo tên khóa học
-    const startDate = document.getElementById('startDate')?.value || '';  // Ngày bắt đầu
-    const endDate = document.getElementById('endDate')?.value || '';  // Ngày kết thúc
-    const status = document.getElementById('status')?.value || '';  // Trạng thái
-
-    return { search, startDate, endDate, status };
+    return {
+        search: document.getElementById('search')?.value || '',
+        startDate: document.getElementById('startDate')?.value || '',
+        endDate: document.getElementById('endDate')?.value || '',
+        status: document.getElementById('status')?.value || ''
+    };
 }
 
+// Hàm phân trang dữ liệu từ mảng
+function getPaginatedData(data, page, pageSize) {
+    const start = (page - 1) * pageSize;
+    return data.slice(start, start + pageSize);
+}
+
+// Gọi lại khi lọc
 async function filterSchedule() {
-    const filters = getFilters(); // Lấy các giá trị bộ lọc từ giao diện
-
-    // Gọi API lấy dữ liệu khóa học theo phân trang (2 tham số: trang và số lượng mỗi trang)
-    const response = await fetchKhoaHocPhanTrang(1, 1000); // Lấy hết dữ liệu (không phân trang) để lọc
-
+    const filters = getFilters();
+    const response = await fetchKhoaHocPhanTrang(1, 1000); // Lấy toàn bộ để lọc
     let filteredData = response.data;
 
-    // Sử dụng filter để lọc theo điều kiện
+    // Lọc theo điều kiện
     filteredData = filteredData.filter(khoahoc => {
         const matchesSearch = khoahoc.tenkhoahoc.toLowerCase().includes(filters.search.toLowerCase());
         const matchesStartDate = filters.startDate ? new Date(khoahoc.ngaybatdau) >= new Date(filters.startDate) : true;
         const matchesEndDate = filters.endDate ? new Date(khoahoc.ngayketthuc) <= new Date(filters.endDate) : true;
         const matchesStatus = filters.status ? khoahoc.trangthai == filters.status : true;
-
         return matchesSearch && matchesStartDate && matchesEndDate && matchesStatus;
     });
 
-    // Reset về trang 1 khi thay đổi bộ lọc
+    currentFilteredData = filteredData;
     currentPage = 1;
-
-    // Cập nhật lại số lượng trang
     totalPages = Math.ceil(filteredData.length / 5);
-
-    // Hiển thị kết quả sau khi lọc
-    await HienThiThongTin(currentPage, totalPages, filteredData);
+    const paginatedData = getPaginatedData(currentFilteredData, currentPage, 5);
+    await HienThiThongTin(currentPage, totalPages, paginatedData);
 }
-
 window.filterSchedule = filterSchedule;
 
-// Hiển thị thông tin khóa học
+// Hiển thị tất cả dữ liệu
+async function ShowAll(page = 1) {
+    currentPage = page;
+
+    if (currentFilteredData.length === 0) {
+        // Lần đầu load: lấy toàn bộ dữ liệu (không lọc)
+        const response = await fetchKhoaHocPhanTrang(1, 1000);
+        currentFilteredData = response.data;
+    }
+
+    totalPages = Math.ceil(currentFilteredData.length / 5);
+    const paginatedData = getPaginatedData(currentFilteredData, page, 5);
+    await HienThiThongTin(page, totalPages, paginatedData);
+}
+
+// Hiển thị danh sách khóa học
 async function HienThiThongTin(page, total, data) {
-    console.log(data);
     const all = document.getElementById('course-list-section');
     all.innerHTML = `
         <h3>Danh Sách Khóa Học</h3>
@@ -97,13 +98,12 @@ async function HienThiThongTin(page, total, data) {
             <tbody id="body-details"></tbody>
         </table>
     `;
+
     const body = document.getElementById('body-details');
     body.innerHTML = "";
 
     data.forEach(khoahoc => {
-        let statusText = "";  // Khai báo statusText trước khi sử dụng
-
-        // Kiểm tra trạng thái và gán giá trị cho statusText
+        let statusText = "";
         if (khoahoc.trangthai === 1 || khoahoc.trangthai === '1') {
             statusText = "Đang giảng dạy";
         } else if (khoahoc.trangthai === 2 || khoahoc.trangthai === '2') {
@@ -130,13 +130,13 @@ async function HienThiThongTin(page, total, data) {
     renderPagination(page, total);
 }
 
-// Hàm chuyển đổi định dạng ngày
+// Định dạng ngày kiểu Việt Nam
 function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString('vi-VN');
 }
 
-// Chỉnh sửa khóa học
+// Chuyển sang trang chỉnh sửa
 function edit(id, images) {
     window.location.href = `taovaquanlykhoahoc.html?idkhoahoc=${id}&&images=${images}`;
 }
@@ -147,7 +147,7 @@ async function remove(id) {
     if (confirm("Bạn có muốn xóa khóa học này không?")) {
         const result = await RemoveKhoaHoc(id);
         if (result) {
-            await ShowAll();
+            await ShowAll(currentPage); // Refresh trang hiện tại
         }
     }
 }

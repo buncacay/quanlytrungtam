@@ -8,21 +8,21 @@
 </head>
 <body>
     <div class="header">
-        <strong>TRUNG TÂM NGOẠI NGỮ HÀNG HẢI</strong>
+        <strong></strong>
     </div>
     <div class="container">
         <div class="login-box">
-            <img src="anhlogo.png" alt="Logo" class="logo" width="100">
             <h2>Đăng nhập hệ thống</h2>
             <form>
-                <input type="text" placeholder="Tên đăng nhập" required>
-                <input type="password" placeholder="Mật khẩu" required>
-                <button type="submit" class="btn">ĐĂNG NHẬP</button>
+                <input type="text" placeholder="Tên đăng nhập" id="user" required>
+                <input type="password" placeholder="Mật khẩu" id="pass" required>
+                <button type="submit" class="btn" id="login">ĐĂNG NHẬP</button>
             </form>
             <div class="forgot-password">
                 <a href="#">Quên mật khẩu? Nhấn vào đây</a>
             </div>
         </div>
     </div>
+    <script type="module" src="../../fetch/dangnhap.js"></script>
 </body>
 </html>

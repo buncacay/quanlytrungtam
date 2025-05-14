@@ -1,3 +1,4 @@
+/* Sidebar với nền Gradient */
 /* Sidebar */
 .sidebar {
     width: 300px;
@@ -16,9 +17,11 @@
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Hiệu ứng mượt */
 }
 
+
+/* Logo */
 /* Logo */
 .sidebar .logo {
-    font-size: 28px; /* Chữ lớn hơn */
+    font-size: 28px; /* Nổi bật hơn */
     font-weight: bold;
     color: #FFFACD; /* Màu vàng nhạt tạo sự tương phản */
     text-align: center;
@@ -39,7 +42,7 @@
     }
 }
 
-/* Menu */
+/* Danh sách menu */
 .sidebar ul {
     list-style: none;
     padding: 0;
@@ -47,16 +50,16 @@
 }
 
 .sidebar ul li {
-    margin: 20px 0; /* Tạo khoảng cách đều */
+    margin: 20px 0; /* Khoảng cách lớn hơn giữa các mục */
 }
 
 .sidebar ul li a {
-    color: #333; /* Chữ màu tối nổi bật */
+    color: #333;
     text-decoration: none;
     display: block;
-    padding: 15px 20px; /* Tăng padding để thoải mái hơn */
+    padding: 15px 20px; /* Tăng padding cho thoải mái */
     border-radius: 12px; /* Bo góc mềm mại */
-    background: rgba(255, 255, 255, 0.8); /* Nền bán trong suốt */
+    background: rgba(255, 255, 255, 0.9); /* Nền bán trong suốt */
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
     backdrop-filter: blur(10px); /* Làm mờ nền */
     transition: all 0.4s ease; /* Hiệu ứng chuyển đổi mượt */
@@ -66,15 +69,15 @@
     overflow: hidden;
 }
 
-/* Hiệu ứng hover */
+/* Hiệu ứng hover cho menu */
 .sidebar ul li a:hover {
-    background: linear-gradient(145deg, #FF7F50, #FF6347); /* Gradient khi hover */
-    color: #fff; /* Chữ trắng nổi bật */
+    background: linear-gradient(145deg, #FF7F50, #FF6347); /* Gradient màu cam và đỏ */
+    color: #fff;
     transform: scale(1.05); /* Phóng to nhẹ */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Bóng đổ đậm hơn */
 }
 
-/* Hiệu ứng dòng highlight */
+/* Hiệu ứng highlight dòng */
 .sidebar ul li a::before {
     content: "";
     position: absolute;
@@ -98,22 +101,22 @@
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-    background-color: #FF7F50; /* Màu cam */
+    background-color: #FF7F50; /* Màu thanh cuộn cam */
     border-radius: 5px;
-    border: 2px solid #ffffff; /* Viền trắng */
+    border: 2px solid #ffffff; /* Viền trắng xung quanh */
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-    background-color: #FF6347; /* Màu đậm hơn khi hover */
+    background-color: #FF6347; /* Đậm hơn khi hover */
 }
 
 .sidebar::-webkit-scrollbar-track {
     background-color: #f8f9fa;
 }
 
-/* Hiệu ứng trượt sidebar */
+/* Hiệu ứng xuất hiện sidebar */
 .sidebar.open {
-    transform: translateX(0); /* Hiệu ứng trượt từ trái */
+    transform: translateX(0); /* Hiệu ứng trượt từ bên trái */
     opacity: 1;
 }
 
@@ -121,16 +124,14 @@
     transform: translateX(-100%);
     opacity: 0;
 }
-
-/* Responsive cho màn hình nhỏ */
 @media (max-width: 768px) {
-    .sidebar {
-        width: 100%; /* Chiếm toàn bộ chiều rộng màn hình */
-        height: auto;
-        position: relative;
-    }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
 
-    .main {
-        margin-left: 0;
-    }
-}
+  .main {
+    margin-left: 0;
+  }
+}   

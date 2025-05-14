@@ -10,70 +10,47 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px; /* Tăng chiều cao header */
+    height: 70px;
     z-index: 1000;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
     border-bottom: 3px solid rgba(255, 255, 255, 0.3);
     font-family: 'Poppins', sans-serif;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
-    box-sizing: border-box;
-    overflow: visible; /* Đảm bảo không cắt nội dung */
 }
 
-.header:hover {
-    background: linear-gradient(90deg, #f7b733, #fc4a1a); /* Đảo gradient khi hover */
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
-}
-
-/* User Info */
-.user-info {
-    margin-left: auto; /* Đẩy user-info sang phải */
-    font-size: 16px;
-    font-weight: bold;
-    margin-right: 20px;
+.header-container {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 15px; /* Tăng khoảng cách giữa tên và mã */
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    white-space: nowrap; /* Đảm bảo chữ không xuống dòng */
+    width: 100%;
 }
 
-.user-info span {
-    color: #fff;
-    transition: color 0.3s ease;
-}
-
-.user-info span:hover {
-    color: #ffebcc; /* Màu cam nhạt khi hover */
-}
-
-
-/* Buttons */
+/* Điều chỉnh nhóm nút sang bên phải */
 .header .actions {
     display: flex;
-    gap: 15px;
+    gap: 20px;
+    margin-left: auto; /* Đẩy toàn bộ nhóm nút sang phải */
+    padding-right: 20px;
 }
 
 .header .btn {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.85);
     color: #fc4a1a;
     border: none;
-    padding: 10px 20px;
-    border-radius: 30px;
+    padding: 12px 30px;
+    border-radius: 50px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;
     text-transform: uppercase;
     transition: all 0.4s ease-in-out;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .header .btn:hover {
     background: #fc4a1a;
     color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(252, 74, 26, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(252, 74, 26, 0.3);
 }
 
 .header .btn:active {
@@ -81,19 +58,120 @@
     box-shadow: 0 3px 8px rgba(252, 74, 26, 0.2);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .header {
-        height: 60px;
-        padding: 5px 15px;
-    }
 
-    .user-info span {
-        font-size: 14px;
-    }
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    justify-content: center;
+    align-items: center;
+    z-index: 1300;
+    animation: fadeIn 0.5s ease-in-out;
+}
 
-    .header .btn {
-        padding: 8px 15px;
-        font-size: 12px;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
     }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #f7b733, #fc4a1a);
+    padding: 40px 30px;
+    border-radius: 20px;
+    width: 400px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    position: relative;
+    animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-content .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-content .close:hover {
+    color: #f7b733;
+}
+
+.modal-content h2 {
+    font-size: 24px;
+    color: white;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-content input {
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content input:focus {
+    border: 2px solid #fc4a1a;
+    box-shadow: 0 0 8px rgba(252, 74, 26, 0.6);
+    outline: none;
+}
+
+.modal-content button {
+    background: white;
+    color: #fc4a1a;
+    border: none;
+    padding: 15px 0;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content button:hover {
+    background: #fc4a1a;
+    color: white;
+    box-shadow: 0 10px 25px rgba(252, 74, 26, 0.5);
+    transform: translateY(-4px);
+}
+
+.modal-form.hidden {
+    display: none;
 }

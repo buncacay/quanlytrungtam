@@ -13,6 +13,8 @@ class KhoaHoc {
     public $giatien;
     public $giamgia;
     public $conn;
+    public $ngaybatdau;
+    public $ngayketthuc;
     public $table = "khoahoc";
 
     public function __construct($db) {
@@ -32,8 +34,8 @@ public function create() {
     }
 
     $query = "INSERT INTO " . $this->table . " 
-        (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc, mota, images, giatien, giamgia) 
-        VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota, :images, :giatien, :giamgia)";
+        (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc, mota, images, giatien, giamgia, ngaybatdau, ngayketthuc) 
+        VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota, :images, :giatien, :giamgia, :ngaybatdau, :ngayketthuc)";
 
     $stmt = $this->conn->prepare($query);
 
@@ -46,6 +48,8 @@ public function create() {
     $images      = $this->images;
     $giatien     = $this->giatien;
     $giamgia     = $this->giamgia;
+    $ngaybatdau     = $this->ngaybatdau;
+    $ngayketthuc     = $this->ngayketthuc;
 
     $stmt->bindParam(':tenkhoahoc', $tenkhoahoc);
     $stmt->bindParam(':thoigianhoc', $thoigianhoc);
@@ -56,6 +60,8 @@ public function create() {
     $stmt->bindParam(':images', $images);
     $stmt->bindParam(':giatien', $giatien);
     $stmt->bindParam(':giamgia', $giamgia);
+    $stmt->bindParam(':ngaybatdau', $ngaybatdau);
+    $stmt->bindParam(':ngayketthuc', $ngayketthuc);
 
     if ($stmt->execute()) {
         $this->idkhoahoc = $this->conn->lastInsertId();

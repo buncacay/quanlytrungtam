@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider Interface</title>
+    <link rel="stylesheet" href="../../css/trangchu.css">
+    <link rel="stylesheet" href="../../css/chinh.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="header"></div>
+    <div id="sidebar"></div>
+    <div class="main">
+        <section class="search-section">
+            <form action="#" method="GET" class="search-form">
+                <input type="text" id="course-search" name="course" placeholder="Tìm kiếm tên khóa học..." class="search-input">
+                <button type="submit" class="search-button">Tìm kiếm</button>
+            </form>
+        </section>
+        <section class="intro-section" id="all">
+            <!-- Kết quả tìm kiếm sẽ được hiển thị tại đây -->
+        </section>
+        
+             <div id="pagination-container">
+    <button id="prevPage">Trước</button>
+    <span id="currentPage">Trang 1</span>
+    <button id="nextPage">Sau</button>
+</div>
+
+    </div>
+    <script src="../../js/app_user.js"></script>
+    <script type="module" src="../../fetch/trangchuuser.js"></script>
+</body>
+</html>

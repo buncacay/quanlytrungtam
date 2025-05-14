@@ -54,6 +54,23 @@ export async function UpdateDiem(data){
     return true;
 } 
 
+export async function UpdateTaiKhoan(data){
+    alert("chay alrt");
+    const res = await fetch('http://localhost/quanlytrungtam/backend/controller/taikhoancontroller.php',{
+        method:'PUT',
+        headers:{
+             "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+
+    });
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
+
+    alert("Cập nhật thành công!");
+    return true;
+}
 
 export async function UpdateHoaDon(data){
     alert("chay alrt");

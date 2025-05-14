@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin tài khoản giáo viên</title>
+    <link rel="stylesheet" href="../../css/tkgiaovien.css">
+    <link rel="stylesheet" href="../../css/chinh.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div id="header"></div>
+<div id="sidebar">
+    <ul>
+        <li><button id="combo2025">Tài khoản giáo viên</button></li>
+    </ul>
+</div>
+  <div class="main">
+<div class="account-container">
+    <h1>Thông tin tài khoản giáo viên</h1>
+    <div class="account-details">
+        <h2>Thông tin cá nhân</h2>
+        <div class="form-group">
+            <label for="teacher-name">Họ và Tên:</label>
+            <input type="text" id="teacher-name" value="Nguyễn Văn A">
+        </div>
+        <div class="form-group">
+            <label for="teacher-phone">Số điện thoại:</label>
+            <input type="text" id="teacher-phone" value="0123456789">
+        </div>
+        <div class="form-group">
+            <label for="teacher-certification">Chứng chỉ:</label>
+            <input type="text" id="teacher-certification" value="TESOL">
+        </div>
+        <div class="form-group">
+            <label for="teacher-degree">Trình độ:</label>
+            <input type="text" id="teacher-degree" value="Thạc sĩ Ngôn ngữ Anh">
+        </div>
+        <button class="save-btn">Lưu thay đổi</button>
+    </div>
+
+    <!-- Quản lý khóa học -->
+    <div class="course-management">
+        <h2>Quản lý khóa học</h2>
+        <ul>
+            <li>Khóa học 1: Luyện thi TOEIC 2025 <button class="btn" onclick="viewStudents()">Xem chi tiết</button></li>
+            <li>Khóa học 2: Giao tiếp nâng cao <button class="btn" onclick="viewStudents()">Xem chi tiết</button></li>
+            <li>Khóa học 3: IELTS Intensive <button class="btn" onclick="viewStudents()">Xem chi tiết</button></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<script>
+    function viewStudents() {
+        window.location.href = "danhsachsinhvien.html"; // 
+    }
+</script>
+</body>
+    <script src="../../js/app_user.js"></script>
+</html>

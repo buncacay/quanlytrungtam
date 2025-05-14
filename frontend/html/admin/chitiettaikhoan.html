@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Tài khoản</title>
+     <link rel="stylesheet" href="../../css/chitiettaikhoan.css">
+    <link rel="stylesheet" href="../../css/chinh.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* CSS của bạn */
+    </style>
+</head>
+<body>
+    <h2>Quản lý Tài khoản</h2>
+    <div id="header"></div>
+    <div id="sidebar"></div>
+    <div class="cards-container">
+        <div class="filters">
+            <input type="text" id="search-name" placeholder="Tìm kiếm theo tên...">
+            <select id="role-filter">
+                <option value="">-- Lọc theo chức vụ --</option>
+                <option value="hocsinh">Học sinh</option>
+                <option value="giangvien">Giảng viên</option>
+                <option value="admin">Quản trị viên</option>
+            </select>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Họ tên</th>
+                    <th>Tài khoản</th>
+                    <th>Chức vụ</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody id="account-list">
+                <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+            </tbody>
+        </table>
+
+        <div id="pagination"></div>
+
+    <!-- Modal thêm/sửa tài khoản -->
+    <div id="account-modal" style="display: none;">
+        <form id="account-form">
+            <input type="hidden" id="account-id">
+            <input type="text" id="account-name" placeholder="Họ tên" required>
+            <input type="text" id="account-username" placeholder="Tài khoản" required>
+            <select id="account-role" required>
+                <option value="hocsinh">Học sinh</option>
+                <option value="giangvien">Giảng viên</option>
+                <option value="admin">Quản trị viên</option>
+            </select>
+            <button type="submit">Lưu</button>
+            <button type="button" onclick="closeModal()">Đóng</button>
+        </form>
+    </div>
+    </div>
+
+    
+
+    <script src="../../js/app.js"></script>
+    <script type="module" src="../../fetch/chitiettaikhoan.js"></script>
+</body>
+</html>

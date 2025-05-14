@@ -37,6 +37,40 @@ export async function fetchChiTiethocvienVoiIdKhocHoc(id) {
     return data;
 }
 
+export async function fetchTaiKhoan(user) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/taikhoanController.php?username=${user}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+
+export async function fetchTaiKhoanHocvien(user) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/HocvienController.php?user=${user}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+export async function fetchTaiKhoanGiangVien(user) {
+    const url = `http://localhost/quanlytrungtam/backend/controller/NhanVienController.php?user=${user}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+
+export async function fetchAllTaiKhoan() {
+    const url = `http://localhost/quanlytrungtam/backend/controller/taikhoanController.php`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
 
 export async function fetchKhoaHoc() {
     const url = `http://localhost/quanlytrungtam/backend/controller/KhoahocController.php`;

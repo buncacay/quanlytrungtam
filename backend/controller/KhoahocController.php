@@ -152,6 +152,8 @@ function createKhoaHoc($khoahoc) {
     $khoahoc->lichhoc = $data->lichhoc;
     $khoahoc->diadiemhoc = $data->diadiemhoc;
     $khoahoc->giatien = $data->giatien;
+     $khoahoc->ngaybatdau = $data->ngaybatdau;
+    $khoahoc->ngayketthuc = $data->ngayketthuc;
     $khoahoc->giamgia = $data->giamgia ?? null;
     $khoahoc->mota = $data->mota ?? null;
 
@@ -167,7 +169,9 @@ function createKhoaHoc($khoahoc) {
                 "mota" => $khoahoc->mota,
                 "images" => $khoahoc->images,
                 "giatien" => $khoahoc->giatien,
-                "giamgia" => $khoahoc->giamgia
+                "giamgia" => $khoahoc->giamgia,
+                "ngaybatdau" => $khoahoc->ngaybatdau,
+                "ngayketthuc" => $khoahoc->ngayketthuc
             
            
         ]);

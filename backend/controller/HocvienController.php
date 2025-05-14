@@ -21,32 +21,52 @@ $hocvien = new hocvien($conn);
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
-    case 'GET':
-        if (isset($_GET['idhocvien'])) {
-            $id = intval($_GET['idhocvien']);
-            $data = $hocvien->showById($id);
-            if ($data) {
-                echo json_encode($data);
-            } else {
-                http_response_code(404);
-                echo json_encode(["message" => "Record not found."]);
-            }
-        } else {
-            $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
-            $offset = ($page - 1) * $limit;
-            $total = ceil($hocvien->countAll() / $limit); 
-            $result = $hocvien->read($limit, $offset);
-           
+   case 'GET':
+    // Kiểm tra nếu có tham số 'user'
+    if (isset($_GET['user'])) {
+        $user = $_GET['user'];  // Lấy giá trị 'user' từ GET
+        $data = $hocvien->taikhoangiangvien($user);  // Lấy thông tin giảng viên
 
-            echo json_encode([
-                "data" => $result,
-                "total" => $total,
-                "page" => $page,
-                "limit" => $limit
-            ]);
+        if ($data) {
+            echo json_encode($data);  // Trả về dữ liệu giảng viên
+        } else {
+            http_response_code(404);  // Không tìm thấy dữ liệu
+            echo json_encode(["message" => "Record not found."]);
         }
-        break;
+    }
+    // Kiểm tra nếu có tham số 'idhocvien'
+    else if (isset($_GET['idhocvien'])) {
+        $id = intval($_GET['idhocvien']);  // Lấy giá trị 'idhocvien' từ GET
+        $data = $hocvien->showById($id);  // Lấy thông tin học viên theo ID
+
+        if ($data) {
+            echo json_encode($data);  // Trả về dữ liệu học viên
+        } else {
+            http_response_code(404);  // Không tìm thấy dữ liệu
+            echo json_encode(["message" => "Record not found."]);
+        }
+    }
+    // Nếu không có 'user' và 'idhocvien', trả về tất cả học viên với phân trang
+    else {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;  // Lấy số trang
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;  // Lấy số bản ghi mỗi trang
+        $offset = ($page - 1) * $limit;  // Tính vị trí bắt đầu của bản ghi
+
+        // Tính tổng số trang
+        $total = ceil($hocvien->countAll() / $limit);
+
+        // Lấy danh sách học viên
+        $result = $hocvien->read($limit, $offset);
+
+        echo json_encode([
+            "data" => $result,
+            "total" => $total,
+            "page" => $page,
+            "limit" => $limit
+        ]);
+    }
+    break;
+
 
     case 'POST':
         createHocVien($hocvien);

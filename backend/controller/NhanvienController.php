@@ -18,9 +18,34 @@ $nhanvien = new nhanvien($conn);
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
-    case 'GET':
-        getNhanVien($nhanvien);
-        break;
+   
+   case 'GET':
+    if (isset($_GET['user'])) {
+        $user = $_GET['user'];  // Lấy giá trị 'user' từ GET
+        // Gọi phương thức taikhoangiangvien với tham số user và lấy kết quả
+        $result = $nhanvien->taikhoangiangvien($user); 
+
+        // Nếu có kết quả, trả về thông tin nhân viên
+        if ($result) {
+            echo json_encode([
+                $result
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Không tìm thấy nhân viên'
+            ]);
+        }
+    } else {
+        // Nếu không có tham số 'user', gọi getNhanVien để lấy tất cả nhân viên
+        $result = $nhanvien->getNhanVien();  // Gọi hàm getNhanVien để lấy dữ liệu
+        echo json_encode([
+             $result
+        ]);
+    }
+    break;
+
+
 
     case 'POST':
         createNhanVien($nhanvien);
@@ -63,7 +88,7 @@ function createNhanVien($nhanvien) {
         $nhanvien->chucvu       = $data->chucvu;
         $nhanvien->tonggioday   = $data->tonggioday;
         $nhanvien->ghichu       = $data->ghichu;
-        $nhanvien->trangthai       = $data->trangthai;
+        $nhanvien->trangthai       = $data->trangthai ?? 1;
 
         $nhanvien->user       = $data->user;
         if ($nhanvien->create()) {

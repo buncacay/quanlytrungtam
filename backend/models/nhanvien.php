@@ -106,6 +106,18 @@ class nhanvien {
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
     }
+
+    public function taikhoangiangvien($user) {
+    $query = "SELECT * FROM " . $this->table . " WHERE user = :user";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':user', $user);  // Sử dụng tham số $user thay vì $this->user
+    $stmt->execute();
+
+    // Fetch all rows
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
     
 }
 ?>

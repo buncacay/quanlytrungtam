@@ -11,23 +11,7 @@ body {
   background: linear-gradient(to bottom, #fffaf0, #f0f8ff); /* Màu nền sáng nhẹ nhàng */
   color: #333;
   line-height: 1.6;
-  padding-top: 80px; /* Khoảng cách cho header fixed */
-}
-
-.main {
-  margin-left: 300px; /* Điều chỉnh để không bị che bởi sidebar */
-  margin-top: 60px; /* Khoảng cách dưới header */
-  padding: 20px;
-  box-sizing: border-box;
-  background: #ffffff;
-  z-index: 1;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  animation: fade-in 1.2s ease-in-out;
-  width: 80%; /* Đặt width là 80% để thu nhỏ phần main */
-  max-width: 1200px; /* Giới hạn kích thước tối đa nếu cần */
-  margin-left: auto; /* Căn giữa */
-  margin-right: auto; /* Căn giữa */
+  padding-top: 0; /* Khoảng cách cho header fixed */
 }
 
 /* Intro Section */

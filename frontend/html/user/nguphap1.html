@@ -5,111 +5,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course Details</title>
-    <link rel="stylesheet" href="../../css/nguphap1.css">
+          <link rel="stylesheet" href="../../css/nguphap1.css">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-
 <body>
     <div id="header"></div>
     <div id="sidebar"></div>
-
     <div class="main">
         <div class="container">
-            <div class="course-header">
-                <h1>Ngữ pháp Tiếng Anh tinh gọn (2025)</h1>
-                <h1>Ngữ pháp Tiếng Anh tinh gọn (2025)</h1>
-                <h1>Ngữ pháp Tiếng Anh tinh gọn (2025)</h1>
+            <div id="tongquan">
+                <!-- Nội dung tổng quan khóa học -->
             </div>
 
-            <div class="content">
-                <div class="left">
-                    <div class="course-description">
-                        <p>
-                            <strong>Ngữ pháp Tiếng Anh tinh gọn (2025):</strong> Bao gồm những chủ điểm
-                            <span class="highlight">Ngữ pháp quan trọng nhất</span>,
-                            đã xuất hiện trong đề thi minh họa môn Tiếng Anh năm 2025
-                            (Công bố ngày 18/10/2024). Khóa học giúp em nhanh chóng
-                            <span class="highlight">làm chủ và dành trọn điểm</span>
-                            các câu hỏi Ngữ pháp trong đề thi chính thức năm 2025.
-                        </p>
-                    </div>
+            <div class="lesson-search">
+                <input type="text" id="search-input" placeholder="Tìm kiếm bài học..." />
+                <button id="search-button">Tìm kiếm</button>
+            </div>
 
-                    <div class="lesson-search">
-                        <input type="text" id="search-input" placeholder="Tìm kiếm bài học..." />
-                        <button id="search-button">Tìm kiếm</button>
-                    </div>
+            <div class="lesson-list">
+                <h2>Danh sách bài học</h2>
+                <div id="chitietbaihoc"></div>
+            </div>
 
-                    <div class="lesson-list">
-                        <h2>Danh sách bài học</h2>
-
-                        <div class="lesson-item" onclick="toggleLesson(1)">
-                            <span class="lesson-index">01</span>
-                            <span class="lesson-name">Bài 1: Thì hiện tại tiếp diễn</span>
-                            <span class="free">FREE</span>
-                        </div>
-                        <div class="lesson-link" id="lesson-1">
-                            <a href="https://www.youtube.com/watch?v=xI18kgDDhuE" target="_blank">Xem bài học trên YouTube</a>
-                        </div>
-
-                        <div class="lesson-item" onclick="toggleLesson(2)">
-                            <span class="lesson-index">02</span>
-                            <span class="lesson-name">Thì hiện tại đơn</span>
-                        </div>
-                        <div class="lesson-link" id="lesson-2">
-                            <a href="https://www.youtube.com/watch?v=O-oQ6minK0w" target="_blank">Xem bài học trên YouTube</a>
-                        </div>
-
-                        <div class="lesson-item" onclick="toggleLesson(3)">
-                            <span class="lesson-index">03</span>
-                            <span class="lesson-name">Thì hiện tại hoàn thành</span>
-                        </div>
-                        <div class="lesson-link" id="lesson-3">
-                            <a href="https://www.youtube.com/watch?v=hvNsUf-arM4" target="_blank">Xem bài học trên YouTube</a>
-                        </div>
-
-                        <!-- Add more lessons -->
-                    </div>
-
-                    <div class="discussion">
-                        <h2>Thảo luận</h2>
-
-                        <div class="comment-section">
-                            <textarea id="comment-input" placeholder="Viết bình luận..."></textarea>
-                            <button id="comment-submit">Gửi</button>
-                        </div>
-
-                        <div class="comments">
-                            <div class="comment-item">
-                                <p><strong>Hồ Thị Thanh Tâm:</strong> Có phần lý thuyết cho phần collations không ạ? Em tìm không thấy ạ</p>
-                                <span class="timestamp">10:07 - 12/04/2025</span>
-                            </div>
-
-                            <div class="comment-reply">
-                                <p><strong>Hạnh Vy - Trợ giảng Cô Mai Phương:</strong> Em xem ở chuyên đề 4 khóa luyện toàn diện các dạng câu hỏi trong đề thi (2025)</p>
-                                <span class="timestamp">10:12 - 12/04/2025</span>
-                            </div>
-
-                            <div class="comment-reply">
-                                <p><strong>Hạnh Vy - Trợ giảng Cô Mai Phương:</strong> Hoặc VIP90 ở tuần 7 và tuần 8 em nhé</p>
-                                <span class="timestamp">10:13 - 12/04/2025</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="right">
+                <div class="course-overview">
+                    <h3>Tổng quan khóa học</h3>
+                    <div id="hocphi"></div>
+                    <p>Thời hạn khóa học: Sau khi kết thúc kỳ thi THPT 2025</p>
+                    <button class="btn buy-now">MUA NGAY</button>
                 </div>
+            </div>
+        </div> <!-- End content -->
+    </div> <!-- End container -->
+</div> <!-- End main -->
 
-                <div class="right">
-                    <div class="course-overview">
-                        <h3>Tổng quan khóa học</h3>
-                        <p>Học phí: <span class="price">1,050,000 VNĐ</span></p>
-                        <p>Thời hạn khóa học: Sau khi kết thúc kỳ thi THPT 2025</p>
-                        <button class="btn buy-now">MUA NGAY</button>
-                    </div>
-                </div>
-            </div> <!-- End content -->
-        </div> <!-- End container -->
-    </div> <!-- End main -->
-
-    <script src="../../js/app_user.js"></script>
-</body>
-
+<script src="../../js/app_user.js"></script>
+<script type="module" src="../../fetch/nguphap1.js"></script>
+</body> <!-- Đóng thẻ body -->
 </html>

@@ -22,6 +22,19 @@ export async function RemoveHoaDon(id){
     
 }
 
+
+export async function RemoveTaiKhoan(id){
+    const res=await fetch(`http://localhost/quanlytrungtam/backend/controller/TaiKhoanController.php?user=${id}`,{
+        method : 'DELETE'
+    });
+    if (!res.ok){
+        throw new Error(await res.text());
+        return false;
+    }
+    return true;
+    
+}
+
 export async function RemoveDiem(id){
     const res=await fetch(`http://localhost/quanlytrungtam/backend/controller/DiemsoController.php?id=${id}`,{
         method : 'DELETE'
