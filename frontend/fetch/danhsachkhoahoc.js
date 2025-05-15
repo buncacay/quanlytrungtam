@@ -150,7 +150,7 @@ async function remove(id) {
             await ShowAll(currentPage); // Refresh trang hiện tại
         }
         else {
-            alert("cai cai moe j");
+            // alert("cai cai moe j");
         }
     }
 }

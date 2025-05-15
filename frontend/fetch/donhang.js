@@ -20,9 +20,9 @@ const showDonHang = async () => {
             const row = document.createElement('tr');
 
             // Mã đơn hàng
-            const tdId = document.createElement('td');
-            tdId.textContent = dh.iddonhang;
-            row.appendChild(tdId);
+            // const tdId = document.createElement('td');
+            // tdId.textContent = dh.iddonhang;
+            // row.appendChild(tdId);
 
             // ID học viên
             const tdTaiKhoan = document.createElement('td');
@@ -78,7 +78,7 @@ async function capnhat(idkhoahoc, idhocvien, iddonhang, selectElement) {
     const trangthaidon = selectElement.value;
 
     const data = {
-        iddonhang: iddonhang,
+       
         idkhoahoc: idkhoahoc,
         idhocvien: idhocvien,
         trangthaidon: trangthaidon,

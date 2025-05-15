@@ -18,7 +18,7 @@ const limit = 5;
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   id = params.get('id');
-  alert(id);
+  // alert(id);
 
   if (!id) {
     alert("Không tìm thấy ID học viên.");

@@ -8,7 +8,7 @@ export async function addKhoaHoc(data) {
         });
         if (!res.ok) {
             const err = await res.text();
-            alert(err);
+            // alert(err);
             throw new Error('Lỗi: ' + err);
         }
         // return await res.json();
@@ -50,7 +50,7 @@ export async function addDiem(data) {
         });
         if (!res.ok) {
             const err = await res.text();
-            alert(err);
+            // alert(err);
             throw new Error('Lỗi: ' + err);
         }
         // return await res.json();
@@ -117,7 +117,7 @@ export async function addChiTietKhoaHoc(data){
                     body:JSON.stringify(data)
             });
             if (!res.ok) {
-                alert("xem lai");
+                // alert("xem lai");
                 throw new Error('Lỗi: ' + await res.text());
             }
             return await res.json();
@@ -216,7 +216,7 @@ export async function addHoaDon(data){
         body:JSON.stringify(data)
 });
 if (!res.ok) {
-    alert("xem lai");
+    // alert("xem lai");
     throw new Error('Lỗi: ' + await res.text());
 }
 return await res.json();

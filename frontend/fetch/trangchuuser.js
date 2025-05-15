@@ -1,12 +1,12 @@
 import { fetchKhoaHocPhanTrang } from './get.js';
 
-let page = 1; // Khởi tạo page mặc định
-let totalPages = 1; // Biến lưu tổng số trang
+let page = 1;
+let totalPages = 1;
+let allData = []; // Lưu trữ tất cả dữ liệu khóa học
 
 document.addEventListener('DOMContentLoaded', function() {
-    loadPage(page); // Gọi hàm load dữ liệu trang đầu tiên
+    loadAllData(); // Gọi hàm tải tất cả dữ liệu
 
-    // Gắn sự kiện cho nút phân trang (nếu có)
     document.getElementById('nextPage').addEventListener('click', function() {
         if (page < totalPages) {
             page++;
@@ -22,25 +22,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-async function loadPage(page) {
+async function loadAllData() {
     const all = document.getElementById('all');
     const currentPage = document.getElementById('currentPage');
-    all.innerHTML = ''; // Xóa nội dung cũ
+    all.innerHTML = '';
 
     try {
-        const res = await fetchKhoaHocPhanTrang(page, 5); // Gọi API theo trang, giả sử mỗi trang có 5 khóa học
-
-        if (res.length === 0 && page > 1) {
-            page--; // Nếu không có dữ liệu, quay lại trang trước
+        let res = await fetchKhoaHocPhanTrang(page, 5);
+        console.log(res);
+        
+        // Kiểm tra dữ liệu trả về
+        if (!res || !res.data || res.data.length === 0) {
+            all.innerHTML = '<p>Không có dữ liệu để hiển thị.</p>';
             return;
         }
 
-        // Cập nhật tổng số trang từ dữ liệu API (giả sử API trả về tổng số khóa học)
-        totalPages = Math.ceil(res.total / 5); // Tổng số trang
+        totalPages = res.total; // Cập nhật tổng số trang
+        allData = res.data; // Lưu trữ tất cả dữ liệu khóa học
 
-        res.data.forEach(kh => {
+        // Lặp qua các trang còn lại nếu cần
+        for (let i = 2; i <= totalPages; i++) {
+            const nextRes = await fetchKhoaHocPhanTrang(i, 5);
+            allData = allData.concat(nextRes.data); // Gộp dữ liệu vào allData
+        }
+
+        // Hiển thị tất cả khóa học
+        allData.forEach(kh => {
             all.innerHTML += `
-               <div>
+                <div>
                     <h2 class="combo-title">${kh.tenkhoahoc}</h2>
                     <div class="combo-list">
                         <div class="combo-card">
@@ -54,8 +63,7 @@ async function loadPage(page) {
             `;
         });
 
-        // Cập nhật số trang hiện tại
-        currentPage.textContent = `Trang ${page}`;
+        currentPage.textContent = `Trang 1 / ${totalPages}`; // Chỉ hiển thị trang đầu vì đã tải hết
     } catch (error) {
         console.error('Lỗi khi tải dữ liệu:', error);
         all.innerHTML = '<p>Lỗi khi tải dữ liệu.</p>';

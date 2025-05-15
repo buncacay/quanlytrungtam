@@ -127,7 +127,7 @@ function createKhoaHoc($khoahoc) {
     }
 
     // Kiểm tra các trường bắt buộc
-    $requiredFields = ['tenkhoahoc', 'thoigianhoc', 'soluongbuoi', 'lichhoc', 'diadiemhoc', 'giatien'];
+    $requiredFields = ['tenkhoahoc', 'thoigianhoc', 'soluongbuoi', 'lichhoc', 'giatien'];
     $missingFields = [];
 
     foreach ($requiredFields as $field) {
@@ -150,7 +150,6 @@ function createKhoaHoc($khoahoc) {
     $khoahoc->thoigianhoc = $data->thoigianhoc;
     $khoahoc->soluongbuoi = $data->soluongbuoi;
     $khoahoc->lichhoc = $data->lichhoc;
-    $khoahoc->diadiemhoc = $data->diadiemhoc;
     $khoahoc->giatien = $data->giatien;
      $khoahoc->ngaybatdau = $data->ngaybatdau;
     $khoahoc->ngayketthuc = $data->ngayketthuc;
@@ -165,7 +164,6 @@ function createKhoaHoc($khoahoc) {
                 "tenkhoahoc" => $khoahoc->tenkhoahoc,
                 "thoigianhoc" => $khoahoc->thoigianhoc,
                 "lichhoc" => $khoahoc->lichhoc,
-                "diadiemhoc" => $khoahoc->diadiemhoc,
                 "mota" => $khoahoc->mota,
                 "images" => $khoahoc->images,
                 "giatien" => $khoahoc->giatien,
@@ -190,12 +188,14 @@ function updateKhoaHoc($khoahoc) {
         $khoahoc->soluongbuoi = $data->soluongbuoi;
         $khoahoc->tenkhoahoc = $data->tenkhoahoc;
         $khoahoc->thoigianhoc = $data->thoigianhoc;
-        $khoahoc->diadiemhoc = $data->diadiemhoc;
         $khoahoc->lichhoc = $data->lichhoc;
         $khoahoc->mota = $data->mota ?? null;
         $khoahoc->images = $data->images ?? null;
         $khoahoc->giatien = $data->giatien;
         $khoahoc->giamgia = $data->giamgia ?? null;
+         $khoahoc->trangthai = $data->trangthai;
+        $khoahoc->ngaybatdau = $data->ngaybatdau;
+        $khoahoc->ngayketthuc = $data->ngayketthuc;
 
         if ($khoahoc->update()) {
             echo json_encode(["message" => "Cập nhật khoá học thành công."]);

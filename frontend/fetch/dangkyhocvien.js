@@ -7,7 +7,7 @@ import {UpdateHocVien, UpdateNhanVien, UpdateTaiKhoan} from './update.js';
 let id="";
 let user="";
 document.addEventListener('DOMContentLoaded', async () => {
-    alert("t dang dung ne");
+    // alert("t dang dung ne");
     const params = new URLSearchParams(window.location.search);
     const role = params.get('role');
     user = params.get('user'); // lấy user từ URL
@@ -92,14 +92,14 @@ async function handleFormSubmit(e) {
             trangthai: 1
         };
         console.log(taikhoanData);
-        alert("dads", user);
+        // alert("dads", user);
         let response;
         if (user) {
-            alert("chay update tai khoan");
+            // alert("chay update tai khoan");
             // Cập nhật tài khoản nếu có user trong URL
             response = await UpdateTaiKhoan(taikhoanData);
         } else {
-            alert("chay tao tai khoan");
+            // alert("chay tao tai khoan");
             // Tạo tài khoản mới nếu không có user
             response = await addTaiKhoan(taikhoanData);
         }
@@ -125,7 +125,7 @@ async function handleFormSubmit(e) {
                 await handleAddNhanVien(username); // Thêm mới giảng viên
             }
         }
-        window.location.href = "dangnhap.html";
+       
         // alert("Tạo tài khoản thành công!");
         // Có thể reset form tại đây nếu cần
         // document.getElementById('add-form').reset();
@@ -155,6 +155,7 @@ async function handleaddStudent(user) {
     const res = await addStudent(hv);  // Thêm học viên
     if (res) {
         alert("Tạo tài khoản thành công");
+         window.location.href = "../admin/dangnhap.html";
     }
 }
 
@@ -204,6 +205,7 @@ async function handleAddNhanVien(user) {
     const res = await addThongTinGiangVien(nv);  // Thêm giảng viên
     if (res){
         alert("Tạo tài khoản thành công");
+         window.location.href = "../admin/dangnhap.html";
     }
 
 }

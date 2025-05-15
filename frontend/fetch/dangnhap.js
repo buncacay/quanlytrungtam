@@ -4,7 +4,7 @@ import {fetchTaiKhoan} from './get.js';
 document.getElementById('login').addEventListener('click', async function (event) {
     event.preventDefault();
     const user = document.getElementById('user').value.trim();
-    alert("chao cac be");
+    // alert("chao cac be");
     const pass = document.getElementById('pass').value;
 
     console.log('User:', user);  // Log user nhập vào

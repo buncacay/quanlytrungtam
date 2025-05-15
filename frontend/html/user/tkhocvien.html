@@ -12,57 +12,19 @@
 <body>
     <div id="header"></div>
     <div id="sidebar"></div>
+    <div class="main">
 
-    <div class="cards-container">
-
-        <!-- Thông tin học viên -->
-        <div id="all">
-            <div id="student-info"></div>
-            <button onclick="edit()" class="btn btn-warning me-2">✏️ Edit</button>
-            <button onclick="remove()" class="btn btn-danger">🗑️ Remove</button>
-            <div id="student-hdon"></div>
-        </div>
-
-        <!-- Khóa học -->
-        <div id="huhu">
-            <div id="student-khoc"></div>
-            <div id="dkykhoahoc" class="mt-3">
-                <label for="dky">Đăng ký khóa học</label>
-                <select id="dky" class="form-select mb-2"></select>
-                <button onclick="themkhoahoc()" class="btn btn-success">➕ Thêm Khóa học</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Điểm số -->
-    <div id="diemhocvien" class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <h3 class="mb-0">📊 Điểm số của học viên</h3>
-            <button onclick="themDiem()" class="btn btn-primary">Chỉnh sửa điểm</button>
-        </div>
-        <table class="table table-bordered table-striped">
-            <thead class="table-light">
-                <tr>
-                    <th>Tên khóa học</th>
-                    <th>Tên học viên</th>
-                    <th>Kỳ thi</th>
-                    <th>Điểm số</th>
-                    <th>Ghi chú</th>
-                  
-                </tr>
-            </thead>
-            <tbody id="scoreTableBody">
-                <!-- Dữ liệu điểm số sẽ hiển thị ở đây -->
-            </tbody>
-        </table>
-    </div>
-
+    <div class="container mt-4">
+        <h2 class="mb-4">Danh sách khóa học của bạn</h2>
+        <ul id="khoahoc" class="list-group">
+            <!-- Các khóa học sẽ được hiển thị ở đây -->
+        </ul>
     <!-- Phân trang -->
     <div id="pagination" class="text-center my-3"></div>
-
+    </div>
     <!-- Scripts -->
-    <script src="../../js/app.js"></script>
-    <script type="module" src="../../fetch/tthocvien.js"></script>
+    <script src="../../js/app_user.js"></script>
+    <script type="module" src="../../fetch/thongtinhocvien.js"></script>
     
 </body>
 </html>

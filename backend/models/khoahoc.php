@@ -34,8 +34,8 @@ public function create() {
     }
 
     $query = "INSERT INTO " . $this->table . " 
-        (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc, mota, images, giatien, giamgia, ngaybatdau, ngayketthuc) 
-        VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota, :images, :giatien, :giamgia, :ngaybatdau, :ngayketthuc)";
+        (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc, mota, images, giatien, giamgia, ngaybatdau, ngayketthuc, trangthai) 
+        VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota, :images, :giatien, :giamgia, :ngaybatdau, :ngayketthuc, 1)";
 
     $stmt = $this->conn->prepare($query);
 
@@ -81,7 +81,11 @@ public function create() {
         diadiemhoc = :diadiemhoc,
         mota = :mota,
         giatien = :giatien,
-        giamgia = :giamgia";
+        giamgia = :giamgia,
+        ngaybatdau = :ngaybatdau,
+        ngayketthuc = :ngayketthuc,
+        trangthai = :trangthai"
+        ;
 
     // Nếu có ảnh mới thì thêm vào câu truy vấn
     if (isset($this->image) && is_array($this->image) && isset($this->image['tmp_name']) && $this->image['tmp_name'] !== '') {
@@ -100,7 +104,10 @@ public function create() {
     $stmt->bindParam(':diadiemhoc', $this->diadiemhoc);
     $stmt->bindParam(':mota', $this->mota);
     $stmt->bindParam(':giatien', $this->giatien);
+     $stmt->bindParam(':ngaybatdau', $ngaybatdau);
+    $stmt->bindParam(':ngayketthuc', $ngayketthuc);
     $stmt->bindParam(':giamgia', $this->giamgia);
+      $stmt->bindParam(':trangthai', $this->trangthai);
     $stmt->bindParam(':idkhoahoc', $this->idkhoahoc, PDO::PARAM_INT);
 
     // Xử lý ảnh mới (nếu có)
@@ -120,7 +127,7 @@ public function create() {
 
 
     public function read($limit, $offset) {
-        $query = "SELECT * FROM " . $this->table . " WHERE trangthai = 1 LIMIT :limit OFFSET :offset";
+        $query = "SELECT * FROM " . $this->table . "  LIMIT :limit OFFSET :offset";
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);

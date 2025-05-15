@@ -75,7 +75,7 @@ export async function UpdateGiaKhoaHoc(data){
 
 
 export async function UpdateDonHang(data){
-    alert("chay alrt");
+    // alert("chay alrt");
     const res = await fetch('http://localhost/quanlytrungtam/backend/controller/donhangController.php',{
         method:'PUT',
         headers:{
@@ -93,7 +93,7 @@ export async function UpdateDonHang(data){
 } 
 
 export async function UpdateDiem(data){
-    alert("chay alrt");
+    // alert("chay alrt");
     const res = await fetch('http://localhost/quanlytrungtam/backend/controller/DiemsoController.php',{
         method:'PUT',
         headers:{
@@ -112,7 +112,7 @@ export async function UpdateDiem(data){
 
 export async function UpdateTaiKhoan(data) {
     try {
-        alert("Chạy alert"); // Kiểm tra nếu hàm được gọi
+        // alert("Chạy alert"); // Kiểm tra nếu hàm được gọi
         const res = await fetch('http://localhost/quanlytrungtam/backend/controller/taikhoancontroller.php', {
             method: 'PUT',
             headers: {
@@ -138,7 +138,7 @@ export async function UpdateTaiKhoan(data) {
 
 
 export async function UpdateHoaDon(data){
-    alert("chay alrt");
+    // alert("chay alrt");
     const res = await fetch('http://localhost/quanlytrungtam/backend/controller/HoaDonController.php',{
         method:'PUT',
         headers:{
@@ -157,7 +157,7 @@ export async function UpdateHoaDon(data){
 
 
 export async function UpdateKhoaHoc(data){
-    alert("chay alrt");
+    // alert("chay alrt");
     const res = await fetch('http://localhost/quanlytrungtam/backend/controller/KhoaHocController.php',{
         method:'PUT',
         headers:{
@@ -175,7 +175,7 @@ export async function UpdateKhoaHoc(data){
 } 
 
 export async function UpdateChiTietKhoaHoc(data){
-    alert("chay alrt");
+    // alert("chay alrt");
     console.log(data);
     const res = await fetch('http://localhost/quanlytrungtam/backend/controller/ChitietkhoahocController.php',{
         method:'PUT',
@@ -195,7 +195,7 @@ export async function UpdateChiTietKhoaHoc(data){
 
 
 export async function UpdateGiangVien(data){
-    alert("chay alrt");
+    // alert("chay alrt");
     const res = await fetch('http://localhost/quanlytrungtam/backend/controller/NhanVienController.php',{
         method:'PUT',
         headers:{
@@ -214,7 +214,7 @@ export async function UpdateGiangVien(data){
 
 
 export async function UpdateChiTietNhanVien(data) {
-    alert("Đang gửi dữ liệu cập nhật...");
+    // alert("Đang gửi dữ liệu cập nhật...");
     const res = await fetch("http://localhost/quanlytrungtam/backend/controller/ChitietnhanvienController.php", {
         method: "PUT",
         headers: {

@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', async function (event) {
      const pa = new URLSearchParams(window.location.search);
      const images = pa.get('images');
     if (images) {
-        alert(images);
+        // alert(images);
         HienThiAnh(event, images);  // Chỉ xử lý ảnh từ server (folder upload)
     }
    
@@ -391,7 +391,7 @@ function toggleLink(titleElement) {
     item.classList.toggle('expanded');
 }
 
-
+let trangthai=1;
 document.querySelectorAll('.lesson-item').forEach(item => {
     item.addEventListener('click', function () {
         toggleLink(this);
@@ -414,7 +414,19 @@ async function saveChanges(event, idkhoahoc) {
     const mota = document.getElementById('motakhoahoc').value;
     const giatien = document.getElementById('giatien').value;
     const giamgia = document.getElementById('giamgia').value;
+    const start = document.getElementById('start').value;
+    const end = document.getElementById('end').value;
 
+    const today = new Date().toISOString().split('T')[0]; // Lấy ngày hôm nay ở định dạng 'YYYY-MM-DD'
+alert(today);
+
+if (end <= today) {
+    // Gọi API cập nhật trạng thái
+    trangthai = 2
+}
+else {
+    trangthai = 1
+}
     const data = {
         idkhoahoc: idkhoahoc,
         tenkhoahoc: ten,
@@ -424,9 +436,12 @@ async function saveChanges(event, idkhoahoc) {
         mota: mota,
         giatien: giatien,
         giamgia: giamgia,
+        ngaybatdau : start,
+        ngayketthuc : end,
+        trangthai : 2
         // idnhanvien: idnhanvien
     };
-
+    console.log(data);
     try {
         
         if (await UpdateKhoaHoc(data)) {
@@ -449,7 +464,7 @@ async function saveChanges(event, idkhoahoc) {
                 });
                 d++;
             });
-            alert("cho anh");
+            // alert("cho anh");
             console.log("data 3" , data3);
             if (await UpdateChiTietKhoaHoc(data3)){
                     alert("cap nhat chi tiet thanh cong");

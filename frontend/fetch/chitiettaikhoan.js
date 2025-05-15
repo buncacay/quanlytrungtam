@@ -23,7 +23,7 @@ async function loadTaiKhoan(page = 1) {
 
     const response = await fetchAllTaiKhoan(); // giả định trả về toàn bộ
     currentFilteredData = response.data;
-    alert(currentFilteredData.length);
+    // alert(currentFilteredData.length);
     // Tính lại số trang dựa trên số lượng tài khoản
     totalPages = Math.ceil(currentFilteredData.length / 5);
     
@@ -139,7 +139,7 @@ window.editTaiKhoan = editTaiKhoan;
 
 // Xóa tài khoản
 async function removeTaiKhoan(id) {
-    alert(`ID cần xóa là: ${id}`);
+    // alert(`ID cần xóa là: ${id}`);
 
     if (confirm('Bạn có chắc chắn muốn xóa tài khoản này?')) {
         const result = await RemoveTaiKhoan(id);
