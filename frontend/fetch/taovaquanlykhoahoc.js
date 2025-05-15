@@ -143,9 +143,10 @@ for (let pair of formData.entries()) {
     event.preventDefault();
     const kq = await addKhoaHoc(formData);
     console.log("hellodfads" , kq);
-    const khoaHoc = JSON.parse(kq); // jsonData là chuỗi JSON phía trên
+    
+    
 
-    const id = khoaHoc.idkhoahoc;
+    const id = kq[0].idkhoahoc;
     alert(id); // sẽ in ra: 172
 
     }

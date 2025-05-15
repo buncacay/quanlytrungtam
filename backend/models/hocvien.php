@@ -60,7 +60,7 @@ class hocvien {
 
     public function update() {
         $query = "UPDATE " . $this->table . " 
-                  SET hoten = :hoten, ngaysinh = :ngaysinh, sdt = :sdt, diachi = :diachi, sdtph = :sdtph, user = :user 
+                  SET hoten = :hoten, ngaysinh = :ngaysinh, sdt = :sdt, diachi = :diachi, sdtph = :sdtph, user = :user, trangthia = :trangthia 
                   WHERE idhocvien = :idhocvien";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute([
@@ -70,20 +70,17 @@ class hocvien {
             ':diachi' => $this->diachi,
             ':sdtph' => $this->sdtph,
             ':idhocvien' => $this->idhocvien,
-            ':user' => $this->user
+            ':user' => $this->user,
+            "trangthia" => $this->trangthia
         ]);
     }
 
     public function delete() {
-        $query1 = "DELETE FROM hoadon WHERE idhocvien = :idhocvien";
-        $stmt1 = $this->conn->prepare($query1);
-        $stmt1->execute([':idhocvien' => $this->idhocvien]);
+       
 
-        $query1 = "DELETE FROM chitiethocvien WHERE idhocvien = :idhocvien";
-        $stmt1 = $this->conn->prepare($query1);
-        $stmt1->execute([':idhocvien' => $this->idhocvien]);
-
-        $query = "DELETE FROM " . $this->table . " WHERE idhocvien = :idhocvien";
+        $query = "UPDATE " . $this->table . " 
+                  SET trangthia = 0 
+                  WHERE idhocvien = :idhocvien";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute([':idhocvien' => $this->idhocvien]);
     }

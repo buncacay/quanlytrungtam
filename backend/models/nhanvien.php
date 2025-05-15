@@ -140,7 +140,7 @@ class nhanvien {
     }
 
     public function taikhoangiangvien($user) {
-    $query = "SELECT * FROM " . $this->table . " WHERE user = :user";
+    $query = "SELECT * FROM " . $this->table . " inner join taikhoan on taikhoan.username = nhanvien.user WHERE user = :user and taikhoan.trangthai=1";
 
     $stmt = $this->conn->prepare($query);
     $stmt->bindParam(':user', $user);  // Sử dụng tham số $user thay vì $this->user

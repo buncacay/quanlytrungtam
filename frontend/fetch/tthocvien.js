@@ -8,7 +8,7 @@ import {
 } from './get.js';
 
 import { addChiTietHocVien } from './add.js';
-import {RemoveHoaDon, removeChiTietHocvien} from './delete.js';
+import {RemoveHoaDon, removeChiTietHocvien, RemoveHocvien} from './delete.js';
 
 let id = "";
 let khoahocDaDangKy = [];
@@ -18,6 +18,7 @@ const limit = 5;
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   id = params.get('id');
+  alert(id);
 
   if (!id) {
     alert("Không tìm thấy ID học viên.");
@@ -128,6 +129,8 @@ function HienThiHoaDon(hoadon) {
 }
 
 function HienThiKhoaHoc(data) {
+  const params = new URLSearchParams(window.location.search);
+  idhocvien = params.get('id');
   document.getElementById('student-khoc').innerHTML = `
     <h3>Chi tiết khóa học</h3>
     <table class="table table-bordered">
@@ -146,7 +149,7 @@ function HienThiKhoaHoc(data) {
             <td>
           <button onclick="editkhoahoc(${kh.idkhoahoc}, '${kh.images}')">Edit</button>
 
-              <button onclick="removekhoahoc(${kh.idkhoahoc}, ${id})">Remove</button>
+              <button onclick="removekhoahoc(${kh.idkhoahoc}, ${idhocvien})">Remove</button>
             </td>
           </tr>`).join('')}
       </tbody>
@@ -265,6 +268,8 @@ async function editkhoahoc(id, image){
 
 
 async function removeHoaDon(id) {
+    console.log(" asdfasd" + id);
+
   const confirmDelete = confirm("Bạn có chắc chắn muốn xóa hóa đơn này?");
   if (!confirmDelete) return; // Người dùng chọn 'Hủy'
 
@@ -280,8 +285,9 @@ async function removeHoaDon(id) {
 async function removekhoahoc(idkhoahoc, idhocvien){
    const confirmDelete = confirm("Bạn có chắc chắn muốn xóa học viên khỏi khóa học này?");
   if (!confirmDelete) return; // Người dùng chọn 'Hủy'
-
+  console.log(idkhoahoc +" asdfasd" + idhocvien);
   const res = await removeChiTietHocvien(idkhoahoc, idhocvien);
+  console.log(res);
   if (res) {
     alert("Xóa thành công");
     await renderHoaDonTable(currentPage); // Nếu muốn load lại bảng sau khi xóa
@@ -298,3 +304,14 @@ window.removekhoahoc = removekhoahoc;
 window.editHoaDon = editHoaDon;
 window.removeHoaDon = removeHoaDon;
 window.themDiem = themDiem;
+window.remove=remove;
+
+async function remove(){
+  const params = new URLSearchParams(window.location.search);
+  const idhocvien = params.get('id');
+  const res = await RemoveHocvien(idhocvien);
+  if (res){
+    alert("xoa thanh cong");
+    window.location.href='danhsachhocvien.html';
+  }
+}

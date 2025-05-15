@@ -94,9 +94,9 @@ export async function removeChiTietNhanVien(data) {
     }
 }
 
-export async function removeChiTietHocvien(data) {
+export async function removeChiTietHocvien(idhocvien, idkhoahoc) {
     try {
-        const res = await fetch('http://localhost/quanlytrungtam/backend/controller/ChitiethocvienController.php?idhocvien=50&idkhoahoc=197', {
+        const res = await fetch(   `http://localhost/quanlytrungtam/backend/controller/ChitiethocvienController.php?idhocvien=${idhocvien}&idkhoahoc=${idkhoahoc}`, {
             method: 'DELETE',
            
         });

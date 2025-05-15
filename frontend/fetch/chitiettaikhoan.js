@@ -8,8 +8,13 @@ let currentFilteredData = [];
 // Khi trang vừa load
 document.addEventListener('DOMContentLoaded', async () => {
     await loadTaiKhoan();
-    document.getElementById('search-name').addEventListener('input', filterTaiKhoan);
-    document.getElementById('role-filter').addEventListener('change', filterTaiKhoan);
+
+    document.getElementById('btn-filter').addEventListener('click', filterTaiKhoan);
+    document.getElementById('btn-reset').addEventListener('click', async () => {
+        document.getElementById('search-name').value = '';
+        document.getElementById('role-filter').value = '';
+        await loadTaiKhoan(1); // Reset lại danh sách về trang đầu
+    });
 });
 
 // Tải danh sách tài khoản từ API
@@ -37,16 +42,15 @@ function filterTaiKhoan() {
     const search = document.getElementById('search-name').value.toLowerCase();
     const role = document.getElementById('role-filter').value;
 
+    // Tìm theo username và role (dữ liệu từ fetchAllTaiKhoan)
     const filtered = currentFilteredData.filter(acc => {
-        const matchName = acc.hoten.toLowerCase().includes(search);
-        const matchRole = role ? acc.chucvu === role : true;
-        return matchName && matchRole;
+        const matchUsername = acc.username.toLowerCase().includes(search);
+        const matchRole = role ? parseInt(acc.role) === parseInt(role) : true;
+
+        return matchUsername && matchRole;
     });
 
-    // Cập nhật tổng số trang sau khi lọc
     totalPages = Math.ceil(filtered.length / 5);
-    
-    // Giới hạn trang nếu có ít dữ liệu
     if (currentPage > totalPages && totalPages > 0) {
         currentPage = totalPages;
     }
@@ -96,18 +100,20 @@ async function renderTaiKhoan(data) {
 
     // Đợi tất cả promise hoàn tất
     const results = await Promise.all(fetchPromises.filter(p => p !== null));
+    console.log("kq",results);
 
     // Xử lý kết quả và hiển thị
  for (const item of results) {
     if (!item || !item.userData) continue;
-console.log("uia ", item.userData[0].tennhanvien);  // Kiểm tra dữ liệu của user
+    
 
     const acc = item.acc;
+    
     const role = acc.role;  // Đây là giá trị 'role' mà bạn cần chuyển thành tên chức vụ
     const chucVuText = getChucVuText(role);  // Lấy tên chức vụ từ hàm getChucVuText
     const tenNguoiDung = item.isHocVien ? item.userData[0].hoten : item.userData[0].tennhanvien;
     const id = item.isHocVien ? item.userData[0].idhocvien : item.userData[0].idnhanvien; // Lấy ID từ dữ liệu
-    console.log(id);
+    console.log("sdfasdf",acc.username);
     const row = document.createElement('tr');
     row.innerHTML = `
         <td>${id}</td> <!-- Hiển thị ID -->
@@ -133,6 +139,8 @@ window.editTaiKhoan = editTaiKhoan;
 
 // Xóa tài khoản
 async function removeTaiKhoan(id) {
+    alert(`ID cần xóa là: ${id}`);
+
     if (confirm('Bạn có chắc chắn muốn xóa tài khoản này?')) {
         const result = await RemoveTaiKhoan(id);
         if (result) {

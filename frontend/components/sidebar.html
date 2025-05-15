@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trung tâm Ngoại ngữ</title>
     <link rel="stylesheet" href="../../css/sidebar.css">
+    
 </head>
 <body>
 <div class="sidebar">
@@ -22,9 +23,16 @@
             <!-- <li><a onclick="window.location.href='qltailieu.html'">Quản lý tài liệu</a></li> -->
             <!-- <li><a onclick="window.location.href='qlhocvien.html'">Quản lý thông báo</a></li> -->
             <!-- <li><a onclick="window.location.href='qlhocvien.html'">Hệ thống báo cáo </a></li> -->
+            <!-- Phần hiển thị thông tin người dùng (sẽ được hiển thị khi đăng nhập) -->
+  <div id="user-info" style="display: none;">
+    <span id="username"></span> | <span id="role"></span>
+    <button id="logout-btn">Đăng xuất</button>
+</div>
+
 
         </ul>
     </nav>
+    <script src="../../frontend/fetch/sidebar_be.js"></script>
 </div>
 </body>
 </html>

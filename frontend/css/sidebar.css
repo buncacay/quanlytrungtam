@@ -135,3 +135,11 @@
     margin-left: 0;
   }
 }   
+
+#user-info {
+    display: none; /* Ẩn mặc định */
+}
+
+#logout-btn {
+    cursor: pointer;  /* Thêm kiểu con trỏ cho nút */
+}

@@ -98,6 +98,7 @@ function createHocVien($hocvien) {
         $hocvien->user = $data->user;
         $hocvien->sdtph = !empty($data->sdtph) ? $data->sdtph : null;
         $hocvien->diachi = !empty($data->diachi) ? $data->diachi : null;
+        $hocvien->trangthia=$data->trangthia;
 
         if ($hocvien->create()) {
             $response = [
@@ -107,7 +108,8 @@ function createHocVien($hocvien) {
                 "sdt" => $hocvien->sdt,
                 "sdtph" => $hocvien->sdtph,
                 "diachi" => $hocvien->diachi,
-                "user" => $hocvien->user
+                "user" => $hocvien->user,
+                "trangthia" => $hocvien->trangthia
             ];
             echo json_encode($response);
         } else {
@@ -130,6 +132,7 @@ function updateHocVien($hocvien) {
         $hocvien->user = $data->user;
         $hocvien->diachi = isset($data->diachi) ? $data->diachi : null;
         $hocvien->sdtph = isset($data->sdtph) ? $data->sdtph : null;
+         $hocvien->trangthia=$data->trangthia;
 
         if ($hocvien->update()) {
             echo json_encode(["message" => "Record updated successfully."]);

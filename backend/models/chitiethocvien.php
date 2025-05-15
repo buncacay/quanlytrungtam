@@ -30,7 +30,7 @@ class ChiTietHocVien {
     }
 
     public function read() {
-        $query ="SELECT * FROM " . $this->table . " inner join khoahoc on khoahoc.idkhoahoc = chitiethocvien.idkhoahoc inner join hocvien on hocvien.idhocvien = chitiethocvien.idhocvien";
+        $query ="SELECT * FROM " . $this->table . " inner join khoahoc on khoahoc.idkhoahoc = chitiethocvien.idkhoahoc inner join hocvien on hocvien.idhocvien = chitiethocvien.idhocvien where hocvien.trangthia=1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -88,7 +88,7 @@ class ChiTietHocVien {
               INNER JOIN khoahoc ON khoahoc.idkhoahoc = chitiethocvien.idkhoahoc 
               INNER JOIN hocvien ON hocvien.idhocvien = chitiethocvien.idhocvien 
               WHERE chitiethocvien.idkhoahoc = :idkhoahoc 
-              AND chitiethocvien.idhocvien = :idhocvien";
+              AND chitiethocvien.idhocvien = :idhocvien and hocvien.trangthia=1";
     
     $stmt = $this->conn->prepare($query);
     $stmt->bindParam(':idhocvien', $idhocvien, PDO::PARAM_INT);
