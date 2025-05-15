@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Tài khoản</title>
+    
+    <link rel="stylesheet" href="../../css/login.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    
+</head>
+
+<body>
+    <div class="course-management">
+        <h2>Tạo Tài khoản</h2>
+
+        <div class="cards-container">
+            <div class="form-section">
+                <h3>Thêm Tài khoản</h3>
+                <form id="add-form">
+                    <div class="form-group">
+                        <label for="name">Tên đăng nhập</label>
+                        <input type="text" id="name" name="name" placeholder="Nhập tên đăng nhập" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">Nhập lại mật khẩu</label>
+                        <input type="password" id="confirm-password" name="confirm-password" placeholder="Nhập lại mật khẩu" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Chức vụ:</label><br>
+                        <label>
+                            <input type="radio" name="role" id="student" value="0"> Học sinh
+                        </label>
+                        <label>
+                            <input type="radio" name="role" id="teacher" value="1"> Giảng viên
+                        </label>
+                        <label>
+                            <input type="radio" name="role" id="admin" value="3"> Quản trị viên
+                        </label>
+                    </div>
+
+                    <!-- Form học sinh -->
+                    <div id="student-form">
+                        <h4>Thông tin Học sinh</h4>
+                        <div class="form-group">
+                            <label for="fullname">Họ và tên:</label>
+                            <input type="text" id="fullname" name="fullname" placeholder="Nhập họ và tên">
+                        </div>
+                        <div class="form-group">
+                            <label for="sdt-student">Số điện thoại:</label>
+                            <input type="tel" id="sdt-student" name="sdt-student" placeholder="Nhập số điện thoại" pattern="[0-9]{10}">
+                        </div>
+                        <div class="form-group">
+                            <label for="birth">Ngày sinh:</label>
+                            <input type="date" id="birth" name="birth">
+                        </div>
+                    </div>
+
+                    <!-- Form giảng viên -->
+                    <div id="teacher-form">
+                        <h4>Thông tin Giảng viên</h4>
+                        <div class="form-group">
+                            <label for="teacher-name">Tên giảng viên:</label>
+                            <input type="text" id="teacher-name" name="teacher-name" placeholder="Nhập tên giảng viên">
+                        </div>
+                        <div class="form-group">
+                            <label for="trinhdo">Trình độ:</label>
+                            <input type="text" id="trinhdo" name="trinhdo" placeholder="Cử nhân, Thạc sĩ...">
+                        </div>
+                        <div class="form-group">
+                            <label for="chungchi">Chứng chỉ:</label>
+                            <input type="text" id="chungchi" name="chungchi" placeholder="TOEIC, IELTS...">
+                        </div>
+                        <div class="form-group">
+                            <label for="sdt-teacher">Số điện thoại:</label>
+                            <input type="tel" id="sdt-teacher" name="sdt-teacher" placeholder="Nhập số điện thoại" pattern="[0-9]{10}">
+                        </div>
+                        <div class="form-group">
+                            <label for="ghichu">Ghi chú:</label>
+                            <input type="text" id="ghichu" name="ghichu" placeholder="Ghi chú thêm">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" id="submit-btn">Tạo tài khoản</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var res = { role: 0 }; // Giá trị giả định là 0 (Học sinh)
+
+            // Gán giá trị cho radio button dựa trên res.role
+            if (res.role === 0) {
+                $('#student').prop('checked', true); // Gán checked cho radio học sinh
+            } else if (res.role === 1) {
+                $('#teacher').prop('checked', true); // Gán checked cho radio giảng viên
+            } else if (res.role === 3) {
+                $('#admin').prop('checked', true); // Gán checked cho radio quản trị viên
+            }
+
+            // Kiểm tra và hiển thị form tương ứng khi radio đã được chọn
+            function toggleForm() {
+                if ($('#student').is(':checked')) {
+                    $('#student-form').slideDown(); // Hiển thị form học sinh
+                    $('#teacher-form').slideUp();  // Ẩn form giảng viên
+                } else {
+                    $('#teacher-form').slideDown(); // Hiển thị form giảng viên
+                    $('#student-form').slideUp();  // Ẩn form học sinh
+                }
+            }
+
+            // Kiểm tra form ban đầu khi load trang
+            toggleForm();
+
+            // Khi người dùng thay đổi radio
+            $('input[name="role"]').change(function () {
+                toggleForm();  // Cập nhật lại form khi radio được thay đổi
+            });
+        });
+    </script>
+     <script type="module" src="../../fetch/dangkyhocvien.js"></script>
+</body>
+
+</html>

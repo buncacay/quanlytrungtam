@@ -9,26 +9,69 @@ document.getElementById('course-image').addEventListener('change', function(even
     
 });
 
-async function HienThiAnh(event, images) { 
+
+let resizedImageBlob = null; // Lưu blob ảnh đã resize để upload
+
+// Hàm resize ảnh
+function cropAndResizeImage(file, size = 300, callback) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Tính vùng crop (cắt giữa ảnh)
+            let sx = 0, sy = 0, sSize = 0;
+            if (img.width > img.height) {
+                sSize = img.height;
+                sx = (img.width - img.height) / 2;
+            } else {
+                sSize = img.width;
+                sy = (img.height - img.width) / 2;
+            }
+
+            // Vẽ vào canvas vùng đã cắt
+            ctx.drawImage(img, sx, sy, sSize, sSize, 0, 0, size, size);
+
+            // Tạo blob và URL preview
+            canvas.toBlob(function (blob) {
+                const previewUrl = URL.createObjectURL(blob);
+                callback(blob, previewUrl);
+            }, file.type || 'image/jpeg', 0.9);
+        };
+
+        img.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+}
+
+
+
+async function HienThiAnh(event, images = null) {
     const prev = document.getElementById('preview');
 
     if (images) {
-        // prev.src = `./upload/${images}`;
         prev.src = `http://localhost/quanlytrungtam/backend/upload/${images}`;
         prev.style.display = 'block';
-    } else {
-        const file = event.target.files[0];
+        return;
+    }
 
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                prev.src = e.target.result;
-                prev.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+        cropAndResizeImage(file, 400, function (blob, previewUrl) {
+            resizedImageBlob = blob;
+            prev.src = previewUrl;
+            prev.style.display = 'block';
+        });
     }
 }
+
+
 
 
 async function themmoikhoahoc (event) {
@@ -65,14 +108,36 @@ async function themmoikhoahoc (event) {
         ngayketthuc: end
        
     };
-    const fileInput = document.getElementById('course-image');
-    const file = fileInput.files[0];
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('data', JSON.stringify(data));
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
+   const formData = new FormData();
+
+let fileToUpload = null;
+
+// Ưu tiên ảnh đã crop
+if (resizedImageBlob) {
+    formData.append('file', resizedImageBlob, 'avatar.jpg');
+    fileToUpload = resizedImageBlob;
+} else {
+    const originalFile = document.getElementById('course-image').files[0];
+    if (originalFile) {
+        formData.append('file', originalFile);
+        fileToUpload = originalFile;
     }
+}
+
+// Chỉ thêm nếu file thực sự tồn tại
+if (fileToUpload) {
+    formData.append('image', fileToUpload); // 👈 file đã đúng
+}
+
+formData.append('data', JSON.stringify(data));
+
+// In ra để kiểm tra
+for (let pair of formData.entries()) {
+    console.log(pair[0] + ': ', pair[1]);
+}
+
+    
+   
     
   
     event.preventDefault();
@@ -87,7 +152,7 @@ async function themmoikhoahoc (event) {
     catch (error){
         console.log("loi ", error);
     }
- 
+    alert("kq", kq);
     if (kq) {
       
         try {
