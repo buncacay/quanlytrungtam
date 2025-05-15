@@ -74,125 +74,112 @@ async function HienThiAnh(event, images = null) {
 
 
 
-async function themmoikhoahoc (event) {
+async function themmoikhoahoc(event) {
+    event.preventDefault(); // chỉ cần gọi 1 lần
+
     try {
- event.preventDefault();
-   alert("them moi");
-   alert("clicked");
-    event.preventDefault();
-    const ten = document.getElementById('course-name').value;
-    const soluongbuoi = document.getElementById('soluongbuoi').value;
-    const thoigianhoc = document.getElementById('thoigianhoc').value;
-    const lichhoc = document.getElementById('lichhoc').value;
-   
-    const mota= document.getElementById('motakhoahoc').value;
-    const giatien= document.getElementById('giatien').value;
-    const giamgia= document.getElementById('giamgia').value;
-    const start= document.getElementById('start').value;
-    const end= document.getElementById('end').value;
+        const ten = document.getElementById('course-name').value;
+        const soluongbuoi = document.getElementById('soluongbuoi').value;
+        const thoigianhoc = document.getElementById('thoigianhoc').value;
+        const lichhoc = document.getElementById('lichhoc').value;
+        const mota = document.getElementById('motakhoahoc').value;
+        const giatien = document.getElementById('giatien').value;
+        const giamgia = document.getElementById('giamgia').value;
+        const start = document.getElementById('start').value;
+        const end = document.getElementById('end').value;
 
+        const data = {
+            tenkhoahoc: ten,
+            thoigianhoc,
+            soluongbuoi,
+            lichhoc,
+            diadiemhoc: "not found",
+            mota,
+            trangthai: 1,
+            giatien,
+            giamgia,
+            ngaybatdau: start,
+            ngayketthuc: end
+        };
+        console.log(data);
 
-    // alert(mota);
-   
-    const data = {
-        tenkhoahoc: ten,
-        thoigianhoc: thoigianhoc,
-        soluongbuoi: soluongbuoi,
-        lichhoc: lichhoc,
-        diadiemhoc: "not found",
-        mota : mota,
-        trangthai : 1,
-        giatien: giatien,
-        giamgia: giamgia,
-        ngaybatdau : start,
-        ngayketthuc: end
-       
-    };
-   const formData = new FormData();
+        const formData = new FormData();
+        let fileToUpload = null;
 
-let fileToUpload = null;
+        // Nếu có ảnh đã crop
+        if (typeof resizedImageBlob !== 'undefined' && resizedImageBlob) {
+            formData.append('file', resizedImageBlob, 'avatar.jpg');
+            fileToUpload = resizedImageBlob;
+        } else {
+            const originalFile = document.getElementById('course-image')?.files[0];
+            if (originalFile) {
+                formData.append('file', originalFile);
+                fileToUpload = originalFile;
+            }
+        }
 
-// Ưu tiên ảnh đã crop
-if (resizedImageBlob) {
-    formData.append('file', resizedImageBlob, 'avatar.jpg');
-    fileToUpload = resizedImageBlob;
-} else {
-    const originalFile = document.getElementById('course-image').files[0];
-    if (originalFile) {
-        formData.append('file', originalFile);
-        fileToUpload = originalFile;
-    }
+        if (fileToUpload) {
+            formData.append('image', fileToUpload);
+        }
+
+        formData.append('data', JSON.stringify(data));
+        for (let pair of formData.entries()) {
+    console.log(`${pair[0]}:`, pair[1]);
 }
 
-// Chỉ thêm nếu file thực sự tồn tại
-if (fileToUpload) {
-    formData.append('image', fileToUpload); // 👈 file đã đúng
-}
 
-formData.append('data', JSON.stringify(data));
+        // Gọi API thêm khóa học
+        const kq = await addKhoaHoc(formData);
+        const res = JSON.parse(kq);
+        console.log("Kết quả thêm khóa học:", kq);
 
-// In ra để kiểm tra
-for (let pair of formData.entries()) {
-    console.log(pair[0] + ': ', pair[1]);
-}
+        if (!res || !res.idkhoahoc) {
+            throw new Error("Không lấy được ID khóa học từ kết quả.");
+        }
 
-    
-   
-    
-  
-    event.preventDefault();
-    const kq = await addKhoaHoc(formData);
-    console.log("hellodfads" , kq);
-    
-    
+        const id = res.idkhoahoc;
+        alert("Đã thêm khóa học, ID: " + id);
 
-    const id = kq[0].idkhoahoc;
-    alert(id); // sẽ in ra: 172
-
-    }
-    catch (error){
-        console.log("loi ", error);
-    }
-    alert("kq", kq);
-    if (kq) {
-      
-        try {
-
+        // Xử lý chi tiết bài học
         const lessons = document.querySelectorAll('#noidungkhoahoc .lesson-item');
         const data3 = [];
-        let d=0;
-        lessons.forEach(lesson =>{
-            const title = lesson.querySelector('.lesson-title')?.textContent.trim();
-            const link=lesson.querySelector('.lesson-link a')?.href;
-            
+        let d = 0;
 
-            data3.push({
-                idkhoahoc : id,
-                idbaihoc: d,
-                tenbaihoc:title,
-                link: link
-            });
-            d++;
+        lessons.forEach(lesson => {
+            const title = lesson.querySelector('.lesson-title')?.textContent.trim();
+            const link = lesson.querySelector('.lesson-link a')?.href;
+
+            console.log(title + " adfasd " + link);
+
+            if (title && link) {
+                data3.push({
+                    idkhoahoc: id,
+                    idbaihoc: d,
+                    tenbaihoc: title,
+                    link: link
+                });
+                d++;
+            }
         });
-        alert("cho anh");
-        console.log("data 3" , data3);
-        if (await addChiTietKhoaHoc(data3)){
-                alert("them chi tiet thanh cong thanh cong");
+
+        if (data3.length === 0) {
+            alert("Không có bài học nào được nhập.");
+            return;
         }
-        
-        else {
-            alert("them chi tiet that bai");
+
+        const ct = await addChiTietKhoaHoc(data3);
+        if (ct) {
+            alert("Thêm chi tiết khóa học thành công!");
+        } else {
+            alert("Thêm chi tiết khóa học thất bại.");
         }
-        }
-        
-       catch (error) {
-        console.log(error);
-        alert("Lỗi khi thêm chi tiết giảng viên: " + error);
+
+    } catch (error) {
+        console.error("Lỗi:", error);
+        alert("Lỗi: " + error.message);
     }
-    } else {
-        alert("Thêm khóa học thất bại!");
-    }
-};
+}
+
 
 document.getElementById('themkhoahoc').onclick = async (event) => {
     event.preventDefault(); // Ngăn reload nếu là form
