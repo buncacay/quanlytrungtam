@@ -1,30 +1,125 @@
-/* Giả định: Header nằm trên cùng, chiếm chiều cao 60px */
+/* --- Reset và nền chung --- */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #FFFBF0; /* Màu nền cam pastel nhẹ */
+}
+
+/* --- Layout chính --- */
+.cards-container {
+    padding: 40px 60px;
+    background-color: #fff;
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin-top: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Bảng --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Tiêu đề bảng --- */
+th {
+    background-color: #FF9800; /* Màu cam sáng */
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+    border-bottom: 2px solid #FF5722;
+}
+
+/* --- Dữ liệu bảng --- */
+td {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #f1f1f1;
+    background-color: #FFFAF0; /* Nền bảng nhẹ */
+    transition: background-color 0.3s ease;
+}
+
+/* --- Hover cho dòng trong bảng --- */
+tr:hover td {
+    background-color: #FFE0B2; /* Màu nền nhẹ nhàng khi hover */
+}
+
+/* --- Cột Trạng thái --- */
+td.status {
+    font-weight: bold;
+    color: #FF5722; /* Màu cam đậm cho trạng thái */
+}
+
+/* --- Cập nhật button --- */
+td button {
+    background-color: #FF9800;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+td button:hover {
+    background-color: #E65100; /* Màu cam đậm khi hover */
+    transform: scale(1.05);
+}
+
+/* --- Diễn giải khi không có dữ liệu --- */
+#diem {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #FF5722; /* Màu cam đậm */
+    margin-top: 30px;
+}
+
+/* --- Phần Sidebar và Header (mặc định) --- */
 #header {
+    height: 50px;
+    background-color: #FF9800;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+#sidebar {
+    width: 200px;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 60px;
-    background-color: #333;
+    height: 100%;
+    background-color: #FF9800;
     color: white;
-    z-index: 1000;
-}
-
-/* Sidebar bên trái, rộng 200px */
-#sidebar {
-    position: fixed;
-    top: 60px; /* dưới header */
-    left: 0;
-    width: 200px;
-    height: calc(100% - 60px);
-    background-color: #444;
-    color: white;
-    z-index: 999;
-}
-
-/* Phần chứa nội dung chính */
-.cards-container {
-    margin-top: 60px; /* tránh header */
-    margin-left: 200px; /* tránh sidebar */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 20px;
+}
+
+/* --- Responsive Layout --- */
+@media (max-width: 768px) {
+    .cards-container {
+        padding: 20px;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        font-size: 12px;
+        padding: 10px;
+    }
 }

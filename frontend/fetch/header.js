@@ -24,6 +24,6 @@ $(document).ready(function() {
 
         // Optional: Thông báo hoặc chuyển hướng
         alert("Bạn đã đăng xuất!");
-        // window.location.href = "index.html"; // Optional: nếu muốn chuyển hướng sau khi đăng xuất
+         window.location.href = "index.html"; // Optional: nếu muốn chuyển hướng sau khi đăng xuất
     });
 });

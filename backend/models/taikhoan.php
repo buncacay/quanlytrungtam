@@ -96,10 +96,10 @@ class taikhoan {
 
     // Xóa mềm tài khoản: chỉ set trangthai = 0
     public function delete() {
-        $query = "UPDATE " . $this->table . " SET trangthai = 0 WHERE id = :id";
+        $query = "UPDATE " . $this->table . " SET trangthai = 0 WHERE username = :id";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $this->idtaikhoan, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $this->user,PDO::PARAM_STR);
 
         return $stmt->execute();
     }

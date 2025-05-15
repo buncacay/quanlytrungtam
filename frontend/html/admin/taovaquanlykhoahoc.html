@@ -5,19 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tạo và Quản lý Khóa Học</title>
     <link rel="stylesheet" href="../../css/taovaquanlykhoahoc.css">
-    <link rel="stylesheet" href="../../css/chinh.css">
+    <link rel="stylesheet" href="../../css/main.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="course-management">
-        <h2>Tạo và Quản lý Khóa Học</h2>
+        
         
         <div id="header"></div>
         <div id="sidebar"></div>
         <div class="cards-container">
             <div class="form-section">
                 <h3>Thêm Khóa Học</h3>
-                <img id="preview" src="../../images/anhgiangvien.png" style="display:block; width:200px;">
+                <div class="image-container">
+                    <img id="preview" src="../../images/anhgiangvien.png" alt="Ảnh giảng viên">
+                </div>
                 <form id="add-course-form">
                     <label for="images">Ảnh khóa học: </label>
                     <input type="file" name="course-image" id="course-image"  accept="image/*">

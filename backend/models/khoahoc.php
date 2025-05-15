@@ -104,8 +104,9 @@ public function create() {
     $stmt->bindParam(':diadiemhoc', $this->diadiemhoc);
     $stmt->bindParam(':mota', $this->mota);
     $stmt->bindParam(':giatien', $this->giatien);
-     $stmt->bindParam(':ngaybatdau', $ngaybatdau);
-    $stmt->bindParam(':ngayketthuc', $ngayketthuc);
+   $stmt->bindParam(':ngaybatdau', $this->ngaybatdau);
+$stmt->bindParam(':ngayketthuc', $this->ngayketthuc);
+
     $stmt->bindParam(':giamgia', $this->giamgia);
       $stmt->bindParam(':trangthai', $this->trangthai);
     $stmt->bindParam(':idkhoahoc', $this->idkhoahoc, PDO::PARAM_INT);

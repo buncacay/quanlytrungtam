@@ -1,7 +1,8 @@
 import { fetchKhoaHocVoiId, fetchChiTiethocvien, fetchTaiKhoanHocvien} from './get.js';
-import {addDonHang} from './add.js';
+
 let idhocvien = "";
 let idkhoahoc = "";
+let user ="";
 document.addEventListener('DOMContentLoaded', async function () {
     const params = new URLSearchParams(window.location.search); // Lấy id khóa học từ URL
     idkhoahoc = params.get('idkhoahoc');
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     
 
     // Kiểm tra xem người dùng đã đăng nhập hay chưa
-    const user = localStorage.getItem('username'); // Giả sử bạn lưu userId trong localStorage khi đăng nhập
+    user = localStorage.getItem('username'); // Giả sử bạn lưu userId trong localStorage khi đăng nhập
  alert(user);
     // Nếu người dùng đã đăng nhập, kiểm tra xem họ có mua khóa học này không
     let purchased = false;
@@ -29,10 +30,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
        
     }
-    if (idkhoahoc && user) {
-        const link = document.getElementById("buy-now-link");
-        link.href = `chitietmuahang.html?idkhoahoc=${idkhoahoc}&idhocvien=${user}`;
-    }
+    // if (idkhoahoc && user) {
+        
+    // }
 
     const main = document.getElementById('tongquan');
     main.innerHTML = `
@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const gia = document.getElementById('hocphi');
     gia.innerHTML = `
         <p>Học phí: <span class="price">${res[0].giatien} VNĐ</span></p>
+        <p>Thời hạn khóa học: ${res[0].ngayketthuc}</p>
     `;
 });
 
@@ -121,35 +122,22 @@ function toggleLesson(index) {
     }
 }
 
+document.getElementById("buy-now-link").addEventListener("click", function (event) {
+    event.preventDefault(); // Ngăn hành vi mặc định (chuyển link)
 
-document.getElementById('xacnhan').addEventListener('click', async function (){
-    const data ={
-        idkhoahoc : idkhoahoc, 
-        idhocvien :idhocvien,
-        trangthaidon: "Chờ xác nhận",
-        thoigiandat: getFormattedDateTime()    }
-    console.log(data);
-    const res = await addDonHang(data);
-    if (res){
-        alert("Hãy liên hệ qua fanpage để gửi hóa đơn và chờ xác nhận");
+    const check = localStorage.getItem('isLoggedIn');
+   
+
+    if (check === 'true' && idkhoahoc && user) {
+        // Redirect đúng
+        window.location.href = `chitietmuahang.html?idkhoahoc=${idkhoahoc}&idhocvien=${user}`;
+    } else {
+        alert("Bạn cần đăng nhập để thực hiện chức năng này");
+        window.location.href = '../admin/dangnhap.html';
     }
-    else {
-        alert("Đã xảy ra lỗi");
-    }
-    
 });
 
-function getFormattedDateTime() {
-    const now = new Date();
-    const pad = (n) => n.toString().padStart(2, '0');
 
-    const year = now.getFullYear();
-    const month = pad(now.getMonth() + 1);
-    const day = pad(now.getDate());
 
-    const hours = pad(now.getHours());
-    const minutes = pad(now.getMinutes());
-    const seconds = pad(now.getSeconds());
 
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
+

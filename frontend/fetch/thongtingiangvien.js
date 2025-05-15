@@ -98,7 +98,7 @@ async function HienThiThongTin(page, total, data) {
 }
 
 async function edit(encodedData) {
-    alert("clgv");
+    // alert("clgv");
     const data = JSON.parse(decodeURIComponent(encodedData));
     isEditing = true;
     editingId = data.idnhanvien;

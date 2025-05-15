@@ -1,0 +1,71 @@
+/* Header */
+.header {
+    background: linear-gradient(90deg, #FFA07A, #FF8C00); /* Gradient cam sáng - cam đậm */
+    color: #fff;
+    padding: 15px 30px; /* Tăng padding để header trở nên thoáng */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px; /* Chiều cao header vừa phải */
+    z-index: 1000;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Thêm bóng mờ cho header */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Viền dưới nhẹ */
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease-in-out; /* Tạo hiệu ứng mượt khi di chuyển */
+}
+
+/* Điều chỉnh nhóm nút sang bên phải */
+.header .actions {
+    display: flex;
+    gap: 20px;
+    margin-left: auto; /* Đẩy nhóm nút sang phải */
+    padding-right: 20px;
+}
+
+.header .btn {
+    background: rgba(255, 255, 255, 0.85);
+    color: #FF8C00; /* Sử dụng màu cam đậm hơn */
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Thêm bóng mờ cho nút */
+}
+
+.header .btn:hover {
+    background: #FF6347; /* Chuyển sang màu cam đỏ khi hover */
+    color: #fff;
+    transform: translateY(-4px); /* Tăng hiệu ứng nâng lên khi hover */
+    box-shadow: 0 8px 20px rgba(255, 99, 71, 0.3); /* Bóng mờ sâu hơn khi hover */
+}
+
+.header .btn:active {
+    transform: translateY(2px); /* Hiệu ứng khi bấm vào nút */
+    box-shadow: 0 3px 8px rgba(255, 99, 71, 0.2); /* Bóng nhẹ khi nhấn */
+}
+
+/* Căn chỉnh phần user-info */
+.header .user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Khoảng cách giữa các phần tử trong user-info */
+}
+
+/* Avatar người dùng */
+.header .user-info .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-image: url('https://via.placeholder.com/150');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15); /* Thêm bóng mờ cho avatar */
+}

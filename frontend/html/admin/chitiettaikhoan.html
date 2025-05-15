@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Tài khoản</title>
      <link rel="stylesheet" href="../../css/chitiettaikhoan.css">
-    <link rel="stylesheet" href="../../css/chinh.css">
+    <link rel="stylesheet" href="../../css/main.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         /* CSS của bạn */
@@ -17,23 +17,28 @@
     <div id="sidebar"></div>
     <div class="cards-container">
        <div>
-   <div>
-    <label for="search-name">Tìm kiếm theo tên:</label>
-    <input type="text" id="search-name" placeholder="Nhập tên tài khoản">
-</div>
-<div>
-    <label for="role-filter">Lọc theo vai trò:</label>
-    <select id="role-filter">
-        <option value="">Tất cả</option>
-        <option value="0">Học sinh</option>
-        <option value="1">Giảng viên</option>
-        <option value="3">Quản trị viên</option>
-    </select>
-</div>
-<div>
+        <div class="filter-bar">
+    <div class="filter-group">
+        <label for="search-name">Tìm kiếm:</label>
+        <input type="text" id="search-name" placeholder="Nhập tên tài khoản">
+    </div>
+    <div class="filter-group">
+        <label for="role-filter">Vai trò:</label>
+        <select id="role-filter">
+            <option value="">Tất cả</option>
+            <option value="0">Học sinh</option>
+            <option value="1">Giảng viên</option>
+            <option value="3">Quản trị viên</option>
+        </select>
+    </div>
+    <div>
     <button id="btn-filter">Lọc</button>
     <button id="btn-reset">Xóa lọc</button>
 </div>
+  
+</div>
+
+
 
 
         <table>

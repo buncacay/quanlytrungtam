@@ -1,8 +1,8 @@
 /* Header */
 .header {
-    background: linear-gradient(90deg, #fc4a1a, #f7b733); /* Gradient cam sáng đẹp */
+    background: linear-gradient(90deg, #FF9F45, #FFB03B); /* Gradient cam nhẹ và dịu hơn */
     color: #fff;
-    padding: 10px 20px;
+    padding: 12px 25px; /* Điều chỉnh padding để header gọn gàng hơn */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -10,52 +10,45 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 70px;
+    height: 65px; /* Giảm chiều cao của header để dịu hơn */
     z-index: 1000;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-    border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1); /* Bóng mờ nhẹ nhàng hơn */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2); /* Viền dưới nhẹ */
     font-family: 'Poppins', sans-serif;
-}
-
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
 }
 
 /* Điều chỉnh nhóm nút sang bên phải */
 .header .actions {
     display: flex;
-    gap: 20px;
+    gap: 18px;
     margin-left: auto; /* Đẩy toàn bộ nhóm nút sang phải */
     padding-right: 20px;
 }
 
 .header .btn {
-    background: rgba(255, 255, 255, 0.85);
-    color: #fc4a1a;
+    background: rgba(255, 255, 255, 0.8); /* Màu nền trong suốt với độ mờ nhẹ */
+    color: #FF9F45; /* Màu cam nhẹ */
     border: none;
-    padding: 12px 30px;
+    padding: 12px 28px;
     border-radius: 50px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 14px; /* Font size nhỏ hơn để gọn gàng */
     font-weight: bold;
     text-transform: uppercase;
-    transition: all 0.4s ease-in-out;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1); /* Bóng mờ nhẹ cho nút */
 }
 
 .header .btn:hover {
-    background: #fc4a1a;
+    background: #FF9F45; /* Nút chuyển sang màu cam dịu khi hover */
     color: #fff;
     transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(252, 74, 26, 0.3);
+    box-shadow: 0 8px 18px rgba(255, 159, 69, 0.3); /* Bóng mờ mượt mà */
 }
 
 .header .btn:active {
     transform: translateY(2px);
-    box-shadow: 0 3px 8px rgba(252, 74, 26, 0.2);
+    box-shadow: 0 3px 8px rgba(255, 159, 69, 0.2); /* Bóng mờ khi nhấn */
 }
 
 
@@ -67,8 +60,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.7); /* Tối nhẹ hơn cho nền */
+    backdrop-filter: blur(8px); /* Làm mờ nền nhẹ nhàng */
     justify-content: center;
     align-items: center;
     z-index: 1300;
@@ -85,11 +78,11 @@
 }
 
 .modal-content {
-    background: linear-gradient(135deg, #f7b733, #fc4a1a);
-    padding: 40px 30px;
+    background: linear-gradient(135deg, #FFB03B, #FF9F45); /* Gradient nhẹ nhàng giữa cam và vàng */
+    padding: 35px 25px;
     border-radius: 20px;
     width: 400px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
     position: relative;
     animation: scaleIn 0.5s ease-out;
 }
@@ -107,55 +100,55 @@
 
 .modal-content .close {
     position: absolute;
-    top: 15px;
-    right: 20px;
+    top: 12px;
+    right: 18px;
     color: white;
-    font-size: 25px;
+    font-size: 22px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .modal-content .close:hover {
-    color: #f7b733;
+    color: #FFB03B; /* Đổi màu khi hover */
 }
 
 .modal-content h2 {
-    font-size: 24px;
+    font-size: 22px;
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     font-weight: bold;
-    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     text-transform: uppercase;
 }
 
 .modal-content form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 .modal-content input {
-    padding: 15px;
+    padding: 12px;
     border: none;
     border-radius: 8px;
     font-size: 16px;
     font-family: 'Poppins', sans-serif;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.85);
     transition: all 0.3s ease;
     box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .modal-content input:focus {
-    border: 2px solid #fc4a1a;
-    box-shadow: 0 0 8px rgba(252, 74, 26, 0.6);
+    border: 2px solid #FF9F45; /* Đổi màu border khi focus */
+    box-shadow: 0 0 8px rgba(255, 159, 69, 0.6);
     outline: none;
 }
 
 .modal-content button {
     background: white;
-    color: #fc4a1a;
+    color: #FF9F45; /* Màu cam nhẹ */
     border: none;
-    padding: 15px 0;
+    padding: 14px 0;
     border-radius: 50px;
     cursor: pointer;
     font-size: 18px;
@@ -166,9 +159,9 @@
 }
 
 .modal-content button:hover {
-    background: #fc4a1a;
+    background: #FF9F45;
     color: white;
-    box-shadow: 0 10px 25px rgba(252, 74, 26, 0.5);
+    box-shadow: 0 10px 25px rgba(255, 159, 69, 0.5);
     transform: translateY(-4px);
 }
 

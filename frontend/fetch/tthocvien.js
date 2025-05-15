@@ -10,23 +10,23 @@ import {
 import { addChiTietHocVien } from './add.js';
 import {RemoveHoaDon, removeChiTietHocvien, RemoveHocvien} from './delete.js';
 
-let id = "";
+let idhocvien = "";
 let khoahocDaDangKy = [];
 let currentPage = 1;
 const limit = 5;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
-  id = params.get('id');
+  idhocvien = params.get('idhocvien');
   // alert(id);
 
-  if (!id) {
+  if (!idhocvien) {
     alert("Không tìm thấy ID học viên.");
     return;
   }
   
 
-  const data = await fetchHocVien(id);
+  const data = await fetchHocVien(idhocvien);
   if (!data || data.length === 0) {
     alert("Không tìm thấy thông tin học viên.");
     return;
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await HienThiThongTin(data);
   await HienThiListKhoaHoc();
-  await HienThiDiem(id, currentPage);
+  await HienThiDiem(idhocvien, currentPage);
 });
 
 // ======================= Thông tin =======================
@@ -60,6 +60,7 @@ async function HienThiThongTin(data) {
     const divdiem= document.getElementById('diem');
   divdiem.innerHTML=`
     <!-- Điểm số -->
+    <div>
     <div id="diemhocvien" class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <h3 class="mb-0">📊 Điểm số của học viên</h3>
@@ -83,7 +84,8 @@ async function HienThiThongTin(data) {
     </div>
 
     <!-- Phân trang -->
-    <div id="pagination" class="text-center my-3"></div>`;
+    <div id="pagination" class="text-center my-3"></div>
+    </div>`;
   } else {
     document.getElementById('student-khoc').innerHTML = `
       <h3>📘 Chi tiết khóa học</h3>
@@ -129,8 +131,7 @@ function HienThiHoaDon(hoadon) {
 }
 
 function HienThiKhoaHoc(data) {
-  const params = new URLSearchParams(window.location.search);
-  idhocvien = params.get('id');
+ 
   document.getElementById('student-khoc').innerHTML = `
     <h3>Chi tiết khóa học</h3>
     <table class="table table-bordered">
@@ -168,8 +169,7 @@ async function HienThiListKhoaHoc() {
     : chuaDangKy.map(kh => `<option value="${kh.idkhoahoc}">${kh.tenkhoahoc}</option>`).join('');
 }
  function themDiem() {
-        const params = new URLSearchParams(window.location.search);
-        const idHocVien = params.get("id");
+       
 
         if (idHocVien) {
             window.location.href = `diemso.html?idhocvien=${idHocVien}`;
@@ -182,7 +182,7 @@ async function themkhoahoc() {
   if (!idkhoahoc) return alert("Vui lòng chọn khóa học.");
 
   const data = {
-    idhocvien: id,
+    idhocvien: idhocvien,
     idkhoahoc,
     ketquahoctap: "chua co",
     tinhtranghocphi: "chua co"
@@ -190,7 +190,7 @@ async function themkhoahoc() {
 
   try {
     await addChiTietHocVien(data);
-    const updatedHocVien = await fetchHocVien(id);
+    const updatedHocVien = await fetchHocVien(idhocvien);
     await HienThiThongTin(updatedHocVien);
     await HienThiListKhoaHoc();
     alert("Thêm khóa học thành công!");
@@ -308,7 +308,7 @@ window.remove=remove;
 
 async function remove(){
   const params = new URLSearchParams(window.location.search);
-  const idhocvien = params.get('id');
+  const idhocvien = params.get('idhocvien');
   const res = await RemoveHocvien(idhocvien);
   if (res){
     alert("xoa thanh cong");

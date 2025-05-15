@@ -1,0 +1,153 @@
+/* General styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9; /* Màu nền nhẹ nhàng */
+}
+
+/* Main content */
+.main {
+    margin-left: 300px; /* Đảm bảo phần nội dung không bị che bởi sidebar */
+    padding: 40px;
+    background-color: #f9f9f9; /* Nền sáng và thoáng đãng */
+}
+
+/* Container */
+.container {
+    max-width: 1200px; /* Mở rộng chiều rộng */
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1); /* Bóng đổ đậm hơn tạo chiều sâu */
+    transition: transform 0.3s ease-in-out;
+}
+
+.container:hover {
+    transform: translateY(-5px); /* Đẩy lên khi hover tạo hiệu ứng động */
+}
+
+/* Heading */
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 36px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Section titles */
+h2 {
+    color: #FF6347; /* Màu đỏ cam mạnh mẽ */
+    font-size: 28px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Bank info section */
+.bank-info {
+    margin-bottom: 40px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.bank-info p {
+    font-size: 20px;
+    margin: 10px 0;
+    color: #555;
+}
+
+.bank-info strong {
+    font-weight: bold;
+    color: #333;
+}
+
+/* QR Code section */
+.qr-code {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.qr-code img {
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Contact section */
+.contact {
+    margin-bottom: 40px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.contact a {
+    text-decoration: none;
+    color: #FF6347; /* Màu đỏ cam */
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.contact a:hover {
+    color: #FF7F50; /* Màu cam khi hover */
+    transform: scale(1.05); /* Phóng to nhẹ */
+}
+
+.contact img {
+    margin-right: 15px;
+    width: 30px;
+    height: 30px;
+}
+
+/* Confirmation button */
+#xacnhan {
+    display: block;
+    margin: 40px auto;
+    padding: 15px 40px;
+    background-color: #FF6347;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px; /* Nút bo tròn */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#xacnhan:hover {
+    background-color: #FF7F50;
+    transform: translateY(-5px); /* Hiệu ứng đẩy lên khi hover */
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .main {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    .bank-info p, .contact a {
+        font-size: 18px;
+    }
+}

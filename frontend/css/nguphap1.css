@@ -1,194 +1,154 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-body {
-    font-family: 'Poppins', Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(120deg, #f9fafb, #ffffff); /* Nền sáng nhẹ nhàng */
-    color: #1f2937;
-}
-
-.main {
-    margin-top: 80px;
-    margin-left: 300px;
-    padding: 20px;
-    background-color: #ffffff; /* Giữ nền đơn giản */
-    min-height: calc(100vh - 60px);
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.main h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #1f2937;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
+/* Tổng thể container */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  padding: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.course-header {
-    text-align: center;
-    margin-bottom: 30px;
+/* Tổng quan khóa học */
+#tongquan {
+  flex: 2;
+  background-color: #fffaf0;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  width: 100%;
 }
 
-.course-header h1 {
-    font-size: 28px;
-    font-weight: bold;
-    color: #d1d5db; /* Nhẹ nhàng hơn cho hiệu ứng watermark */
+/* Phần tìm kiếm bài học */
+.lesson-search {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
 }
 
-.content {
-    display: flex;
-    gap: 20px;
-    background: #ffffff; /* Giữ nền trắng tinh tế */
-    padding: 20px;
-    border-radius: 12px; /* Giảm bo góc */
+.lesson-search input {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #f6ad55;
+  font-size: 1rem;
+  background-color: #fffaf0;
 }
 
-.left {
-    flex: 3;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
+.lesson-search button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #ed8936;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.course-description {
-    margin-top: 20px;
-    font-size: 16px;
-    color: #4b5563;
-    line-height: 1.8;
-    background: #f9fafb; /* Nền sáng nhạt */
-    padding: 20px;
-    border-radius: 10px; /* Giảm bo góc */
+.lesson-search button:hover {
+  background-color: #dd6b20;
+}
+
+/* Danh sách bài học */
+.lesson-list {
+  flex: 2;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .lesson-list h2 {
-    margin-top: 30px;
-    font-size: 20px;
-    color: #1f2937;
-    border-left: 4px solid #3b82f6;
-    padding-left: 10px;
+  color: #c05621;
+  margin-bottom: 20px;
 }
 
+/* Chi tiết bài học */
+#chitietbaihoc {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Khối bài học */
 .lesson-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-radius: 8px; /* Giảm bo góc */
-    background: #f3f4f6; /* Nền màu sáng nhẹ */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 12px 20px;
+  background-color: #ffe4c4;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .lesson-item:hover {
-    background-color: #e5e7eb; /* Hiệu ứng nhẹ khi hover */
-    transform: translateY(-3px);
+  background-color: #f6ad55;
+  transform: translateY(-2px);
 }
 
-.lesson-item .lesson-index {
-    font-weight: bold;
-    color: #3b82f6;
-    font-size: 16px;
+.lesson-index {
+  font-weight: bold;
+  color: #ed8936;
 }
 
-.lesson-item .lesson-name {
-    flex: 1;
-    text-align: left;
-    color: #374151;
+.lesson-name {
+  font-weight: bold;
+  color: #9c4221;
 }
 
-.lesson-item .free {
-    color: #16a34a;
-    font-weight: 600;
-    text-align: right;
+.lesson-link {
+  display: none;
 }
 
+/* Tổng quan bên phải */
 .right {
-    flex: 1;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
+  flex: 1;
+  background-color: #fff7f0;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .course-overview h3 {
-    font-size: 18px;
-    color: #1f2937;
-    margin-bottom: 15px;
+  color: #c05621;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
 }
 
-.course-overview .price {
-    color: #ef4444;
-    font-weight: bold;
-    font-size: 16px;
+.course-overview p {
+  color: #555;
+  margin-bottom: 15px;
 }
 
-.btn {
-    display: block;
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-}
-.btn.buy-now {
-    background: #10b981;
-    color: #ffffff;
+#hocphi {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #e53e3e;
+  margin-bottom: 10px;
 }
 
-.btn.buy-now:hover {
-    background: #059669;
-    transform: translateY(-3px);
-}
-.lesson-search {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 20px 0;
-    background: #f9fafb;
-    padding: 10px 15px;
-    border-radius: 8px;
-}
-
-#search-input {
-    flex: 1;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+/* Nút mua ngay */
+#buy-now-link {
+  display: inline-block;
+  background-color: #ed8936;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  margin-top: 15px;
 }
 
-#search-input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
-}
-
-#search-button {
-    padding: 10px 15px;
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #ffffff;
-    background: #3b82f6;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-#search-button:hover {
-    background: #2563eb;
-    transform: translateY(-2px);
+#buy-now-link:hover {
+  background-color: #dd6b20;
 }

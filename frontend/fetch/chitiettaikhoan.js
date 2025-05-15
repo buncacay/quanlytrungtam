@@ -22,6 +22,7 @@ async function loadTaiKhoan(page = 1) {
     currentPage = page;
 
     const response = await fetchAllTaiKhoan(); // giả định trả về toàn bộ
+    
     currentFilteredData = response.data;
     // alert(currentFilteredData.length);
     // Tính lại số trang dựa trên số lượng tài khoản
@@ -74,7 +75,7 @@ function getChucVuText(role) {
         default: return 'Không xác định';
     }
 }
-
+let idhocvien = ""; 
 async function renderTaiKhoan(data) {
     const tbody = document.getElementById('account-list');
     tbody.innerHTML = '';
@@ -100,40 +101,52 @@ async function renderTaiKhoan(data) {
 
     // Đợi tất cả promise hoàn tất
     const results = await Promise.all(fetchPromises.filter(p => p !== null));
-    console.log("kq",results);
 
-    // Xử lý kết quả và hiển thị
- for (const item of results) {
-    if (!item || !item.userData) continue;
-    
+    let tenNguoiDung = "";
+    // Giả sử bạn đã có kết quả từ các promises fetch ở đây trong `results`
+    for (let item of results) {
+        if (!item || !item.userData || item.userData.length === 0) continue;
 
-    const acc = item.acc;
-    
-    const role = acc.role;  // Đây là giá trị 'role' mà bạn cần chuyển thành tên chức vụ
-    const chucVuText = getChucVuText(role);  // Lấy tên chức vụ từ hàm getChucVuText
-    const tenNguoiDung = item.isHocVien ? item.userData[0].hoten : item.userData[0].tennhanvien;
-    const id = item.isHocVien ? item.userData[0].idhocvien : item.userData[0].idnhanvien; // Lấy ID từ dữ liệu
-    console.log("sdfasdf",acc.username);
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${id}</td> <!-- Hiển thị ID -->
-        <td>${tenNguoiDung}</td>
-        <td>${acc.username}</td>
-        <td>${chucVuText}</td> <!-- Hiển thị chức vụ -->
-        <td>
-            <button onclick="editTaiKhoan('${acc.username}', ${role})">Sửa</button>
-            <button onclick="removeTaiKhoan('${acc.username}')">Xóa</button>
-           
-        </td>
-    `;
-    tbody.appendChild(row);
+        console.log("adfasd" , item);
+        const userData = item.userData;
+        const acc = item.acc;
+        const role = acc.role;  // Đây là giá trị 'role' mà bạn cần chuyển thành tên chức vụ
+        // alert(role);
+
+        // Kiểm tra role và gán tên người dùng phù hợp
+        if (role === "0") {
+            // Lấy tên học viên từ userData
+            tenNguoiDung = userData.hoten;
+            idhocvien = userData.idhocvien
+            console.log(userData.idhocvien);
+        } else {
+            // Lấy tên giảng viên từ userData
+            console.log(userData);
+            tenNguoiDung = userData[0].tennhanvien;
+        }
+        
+        // Tiến hành render dữ liệu
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${acc.id}</td>  <!-- Ví dụ hiển thị ID tài khoản -->
+            <td>${tenNguoiDung}</td> <!-- Tên người dùng -->
+            <td>${acc.username}</td> <!-- Tên tài khoản -->
+            <td>${getChucVuText(role)}</td> <!-- Chức vụ -->
+            <td>
+                <button onclick="editTaiKhoan('${idhocvien}')">Sửa</button>
+                <button onclick="removeTaiKhoan('${acc.username}')">Xóa</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    }
 }
 
-}
+
+
 
 // Sửa tài khoản: chuyển sang trang qltaikhoan.html
-function editTaiKhoan(id, role) {
-    window.location.href = `qltaikhoan.html?user=${id}&role=${role}`;
+function editTaiKhoan(id) {
+    window.location.href = `tthocvien.html?idhocvien=${id}`;
 }
 window.editTaiKhoan = editTaiKhoan;
 

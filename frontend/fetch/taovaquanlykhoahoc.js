@@ -222,16 +222,14 @@ document.addEventListener('DOMContentLoaded', async function (event) {
     chitietdanhsach.innerHTML = `
         <!-- Danh sách học viên -->
         <div class="student-list-section">
-            <h3>📋 Danh sách học viên</h3>
-            <!-- Gán giá trị idkhoahoc vào URL -->
-            <a href="danhsachhocvien.html?idkhoahoc=${idkhoahoc}">Xem chi tiết</a>
+           
+            <a href="danhsachhocvien.html?idkhoahoc=${idkhoahoc}">📋 Danh sách học viên</a>
         </div>
 
         <!-- Danh sách giảng viên -->
         <div class="instructor-list-section" style="margin-top: 30px;">
-            <h3>👨‍🏫 Danh sách giảng viên</h3>
-            <!-- Gán giá trị idkhoahoc vào URL -->
-            <a href="phanconggiangday.html?idkhoahoc=${idkhoahoc}">Xem chi tiết</a>
+          
+            <a href="phanconggiangday.html?idkhoahoc=${idkhoahoc}">👨‍🏫 Danh sách giảng viên</a>
         </div>`;
 
 
@@ -438,7 +436,7 @@ else {
         giamgia: giamgia,
         ngaybatdau : start,
         ngayketthuc : end,
-        trangthai : 2
+        trangthai : trangthai
         // idnhanvien: idnhanvien
     };
     console.log(data);

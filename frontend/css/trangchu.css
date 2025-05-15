@@ -1,145 +1,127 @@
-/* Reset Margin và Padding cho tất cả các phần tử */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Body */
-body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(to bottom, #fffaf0, #f0f8ff); /* Màu nền sáng nhẹ nhàng */
-  color: #333;
-  line-height: 1.6;
-  padding-top: 0; /* Khoảng cách cho header fixed */
-}
-
-/* Intro Section */
-.intro-section {
+/* Khối tổng các khóa học */
+#all {
   display: flex;
   flex-wrap: wrap;
-  background: white;
+  justify-content: center;
+  gap: 30px;
+  padding: 20px;
+}
+
+/* Thẻ khóa học */
+.course-card {
+  width: 300px;
+  background: #ffffff;
   border-radius: 15px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  animation: fadeIn 1s ease-in-out;
-  margin-bottom: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.intro-text {
-  flex: 1;
-  padding: 40px;
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
-.intro-text h2 {
-  font-size: 30px;
-  margin-bottom: 20px;
-  color: #fc4a1a;
+/* Ảnh khóa học */
+.course-image img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Nội dung */
+.course-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Tiêu đề khóa học */
+.course-title {
+  font-size: 20px;
   font-weight: bold;
-}
-
-.intro-text p {
-  font-size: 18px;
-  margin-bottom: 20px;
-  line-height: 1.8;
-}
-
-.highlights p {
+  color: #fc4a1a;
   margin-bottom: 10px;
-  font-weight: 500;
+}
+
+/* Mô tả */
+.course-desc {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 15px;
+  flex-grow: 1;
+}
+
+/* Giá và nút */
+.course-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.course-price {
+  font-weight: bold;
+  color: #27ae60;
   font-size: 16px;
 }
 
-.intro-image {
-  flex: 1;
-  min-width: 300px;
-}
-
-.intro-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
-}
-
-.intro-image img:hover {
-  transform: scale(1.05); /* Thêm hiệu ứng phóng to khi hover ảnh */
-}
-
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 20px;
-  background: #f7b733;
-  color: white;
-  margin-top: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Tạo bóng nhẹ */
-}
-
-/* Animation */
-@keyframes modalFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.modal {
-  animation: modalFadeIn 0.5s ease-in-out;
-}
-
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* Tìm kiếm */
-.search-section {
-  margin-top: 20px; /* Khoảng cách từ header */
-  background: #f0f8ff; /* Màu nền khác biệt với intro-section */
-  padding: 10px; /* Giảm padding để phần tìm kiếm nhỏ hơn */
-  border-radius: 8px; /* Góc bo tròn nhẹ */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Tạo bóng nhẹ */
-  width: 100%; /* Đặt chiều rộng 100% để kéo dài hết chiều rộng của main */
-  max-width: 1200px; /* Giới hạn chiều rộng tối đa giống với intro-section */
-  margin: 20px auto; /* Căn giữa phần tìm kiếm */
-}
-
-.search-form {
-  display: flex;
-  gap: 10px; /* Tăng khoảng cách giữa các input và nút */
-  justify-content: flex-start; /* Căn bên trái */
-}
-
-.search-input {
-  width: 300px; /* Đặt chiều rộng input lớn hơn */
-  padding: 10px; /* Tăng padding của input */
-  font-size: 16px; /* Kích thước chữ lớn hơn */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  outline: none;
-}
-
-.search-input:focus {
-  border-color: #fc4a1a; /* Đổi màu viền khi focus */
-}
-
-.search-button {
-  padding: 10px 20px; /* Kích thước nút lớn hơn */
+/* Nút mua ngay */
+.buy-now-btn {
   background-color: #fc4a1a;
   color: white;
   border: none;
+  padding: 8px 14px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px; /* Kích thước chữ của nút lớn hơn */
+  font-size: 14px;
+  transition: background 0.3s ease;
 }
 
-.search-button:hover {
-  background-color: #f7b733; /* Màu sáng hơn khi hover */
+.buy-now-btn:hover {
+  background-color: #f7b733;
+}
+
+.course-search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: #f0f8ff;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 800px;
+}
+
+.course-search-bar input {
+  flex: 1;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+
+.course-search-bar input:focus {
+  border-color: #fc4a1a;
+}
+
+.course-search-bar button {
+  padding: 10px 20px;
+  background-color: #fc4a1a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.course-search-bar button:hover {
+  background-color: #f7b733;
 }

@@ -1,0 +1,14 @@
+/* main.css */
+
+/* Container chính của nội dung */
+.cards-container {
+    margin-top: 75px;     /* Đẩy xuống dưới header (65px + khoảng cách an toàn) */
+    margin-left: 310px;   /* Đẩy sang phải để tránh bị sidebar (300px + khoảng cách an toàn) */
+    padding: 30px;
+    background: #fdfcfb;
+    min-height: 100vh;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+     gap: 60px; 
+}

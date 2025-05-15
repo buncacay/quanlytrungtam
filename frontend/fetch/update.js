@@ -1,5 +1,5 @@
 export async function UpdateHocVien(data) {
-    alert("Đang gửi dữ liệu cập nhật...");
+    // alert("Đang gửi dữ liệu cập nhật...");
     const res = await fetch("http://localhost/quanlytrungtam/backend/controller/HocVienController.php", {
         method: "PUT",
         headers: {
@@ -16,7 +16,7 @@ export async function UpdateHocVien(data) {
     return true;
 }
 export async function UpdateNhanVien(data) {
-    alert("Đang gửi dữ liệu cập nhật...");
+    // alert("Đang gửi dữ liệu cập nhật...");
 
     try {
         const res = await fetch("http://localhost/quanlytrungtam/backend/controller/nhanviencontroller.php", {
@@ -56,7 +56,7 @@ export async function UpdateNhanVien(data) {
 
 
 export async function UpdateGiaKhoaHoc(data){
-    alert("chay alrt");
+    // alert("chay alrt");
     const res = await fetch('http://localhost/quanlytrungtam/backend/controller/KhoahocController.php?action=gia',{
         method:'PUT',
         headers:{
