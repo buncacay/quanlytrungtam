@@ -3,10 +3,11 @@ import { fetchKhoaHocVoiId, fetchChiTiethocvien, fetchTaiKhoanHocvien} from './g
 let idhocvien = "";
 let idkhoahoc = "";
 let user ="";
+ let purchased = false;
 document.addEventListener('DOMContentLoaded', async function () {
     const params = new URLSearchParams(window.location.search); // Lấy id khóa học từ URL
     idkhoahoc = params.get('idkhoahoc');
-    alert(idkhoahoc);
+    // alert(idkhoahoc);
    
     const res = await fetchKhoaHocVoiId(idkhoahoc);
 
@@ -15,10 +16,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Kiểm tra xem người dùng đã đăng nhập hay chưa
     user = localStorage.getItem('username'); // Giả sử bạn lưu userId trong localStorage khi đăng nhập
- alert(user);
+    const oke = localStorage.getItem('isLoggedIn');
+//  alert(user);
     // Nếu người dùng đã đăng nhập, kiểm tra xem họ có mua khóa học này không
     let purchased = false;
-    if (user) {
+    if (user && oke) {
         const userCourses = await fetchTaiKhoanHocvien(user); // Lấy danh sách khóa học của người dùng
         idhocvien = userCourses[0].idhocvien;
         console.log(userCourses[0].idhocvien);
@@ -86,11 +88,17 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Nếu đã mua khóa học, hiển thị tất cả bài học, nếu chưa thì chỉ hiển thị 1 bài
     if (purchased) {
-        alert("da mua roi");
+        // alert("da mua roi");
+          const buyNowBtn = document.getElementById('buy-now-link');
+    if (buyNowBtn) {
+        buyNowBtn.style.display = 'none';
+    }
         // Hiển thị tất cả bài học nếu đã mua khóa học
         renderLessons(lessons);
     } else {
-        alert("chua mua khoa nay");
+        // alert("chua mua khoa nay");
+     
+
         // Chỉ hiển thị bài học đầu tiên nếu chưa mua khóa học
         renderLessons([lessons[0]]);
     }
@@ -126,11 +134,11 @@ document.getElementById("buy-now-link").addEventListener("click", function (even
     event.preventDefault(); // Ngăn hành vi mặc định (chuyển link)
 
     const check = localStorage.getItem('isLoggedIn');
-   
+    
 
     if (check === 'true' && idkhoahoc && user) {
         // Redirect đúng
-        window.location.href = `chitietmuahang.html?idkhoahoc=${idkhoahoc}&idhocvien=${user}`;
+        window.location.href = `chitietmuahang.html?idkhoahoc=${idkhoahoc}&idhocvien=${idhocvien}`;
     } else {
         alert("Bạn cần đăng nhập để thực hiện chức năng này");
         window.location.href = '../admin/dangnhap.html';

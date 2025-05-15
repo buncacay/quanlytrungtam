@@ -1,0 +1,157 @@
+.cards-container {
+  margin-left: 240px;    /* tránh bị sidebar che nếu có */
+  margin-top: 80px;      /* tránh bị header che nếu có */
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Bộ lọc tìm kiếm và lọc khóa học */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.filter-bar input[type="text"] {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+#filter-khoahoc {
+  flex: 1;
+}
+
+#btn-filter {
+  padding: 10px 16px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#btn-filter:hover {
+  background-color: #0056b3;
+}
+
+/* Danh sách học viên */
+#student-all {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+/* Một thẻ học viên (tuỳ bạn tạo trong JS hoặc HTML) */
+#student-all .student-card {
+  padding: 16px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#student-all .student-card h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+#student-all .student-card p {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Phân trang */
+#pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+#pagination button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#pagination button:hover {
+  background-color: #e9ecef;
+}
+
+#pagination button.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* Bảng học viên trong #student-all */
+#student-all table {
+  width: 100%;
+  border-collapse: collapse;
+  background: linear-gradient(135deg, #fffaf0, #fff5e6);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+}
+
+/* Header bảng */
+#student-all thead {
+  background: linear-gradient(to right, #ff8008, #ffc837);
+  color: white;
+}
+
+#student-all thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Hàng dữ liệu */
+#student-all tbody tr {
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+#student-all tbody tr:nth-child(even) {
+  background-color: #fff0e6;
+}
+
+#student-all tbody tr:hover {
+  background-color: #ffe5cc;
+}
+
+/* Ô dữ liệu */
+#student-all td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1c27d;
+  color: #333;
+}
+
+/* Link Xem chi tiết */
+#student-all a {
+  color: #ff6600;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+#student-all a:hover {
+  color: #cc3300;
+  text-decoration: underline;
+}
+

@@ -97,10 +97,11 @@ async function capnhat(idkhoahoc, idhocvien, iddonhang, selectElement) {
             const data2 = {
                 idkhoahoc: idkhoahoc,
                 idhocvien: idhocvien,
-                tinhtranghocpho: "Đang học",
+                tinhtranghocphi: "Đang học",
                 ketquahoctap: "Chưa có"
             };
 
+            console.log(data2);
             const result = await addChiTietHocVien(data2);
             console.log("Kết quả thêm chi tiết học viên:", result);
             alert("Đã thêm học viên vào chi tiết học.");

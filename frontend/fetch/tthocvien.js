@@ -4,7 +4,8 @@ import {
   fetchHocVien,
   fetchHoaDonWithIdhocvien,
   fetchChiTiethocvien,
-  fetchDiemSovoiIdHocvien
+  fetchDiemSovoiIdHocvien,
+  fetchChiTiethocvienKhongid
 } from './get.js';
 
 import { addChiTietHocVien } from './add.js';
@@ -26,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   
 
-  const data = await fetchHocVien(idhocvien);
+  const data = await fetchChiTiethocvienKhongid(idhocvien);
   if (!data || data.length === 0) {
     alert("Không tìm thấy thông tin học viên.");
     return;
@@ -50,11 +51,13 @@ async function HienThiThongTin(data) {
   `;
 
   khoahocDaDangKy = data.map(item => item.idkhoahoc).filter(Boolean);
+  console.log("da dang ky ne ", data);
 
   const hoadon = await fetchHoaDonWithIdhocvien(hocvien.idhocvien);
   HienThiHoaDon(hoadon);
 
   const chitiethocvien = await fetchChiTiethocvien(hocvien.idhocvien);
+  console.log("day la chi tiet hoc vie ",chitiethocvien);
   if (chitiethocvien?.length > 0) {
     HienThiKhoaHoc(chitiethocvien);
     const divdiem= document.getElementById('diem');
@@ -161,18 +164,22 @@ function HienThiKhoaHoc(data) {
 async function HienThiListKhoaHoc() {
   const select = document.getElementById('dky');
   const data = await fetchKhoaHoc();
+  console.log("day la tong khoa hocj ", data);
   const list = Array.isArray(data.data) ? data.data : data;
 
   const chuaDangKy = list.filter(kh => !khoahocDaDangKy.includes(kh.idkhoahoc));
+  console.log(chuaDangKy);
   select.innerHTML = chuaDangKy.length === 0
     ? `<option disabled>Đã đăng ký hết các khóa học.</option>`
     : chuaDangKy.map(kh => `<option value="${kh.idkhoahoc}">${kh.tenkhoahoc}</option>`).join('');
 }
+
+
  function themDiem() {
        
 
-        if (idHocVien) {
-            window.location.href = `diemso.html?idhocvien=${idHocVien}`;
+        if (idhocvien) {
+            window.location.href = `diemso.html?idhocvien=${idhocvien}`;
         } else {
             alert("Không tìm thấy ID học viên.");
         }
@@ -286,7 +293,7 @@ async function removekhoahoc(idkhoahoc, idhocvien){
    const confirmDelete = confirm("Bạn có chắc chắn muốn xóa học viên khỏi khóa học này?");
   if (!confirmDelete) return; // Người dùng chọn 'Hủy'
   console.log(idkhoahoc +" asdfasd" + idhocvien);
-  const res = await removeChiTietHocvien(idkhoahoc, idhocvien);
+  const res = await removeChiTietHocvien(idhocvien, idkhoahoc);
   console.log(res);
   if (res) {
     alert("Xóa thành công");

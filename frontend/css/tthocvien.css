@@ -1,171 +1,177 @@
-/* ===== Toàn trang ===== */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #fffaf5;
-  color: #444;
+/* ======= RESET & CƠ BẢN ======= */
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  line-height: 1.6;
 }
 
-/* ===== Header ===== */
-#header {
-  background-color: #ffe4c4;
-  color: #4a3f35;
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(to right, #fff5e6, #ffd699);
+  color: #333;
   padding: 20px;
-  font-size: 22px;
-  font-weight: 600;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* ===== Sidebar ===== */
-#sidebar {
-  background-color: #fff2e6;
-  color: #444;
-  padding: 24px 20px;
-  width: 230px;
-  height: 100vh;
-  position: fixed;
-  overflow-y: auto;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-}
-
-#sidebar a {
-  display: block;
-  padding: 10px 0;
-  font-size: 16px;
-  text-decoration: none;
-  color: #444;
-  transition: 0.2s;
-}
-
-#sidebar a:hover {
-  background-color: #ffdab9;
-  border-radius: 5px;
-  padding-left: 10px;
-}
-
-/* ===== Nội dung chính ===== */
+/* ======= CONTAINER CHÍNH ======= */
 .cards-container {
-  margin-left: 250px;
-  padding: 40px 30px;
-}
-
-/* ===== Thẻ thông tin ===== */
-#student-info,
-#student-hdon,
-#huhu,
-#diem {
-  background-color: #fff8f1;
+  margin-left: 240px;  /* Tránh sidebar */
+  margin-top: 80px;    /* Tránh header */
+  padding: 20px;
+  background-color: #ffffff;
   border-radius: 10px;
-  padding: 24px;
-  margin-bottom: 30px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-#student-info p,
-#student-hdon p {
-  margin: 10px 0;
+/* ======= THÔNG TIN HỌC VIÊN ======= */
+#student-info h2 {
+  color: #ff6f00;
+  margin-bottom: 10px;
 }
 
-/* ===== Tiêu đề ===== */
-h2, h3 {
-  color: #e38b4e;
-  margin-bottom: 18px;
-  font-weight: 600;
+#student-info p {
+  font-size: 16px;
+  margin: 5px 0;
+  color: #333;
 }
 
-/* ===== Bảng ===== */
+/* ======= BẢNG – HÓA ĐƠN, KHÓA HỌC, ĐIỂM ======= */
 table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white;
+  margin-top: 16px;
+  background: #fff;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+thead {
+  background: linear-gradient(to right, #ff6600, #ff9933);
+  color: white;
 }
 
 th, td {
-  padding: 14px 16px;
+  padding: 12px 14px;
   text-align: left;
-  border-bottom: 1px solid #f3e5dc;
+  border-bottom: 1px solid #eee;
 }
 
-th {
-  background-color: #ffebd6;
-  color: #5e412f;
-  font-weight: 600;
+tbody tr:nth-child(even) {
+  background-color: #fff5e6;
 }
 
 tbody tr:hover {
-  background-color: #fff4eb;
+  background-color: #ffe0b3;
 }
 
-/* ===== Nút bấm ===== */
+/* ======= NÚT HÀNH ĐỘNG ======= */
 button {
   border: none;
+  padding: 8px 14px;
+  margin: 6px 4px 6px 0;
   border-radius: 6px;
-  padding: 10px 16px;
-  font-size: 15px;
+  font-weight: bold;
+  font-size: 14px;
   cursor: pointer;
-  margin-right: 8px;
-  margin-top: 10px;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-button:hover {
-  opacity: 0.9;
-}
-
+/* 🎨 Nút theo chức năng */
 .btn-warning {
-  background-color: #ffcc99;
-  color: #5a3e1b;
+  background-color: #ff6f00;
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: #e65c00;
 }
 
 .btn-danger {
-  background-color: #ffc2b3;
-  color: #721c24;
+  background-color: #ff4d4f;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #cc0000;
 }
 
 .btn-success {
-  background-color: #c5e1a5;
-  color: #2e5629;
+  background-color: #ff8000;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #e67300;
 }
 
 .btn-primary {
-  background-color: #ffe0b2;
-  color: #5d4037;
+  background-color: #ffb84d;
+  color: white;
 }
 
-/* ===== Form & Select ===== */
-.form-select {
-  background-color: #fff0e0;
-  border: 1px solid #f4d3b2;
-  border-radius: 6px;
+.btn-primary:hover {
+  background-color: #ff9f00;
+}
+
+/* ======= SELECT ĐĂNG KÝ KHÓA HỌC ======= */
+#dky {
   padding: 8px 12px;
-  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #ff9933;
+  margin-top: 8px;
   margin-bottom: 12px;
+  width: 100%;
+  background: #fff8e1;
 }
 
-/* ===== Phân trang ===== */
+/* ======= PHÂN TRANG ======= */
 #pagination {
+  margin-top: 20px;
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-  flex-wrap: wrap;
+  gap: 6px;
 }
 
 #pagination button {
-  background-color: #ffdbb5;
-  border: none;
-  border-radius: 5px;
-  padding: 6px 12px;
-  margin: 4px;
-  font-size: 14px;
-  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #ffcc80;
+  color: #ff6600;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+#pagination button:hover {
+  background-color: #ffd699;
 }
 
 #pagination button.active {
-  background-color: #f7a76c;
-  color: white;
+  background-color: #ff9933;
+  color: #fff;
+  border-color: #ff9933;
+}
+
+/* ======= NHÃN, TIÊU ĐỀ ======= */
+label {
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+h3 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #ff6f00;
+  font-weight: 600;
+}
+
+/* ======= CHỈNH LẠI ĐỘ SÁNG CỦA BẢNG TRONG MỘT SỐ TRƯỜNG HỢP ======= */
+table td, table th {
+  transition: background-color 0.3s ease;
+}
+
+table td:hover, table th:hover {
+  background-color: #ffcc80;
 }

@@ -1,17 +1,21 @@
 import { addDiem } from './add.js';
 import { UpdateDiem } from './update.js';
 import { RemoveDiem } from './delete.js';
-import { fetchDiem, fetchAllHocVien, fetchKhoaHoc, fetchDiemvoihocvien } from './get.js';
+import { fetchDiem, fetchAllHocVien, fetchKhoaHoc, fetchDiemvoihocvien, fetchChiTiethocvien } from './get.js';
 
 let currentPage = 1;
 let totalPages = 1;
 let allScores = [];
-
+let idhocvien ="";
+let idkhoahoc ="";
 document.addEventListener('DOMContentLoaded', async () => {
    
     loadDropdownData();
+    const params = new URLSearchParams(window.location.search);
+    idkhoahoc = params.get("idkhoahoc") || document.getElementById('courseId')?.value;
+    idhocvien = params.get('idhocvien');
 
-    document.getElementById('studentId').addEventListener('change', () => tryFetchScores(1));
+    // document.getElementById('studentId').addEventListener('change', () => tryFetchScores(1));
     document.getElementById('courseId').addEventListener('change', () => tryFetchScores(1));
     document.getElementById('addScoreBtn').addEventListener('click', addScore);
 
@@ -21,17 +25,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadDropdownData() {
     try {
         const hocVienRes = await fetchAllHocVien();
-        const khoaHocRes = await fetchKhoaHoc();
+        const khoaHocRes = await fetchChiTiethocvien(idhocvien);
 
-        const studentSelect = document.getElementById('studentId');
+        // const studentSelect = document.getElementById('studentId');
         const courseSelect = document.getElementById('courseId');
 
-        hocVienRes.data.forEach(hv => {
-            const option = document.createElement('option');
-            option.value = hv.idhocvien;
-            option.textContent = hv.hoten || `Học viên ${hv.idhocvien}`;
-            studentSelect.appendChild(option);
-        });
+        // hocVienRes.data.forEach(hv => {
+        //     const option = document.createElement('option');
+        //     option.value = hv.idhocvien;
+        //     option.textContent = hv.hoten || `Học viên ${hv.idhocvien}`;
+        //     studentSelect.appendChild(option);
+        // });
 
         khoaHocRes.forEach(kh => {
             const option = document.createElement('option');
@@ -48,7 +52,7 @@ async function loadDropdownData() {
 async function tryFetchScores(page = 1) {
     const params = new URLSearchParams(window.location.search);
     const idkhoahoc = params.get("idkhoahoc") || document.getElementById('courseId')?.value;
-    const idhocvien = params.get('idhocvien');
+    idhocvien = params.get('idhocvien');
 
     let res = []; // <-- khai báo bên ngoài
 
@@ -110,7 +114,7 @@ function renderScores(data) {
 async function addScore() {
     
     const payload = {
-        idhocvien: document.getElementById('studentId').value,
+        idhocvien: idhocvien,
         idkhoahoc: document.getElementById('courseId').value,
         kythi: document.getElementById('kythi').value,
         diemso: parseFloat(document.getElementById('score').value),
@@ -126,7 +130,7 @@ async function addScore() {
         
         const updated = {
             id: iddiemso,
-            idhocvien: document.getElementById('studentId').value,
+            idhocvien: idhocvien,
             idkhoahoc: document.getElementById('courseId').value,
             kythi: document.getElementById('kythi').value,
             diemso: parseFloat(document.getElementById('score').value),
@@ -163,7 +167,7 @@ function editScore(score) {
     iddiemso = score.id;
 
     // Gán dữ liệu lên form
-    document.getElementById('studentId').value = score.idhocvien;
+    // document.getElementById('studentId').value = score.idhocvien;
     document.getElementById('courseId').value = score.idkhoahoc;
     document.getElementById('kythi').value = score.kythi;
     document.getElementById('score').value = score.diemso;

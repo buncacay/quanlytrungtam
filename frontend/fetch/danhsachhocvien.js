@@ -85,7 +85,7 @@ function renderTable(students) {
         <tr>
             <td>${student.idhocvien}</td>
             <td>${student.hoten}</td>
-            <td><a href="tthocvien.html?id=${student.idhocvien}">Xem chi tiết</a></td>
+            <td><a href="tthocvien.html?idhocvien=${student.idhocvien}">Xem chi tiết</a></td>
         </tr>
     `).join('');
 

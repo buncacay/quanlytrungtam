@@ -1,0 +1,75 @@
+/* Card Container */
+.cards-container {
+    margin-top: 75px; /* Đẩy xuống dưới header (65px + khoảng cách an toàn) */
+    margin-left: 310px; /* Đẩy sang phải để tránh bị sidebar (300px + khoảng cách an toàn) */
+    padding: 30px;
+    background: #fdfcfb;
+    min-height: 100vh;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    gap: 60px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+/* Các thẻ card */
+.card {
+    width: 250px;
+    height: 150px;
+    background-color: #ffffff;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    color: #ff6f00;
+    background-color: #fff;
+}
+
+/* Thẻ card khi hover */
+.card:hover {
+    transform: translateY(-5px); /* Di chuyển lên */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Đổ bóng mạnh hơn */
+    background-color: #ff6f00;
+    color: white;
+}
+
+/* Thẻ card khi nhấn */
+.card:active {
+    transform: translateY(2px); /* Đẩy xuống nhẹ */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* Đổ bóng nhẹ khi click */
+}
+
+/* Phân biệt các thẻ */
+.card:nth-child(1) {
+    background-color: #fffae6;
+}
+
+.card:nth-child(2) {
+    background-color: #f9f9f9;
+}
+
+.card:nth-child(3) {
+    background-color: #f1f1f1;
+}
+
+/* Tăng cường hiệu ứng cho text */
+.card:hover {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* Viết đậm cho phần văn bản trong card */
+.card {
+    font-weight: bold;
+}

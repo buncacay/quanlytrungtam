@@ -25,6 +25,7 @@ document.getElementById('xacnhan').addEventListener('click', async function (){
         thoigiandat: getFormattedDateTime()    }
     console.log(data);
     const res = await addDonHang(data);
+    console.log(res);
     if (res){
         alert("Hãy liên hệ qua fanpage để gửi hóa đơn và chờ xác nhận");
     }

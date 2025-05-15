@@ -1,69 +1,76 @@
-import { fetchKhoaHocPhanTrang } from './get.js';
+import { fetchKhoaHoc } from './get.js';
 
 let page = 1;
-let totalPages = 1;
-let allData = [];  // Dữ liệu tất cả khóa học
-let filteredData = [];  // Dữ liệu sau khi lọc (tìm kiếm)
+const perPage = 5; // số mục mỗi trang
+let allData = [];  // tất cả dữ liệu khóa học
+let filteredData = [];  // dữ liệu sau khi lọc
 
-document.addEventListener('DOMContentLoaded', function() {
-    loadAllData();  // Tải tất cả dữ liệu khóa học khi trang web tải
+document.addEventListener('DOMContentLoaded', () => {
+    init();
 
-    // Gắn sự kiện cho nút nextPage
-    document.getElementById('nextPage').addEventListener('click', function() {
+    document.getElementById('nextPage').addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredData.length / perPage);
         if (page < totalPages) {
             page++;
             loadPage(page);
         }
     });
 
-    // Gắn sự kiện cho nút prevPage
-    document.getElementById('prevPage').addEventListener('click', function() {
+    document.getElementById('prevPage').addEventListener('click', () => {
         if (page > 1) {
             page--;
             loadPage(page);
         }
     });
 
-    // Gắn sự kiện cho ô tìm kiếm
-    document.getElementById('course-search-input').addEventListener('input', function() {
-        const keyword = this.value.trim().toLowerCase();
+    document.getElementById('course-search-input').addEventListener('input', (e) => {
+        const keyword = e.target.value.trim().toLowerCase();
         searchCourses(keyword);
     });
 });
 
-async function loadAllData() {
+async function init() {
     const all = document.getElementById('all');
     const currentPage = document.getElementById('currentPage');
-    all.innerHTML = '';  // Xóa dữ liệu cũ trước khi hiển thị
+    all.innerHTML = '';
 
     try {
-        let res = await fetchKhoaHocPhanTrang(page, 5);  // Tải dữ liệu khóa học từ server
+        const data = await fetchKhoaHoc();
+        const res = data.filter(kh => kh.trangthai === '1');
         console.log(res);
-        
-        // Kiểm tra dữ liệu trả về
-        if (!res || !res.data || res.data.length === 0) {
+        if (!res || res.length === 0) {
             all.innerHTML = '<p>Không có dữ liệu để hiển thị.</p>';
             return;
         }
 
-        totalPages = res.total;  // Cập nhật tổng số trang
-        allData = res.data;  // Lưu trữ tất cả dữ liệu khóa học
-        filteredData = allData;  // Đặt filteredData là tất cả dữ liệu ban đầu
+        allData = res;
+        filteredData = [...allData]; // Khởi tạo dữ liệu đã lọc ban đầu
+        loadPage(page); // Hiển thị trang đầu tiên
 
-        // Hiển thị tất cả khóa học
-        renderCourses(filteredData);
-
-        currentPage.textContent = `Trang ${page} / ${totalPages}`;
     } catch (error) {
         console.error('Lỗi khi tải dữ liệu:', error);
         all.innerHTML = '<p>Lỗi khi tải dữ liệu.</p>';
     }
 }
 
-// Hàm để hiển thị các khóa học
+function loadPage(pageNumber) {
+    const all = document.getElementById('all');
+    const currentPage = document.getElementById('currentPage');
+
+    const totalPages = Math.ceil(filteredData.length / perPage);
+    page = pageNumber;
+
+    const startIndex = (page - 1) * perPage;
+    const endIndex = startIndex + perPage;
+    const pageData = filteredData.slice(startIndex, endIndex);
+
+    renderCourses(pageData);
+    currentPage.textContent = `Trang ${page} / ${totalPages}`;
+}
+
 function renderCourses(courses) {
     const all = document.getElementById('all');
-    all.innerHTML = '';  // Xóa các khóa học cũ trước khi hiển thị
+    all.innerHTML = '';
 
     if (courses.length === 0) {
         all.innerHTML = '<p>Không có khóa học phù hợp.</p>';
@@ -88,27 +95,12 @@ function renderCourses(courses) {
     });
 }
 
-// Hàm để tải lại trang với các khóa học đã lọc
-function loadPage(pageNumber) {
-    page = pageNumber;
-    const currentPage = document.getElementById('currentPage');
-    currentPage.textContent = `Trang ${page} / ${totalPages}`;
-
-    const startIndex = (page - 1) * 5;
-    const endIndex = page * 5;
-
-    const paginatedCourses = filteredData.slice(startIndex, endIndex);  // Lọc dữ liệu theo trang
-    renderCourses(paginatedCourses);
-}
-
-// Hàm tìm kiếm khóa học
 function searchCourses(keyword) {
     filteredData = allData.filter(course =>
-        course.tenkhoahoc.toLowerCase().includes(keyword) ||  // Tìm kiếm theo tên khóa học
-        course.mota.toLowerCase().includes(keyword)  // Tìm kiếm theo mô tả khóa học
+        course.tenkhoahoc.toLowerCase().includes(keyword) ||
+        course.mota.toLowerCase().includes(keyword)
     );
 
-    // Sau khi tìm kiếm, ta sẽ tải lại trang đầu tiên và hiển thị kết quả tìm kiếm
     page = 1;
     loadPage(page);
 }
