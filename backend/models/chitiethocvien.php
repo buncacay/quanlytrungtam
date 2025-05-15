@@ -82,5 +82,22 @@ class ChiTietHocVien {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results ?: null;
     }
+
+ public function getAll($idkhoahoc, $idhocvien) {
+    $query = "SELECT * FROM chitiethocvien 
+              INNER JOIN khoahoc ON khoahoc.idkhoahoc = chitiethocvien.idkhoahoc 
+              INNER JOIN hocvien ON hocvien.idhocvien = chitiethocvien.idhocvien 
+              WHERE chitiethocvien.idkhoahoc = :idkhoahoc 
+              AND chitiethocvien.idhocvien = :idhocvien";
+    
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':idhocvien', $idhocvien, PDO::PARAM_INT);
+    $stmt->bindParam(':idkhoahoc', $idkhoahoc, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results ?: null;
+}
+
 }
 ?>

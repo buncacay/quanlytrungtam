@@ -1,26 +1,24 @@
-import { fetchKhoaHoc } from './get.js';
+$(document).ready(function () {
+    // Kiểm tra nếu có thông tin người dùng trong localStorage
+    if (localStorage.getItem("isLoggedIn") === "true") {
+        // Nếu đã đăng nhập, lấy thông tin người dùng từ localStorage
+        const userName = localStorage.getItem("username");
+        const userRole = localStorage.getItem("role");
 
-document.addEventListener('DOMContentLoaded', async function () {
-    alert("asdfasd");
-    try {
-        const res = await fetchKhoaHoc(); // Gọi API để lấy dữ liệu khóa học
-        console.log(res.data); // Kiểm tra dữ liệu từ API
+        // Hiển thị thông tin tài khoản
+        if (userName && userRole) {
+            // Hiển thị tên người dùng
+            $("#username").text(userName);
+            // Hiển thị vai trò người dùng (ví dụ, "Admin" hoặc "User")
+            $("#role").text(userRole);
+            $("#user-info").show(); // Hiển thị phần thông tin tài khoản
 
-        const khoahoc = document.getElementById('khoahoc'); // Lấy phần tử sidebar chứa khóa học
-        khoahoc.innerHTML = ''; // Xóa nội dung cũ trong sidebar nếu có
-
-        // Kiểm tra nếu không có khóa học nào
-       
-        alert("asfasd");
-
-        // Duyệt qua các khóa học và thêm chúng vào sidebar
-        res.data.forEach(kh => {
-            khoahoc.innerHTML += `
-                <li><a href="nguphap1.html?idkhoahoc=${kh.idkhoahoc}">
-                    <i class="fas fa-book"></i> ${kh.tenkhoahoc}
-                </a></li>`;
-        });
-    } catch (error) {
-        console.error('Lỗi khi tải khóa học:', error);
+            // Hiển thị tab "Thông tin tài khoản"
+            $("#account-info-tab").show();
+        }
+    } else {
+        // Nếu chưa đăng nhập, ẩn tab "Thông tin tài khoản" và thông tin tài khoản
+        $("#account-info-tab").hide();
+        $("#user-info").hide();
     }
 });

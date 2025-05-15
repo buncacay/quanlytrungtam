@@ -20,33 +20,31 @@ $hocvien = new chitiethocvien($conn);
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
-    case 'GET':
-            if (isset($_GET['idhocvien'])) {
-                $id = $_GET['idhocvien'];
-                $result = $hocvien->getById($id);
-                if ($result) {
-                    echo json_encode($result);
-                } else {
-                    http_response_code(404);
-                    echo json_encode(["message" => "khong co hoc vien nha."]);
-                }
+case 'GET':
+    if (isset($_GET['idhocvien']) && isset($_GET['idkhoahoc'])) {
+        // Nếu có cả idhocvien và idkhoahoc, gọi hàm getAll
+        $idhocvien = $_GET['idhocvien'];
+        $idkhoahoc = $_GET['idkhoahoc'];
+        
+        $result = $hocvien->getAll($idkhoahoc, $idhocvien );
+        echo json_encode($result ?: null);
+    } elseif (isset($_GET['idhocvien'])) {
+        // Nếu chỉ có idhocvien, gọi hàm getById
+        $id = $_GET['idhocvien'];
+        $result = $hocvien->getById($id);
+        echo json_encode($result ?: null);
+    } elseif (isset($_GET['idkhoahoc'])) {
+        // Nếu chỉ có idkhoahoc, gọi hàm getByIdkhoahoc
+        $id = $_GET['idkhoahoc'];
+        $result = $hocvien->getByIdkhoahoc($id);
+        echo json_encode($result ?: null);
+    } else {
+        // Nếu không có tham số nào, gọi hàm read
+        $result = $hocvien->read();
+        echo json_encode($result ?: null);
+    }
+    break;
 
-            } else 
-            if (isset($_GET['idkhoahoc']))   {
-                $id = $_GET['idkhoahoc'];
-                $result = $hocvien->getByIdkhoahoc($id);
-                if ($result) {
-                    echo json_encode($result);
-                } else {
-                    http_response_code(404);
-                    echo json_encode(["message" => "khong co hoc vien nha."]);
-                }
-            }
-            else{
-                $result = $hocvien->read();
-                echo json_encode($result);
-            }
-            break;
         
 
     case 'POST':

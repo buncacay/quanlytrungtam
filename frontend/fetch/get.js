@@ -233,3 +233,13 @@ export async function fetchHoaDonWithIdhocvien(id){
     const data = await res.json();
     return data;
 }
+
+export async function checkKhoaHoc(idkhoahoc, idhocvien){
+    const res = await fetch(`http://localhost/quanlytrungtam/backend/controller/chitiethocvienController.php?idkhoahoc=${idkhoahoc}&idhocvien=${idhocvien}`);
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
+
+    const data = await res.json();
+    return data;
+}

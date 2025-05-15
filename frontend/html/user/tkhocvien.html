@@ -18,37 +18,17 @@
 </div>
     <div class="main">
     <div class="account-container">
-        <h1>Thông tin tài khoản học viên</h1>
-        <div class="account-details">
-            <form id="account-form">
-                <div class="form-group">
-                    <label for="fullname"><i class="fas fa-user"></i> Họ và tên</label>
-                    <input type="text" id="fullname" value="Nguyễn Văn A" readonly>
-                    <button type="button" class="edit-btn" onclick="enableEdit('fullname')">Chỉnh sửa</button>
-                </div>
-                <div class="form-group">
-                    <label for="phone"><i class="fas fa-phone"></i> Số điện thoại</label>
-                    <input type="text" id="phone" value="0123456789" readonly>
-                    <button type="button" class="edit-btn" onclick="enableEdit('phone')">Chỉnh sửa</button>
-                </div>
-                <div class="form-group">
-                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
-                    <input type="email" id="email" value="email@example.com" readonly>
-                    <button type="button" class="edit-btn" onclick="enableEdit('email')">Chỉnh sửa</button>
-                </div>
-            </form>
-        </div>
+       
+        
 
         <div class="registered-courses">
             <h2><i class="fas fa-book"></i> Các khóa học đã đăng ký</h2>
-            <ul>
-                <li>Khóa học: Ngữ pháp Tiếng Anh tinh gọn (2025) - <a href="course-details.html">Xem chi tiết</a></li>
-                <li>Khóa học: Tiếng Anh giao tiếp cơ bản - <a href="course-details.html">Xem chi tiết</a></li>
-                <li>Khóa học: Luyện thi IELTS 6.5+ - <a href="course-details.html">Xem chi tiết</a></li>
-            </ul>
+            <div id="khoahoc">
+                
+            </div>
         </div>
 
-        <button class="save-btn" onclick="saveChanges()">Lưu thay đổi</button>
+        <!-- <button class="save-btn" onclick="saveChanges()">Lưu thay đổi</button> -->
     </div>
 </div>
     <script>
@@ -65,4 +45,5 @@
     </script>
 </body>
     <script src="../../js/app_user.js"></script>
+    <script type="module" src="../../fetch/thongtinhocvien.js"></script>
 </html>

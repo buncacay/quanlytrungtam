@@ -17,12 +17,17 @@
             <div id="khoahoc">
                 <!-- Các khóa học sẽ được thêm vào đây -->
             </div>
-            <li><a href="tkhocvien.html"><i class="fas fa-user"></i> Thông tin tài khoản</a></li>
+            <!-- Tab "Thông tin tài khoản" chỉ hiển thị khi người dùng đã đăng nhập -->
+            <li id="account-info-tab" style="display: none;"><a href="tkhocvien.html"><i class="fas fa-user"></i> Thông tin tài khoản</a></li>
         </ul>
     </nav>
-</div>
 
+    <!-- Phần hiển thị thông tin người dùng (sẽ được hiển thị khi đăng nhập) -->
+    <div id="user-info" class="user-info" style="display: none;">
+        <div><strong>Chào, <span id="username"></span></strong></div>
+        <div><span id="role"></span></div> <!-- Hiển thị vai trò -->
+    </div>
+</div>
 </body>
 <script src="../../js/app_user.js"></script>
-<script type="module" src="../../fetch/sidebar.js"></script>
 </html>

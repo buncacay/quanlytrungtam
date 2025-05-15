@@ -93,24 +93,34 @@ switch ($method) {
 function createDonhang($donhang) {
     $data = json_decode(file_get_contents("php://input"));
 
-    if (isset($data->idhocvien, $data->idkhoahoc, $data->trangthaidon, $data->thoigiandat, $data->ghichu)) {
+    if (isset($data->idhocvien, $data->idkhoahoc, $data->trangthaidon, $data->thoigiandat)) {
         $donhang->idhocvien = $data->idhocvien;
         $donhang->idkhoahoc = $data->idkhoahoc;
         $donhang->trangthaidon = $data->trangthaidon ?? 1;
         $donhang->thoigiandat = $data->thoigiandat;
-    
 
         if ($donhang->create()) {
-            echo json_encode(["message" => "Đơn hàng đã được tạo thành công."]);
+            http_response_code(200);
+            echo json_encode([
+                "message" => "Đơn hàng đã được tạo thành công.",
+                "success" => true
+            ]);
         } else {
             http_response_code(500);
-            echo json_encode(["message" => "Không thể tạo đơn hàng."]);
+            echo json_encode([
+                "message" => "Không thể tạo đơn hàng.",
+                "success" => false
+            ]);
         }
     } else {
         http_response_code(400);
-        echo json_encode(["message" => "Dữ liệu không đầy đủ."]);
+        echo json_encode([
+            "message" => "Dữ liệu không đầy đủ.",
+            "success" => false
+        ]);
     }
 }
+
 
 function deleteDonhang($donhang) {
     if (isset($_GET['iddonhang'])) {

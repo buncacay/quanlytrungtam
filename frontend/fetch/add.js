@@ -29,6 +29,16 @@ export async function addTaiKhoan(data) {
     });
 }
 
+export async function addDonHang(data) {
+    return fetch('http://localhost/quanlytrungtam/backend/controller/donhangController.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+}
+
 
 export async function addDiem(data) {
    

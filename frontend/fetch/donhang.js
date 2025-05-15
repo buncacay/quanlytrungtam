@@ -1,54 +1,49 @@
-import { fetchDonHang } from './get.js';
-import {UpdateDonHang} from './update.js';
-import {addChiTietHocVien} from './add.js'
+import { fetchDonHang } from './get.js';  // API lấy danh sách đơn hàng
+import { UpdateDonHang } from './update.js'; // API cập nhật đơn hàng
+import { addChiTietHocVien } from './add.js'; // API thêm chi tiết học viên
 
 const showDonHang = async () => {
     try {
         const donhangList = await fetchDonHang();
 
-        // Kiểm tra nếu không có dữ liệu
-        if (donhangList.length === 0) {
+        if (!donhangList || donhangList.length === 0) {
             document.getElementById('hocvien-body').innerHTML = '<tr><td colspan="5">Không có dữ liệu</td></tr>';
             return;
         }
 
-        // Xóa dữ liệu cũ trong bảng
-        let tableBody = document.getElementById('hocvien-body');
+        const tableBody = document.getElementById('hocvien-body');
         tableBody.innerHTML = '';
 
-        // Lặp qua từng đơn hàng và thêm vào bảng
         donhangList.forEach(donhang => {
-            console.log("asdfasd ", donhang);
+            const dh = donhang[0]; // Dễ gọi hơn
+
             const row = document.createElement('tr');
-            
+
+            // Mã đơn hàng
             const tdId = document.createElement('td');
-            tdId.textContent = donhang[0].iddonhang;
+            tdId.textContent = dh.iddonhang;
             row.appendChild(tdId);
 
+            // ID học viên
             const tdTaiKhoan = document.createElement('td');
-            tdTaiKhoan.textContent = donhang[0].idhocvien;  // Giả sử API trả về 'idhocvien'
+            tdTaiKhoan.textContent = dh.idhocvien;
             row.appendChild(tdTaiKhoan);
 
+            // ID khóa học
             const tdKhoaHoc = document.createElement('td');
-            tdKhoaHoc.textContent = donhang[0].idkhoahoc;  // Giả sử API trả về 'idkhoahoc'
+            tdKhoaHoc.textContent = dh.idkhoahoc;
             row.appendChild(tdKhoaHoc);
 
+            // Trạng thái đơn
             const tdTrangThai = document.createElement('td');
             const select = document.createElement('select');
 
-            // Tạo các option cho select (dropdown)
-            const option1 = document.createElement('option');
-            option1.textContent = 'Chờ phê duyệt';
-            option1.value = 'Chờ phê duyệt';
-            const option2 = document.createElement('option');
-            option2.textContent = 'Đã xác nhận';
-            option2.value = 'Đã xác nhận';
-console.log(donhang[0].trangthai); // Kiểm tra giá trị thực tế của trangthai
+            const option1 = new Option('Chờ phê duyệt', 'Chờ phê duyệt');
+            const option2 = new Option('Đã xác nhận', 'Đã xác nhận');
 
-            // Chọn giá trị của trạng thái đơn hàng từ donhang
-            if (donhang[0].trangthaidon === 'Chờ phê duyệt') {
+            if (dh.trangthaidon === 'Chờ phê duyệt') {
                 option1.selected = true;
-            } else if (donhang[0].trangthaidon === 'Đã xác nhận') {
+            } else if (dh.trangthaidon === 'Đã xác nhận') {
                 option2.selected = true;
             }
 
@@ -57,22 +52,18 @@ console.log(donhang[0].trangthai); // Kiểm tra giá trị thực tế của tr
             tdTrangThai.appendChild(select);
             row.appendChild(tdTrangThai);
 
-            // Tạo nút Cập nhật
+            // Nút cập nhật
             const tdUpdate = document.createElement('td');
             const updateButton = document.createElement('button');
             updateButton.textContent = 'Cập nhật';
-            
-            // Đăng ký sự kiện click cho nút Cập nhật
+
             updateButton.addEventListener('click', async () => {
-                await capnhat( donhang[0].idkhoahoc,donhang[0].idhocvien )
-                alert(`Cập nhật thông tin của đơn hàng với ID: ${donhang[0].iddonhang}`);
-                // Thực hiện các hành động khác khi nhấn nút Cập nhật, ví dụ mở form chỉnh sửa
+                await capnhat(dh.idkhoahoc, dh.idhocvien, dh.iddonhang, select);
             });
 
             tdUpdate.appendChild(updateButton);
             row.appendChild(tdUpdate);
 
-            // Thêm row vào bảng
             tableBody.appendChild(row);
         });
     } catch (error) {
@@ -80,9 +71,49 @@ console.log(donhang[0].trangthai); // Kiểm tra giá trị thực tế của tr
     }
 };
 
-// Gọi hàm để hiển thị đơn hàng khi trang được tải
 showDonHang();
 
-async function capnhat(idkhoahoc, idhocvien){
+// Hàm cập nhật trạng thái đơn hàng và chi tiết học viên
+async function capnhat(idkhoahoc, idhocvien, iddonhang, selectElement) {
+    const trangthaidon = selectElement.value;
 
+    const data = {
+        iddonhang: iddonhang,
+        idkhoahoc: idkhoahoc,
+        idhocvien: idhocvien,
+        trangthaidon: trangthaidon,
+        thoigiandat: getFormattedDateTime()
+    };
+
+    console.log("Cập nhật đơn hàng:", data);
+
+    const res = await UpdateDonHang(data);
+    console.log("Kết quả cập nhật:", res);
+
+    if (res?.success || res === true) {
+        alert("Cập nhật trạng thái đơn hàng thành công.");
+
+        if (trangthaidon === "Đã xác nhận") {
+            const data2 = {
+                idkhoahoc: idkhoahoc,
+                idhocvien: idhocvien,
+                tinhtranghocpho: "Đang học",
+                ketquahoctap: "Chưa có"
+            };
+
+            const result = await addChiTietHocVien(data2);
+            console.log("Kết quả thêm chi tiết học viên:", result);
+            alert("Đã thêm học viên vào chi tiết học.");
+        }
+    } else {
+        alert("Cập nhật thất bại.");
+    }
+}
+
+// Hàm lấy thời gian hiện tại theo định dạng 'YYYY-MM-DD HH:mm:ss'
+function getFormattedDateTime() {
+    const now = new Date();
+    const pad = (n) => n.toString().padStart(2, '0');
+
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 }
