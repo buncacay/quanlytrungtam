@@ -10,6 +10,14 @@ export async function fetchGiangVien() {
     return data;
 }
 
+export async function fetchHocVienVoiId(id) {
+    const res = await fetch(`http://localhost/quanlytrungtam/backend/controller/hocvienController.php?idhocvien=${id}`);
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+
 export async function fetchChiTiethocvien(id) {
     const url = `http://localhost/quanlytrungtam/backend/controller/chitiethocvienController.php?idhocvien=${id}`;
     const res = await fetch(url);

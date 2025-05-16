@@ -133,7 +133,7 @@ async function renderTaiKhoan(data) {
             <td>${acc.username}</td> <!-- Tên tài khoản -->
             <td>${getChucVuText(role)}</td> <!-- Chức vụ -->
             <td>
-                <button onclick="editTaiKhoan('${idhocvien}')">Sửa</button>
+                <button onclick="editTaiKhoan('${idhocvien}', '${role}', '${acc.username}')">Sửa</button>
                 <button onclick="removeTaiKhoan('${acc.username}')">Xóa</button>
             </td>
         `;
@@ -145,8 +145,15 @@ async function renderTaiKhoan(data) {
 
 
 // Sửa tài khoản: chuyển sang trang qltaikhoan.html
-function editTaiKhoan(id) {
-    window.location.href = `tthocvien.html?idhocvien=${id}`;
+function editTaiKhoan(id, role, user) {
+    alert(id ,  " asfasd " , role , 'asdfasd', user);
+    if (role==="0"){
+ window.location.href = `tthocvien.html?idhocvien=${id}`;
+    }
+    else {
+        window.location.href=`qltaikhoan.html?user=${user}&role=${2}`
+    }
+   
 }
 window.editTaiKhoan = editTaiKhoan;
 

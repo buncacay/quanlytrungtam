@@ -5,7 +5,8 @@ import {
   fetchHoaDonWithIdhocvien,
   fetchChiTiethocvien,
   fetchDiemSovoiIdHocvien,
-  fetchChiTiethocvienKhongid
+  fetchChiTiethocvienKhongid,
+  fetchHocVienVoiId
 } from './get.js';
 
 import { addChiTietHocVien } from './add.js';
@@ -19,21 +20,23 @@ const limit = 5;
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   idhocvien = params.get('idhocvien');
-  // alert(id);
+  alert(idhocvien);
 
   if (!idhocvien) {
     alert("Không tìm thấy ID học viên.");
-    return;
+    
   }
-  
+  const hocvien = await fetchHocVienVoiId(idhocvien);
+   await HienThiThongTin(hocvien);
 
-  const data = await fetchChiTiethocvienKhongid(idhocvien);
+  const data = await fetchChiTiethocvien(idhocvien);
   if (!data || data.length === 0) {
     alert("Không tìm thấy thông tin học viên.");
-    return;
+    
+
   }
 
-  await HienThiThongTin(data);
+ 
   await HienThiListKhoaHoc();
   await HienThiDiem(idhocvien, currentPage);
 });
@@ -50,8 +53,7 @@ async function HienThiThongTin(data) {
     <p><strong>Số điện thoại:</strong> ${hocvien.sdt}</p>
   `;
 
-  khoahocDaDangKy = data.map(item => item.idkhoahoc).filter(Boolean);
-  console.log("da dang ky ne ", data);
+
 
   const hoadon = await fetchHoaDonWithIdhocvien(hocvien.idhocvien);
   HienThiHoaDon(hoadon);
@@ -162,14 +164,30 @@ function HienThiKhoaHoc(data) {
 }
 
 async function HienThiListKhoaHoc() {
-  const select = document.getElementById('dky');
-  const data = await fetchKhoaHoc();
-  console.log("day la tong khoa hocj ", data);
-  const list = Array.isArray(data.data) ? data.data : data;
+  let chuaDangKy = [];
+   const khoahocDaDangKy = await fetchChiTiethocvien(idhocvien);
+console.log("Khóa học đã đăng ký: ", khoahocDaDangKy);
 
-  const chuaDangKy = list.filter(kh => !khoahocDaDangKy.includes(kh.idkhoahoc));
-  console.log(chuaDangKy);
-  select.innerHTML = chuaDangKy.length === 0
+const select = document.getElementById('dky');
+select.innerHTML = ``;
+
+const data = await fetchKhoaHoc();
+const tongKh = Array.isArray(data.data) ? data.data : data;
+console.log("Tổng khóa học: ", tongKh);
+if (khoahocDaDangKy){
+const khoahocDaDangKyIds = khoahocDaDangKy.map(kh => kh.idkhoahoc);
+
+// Lọc ra các khóa học chưa đăng ký
+ chuaDangKy = tongKh.filter(kh => !khoahocDaDangKyIds.includes(kh.idkhoahoc));
+console.log("Khóa học chưa đăng ký: ", chuaDangKy);
+}
+else {
+  chuaDangKy = tongKh;
+}
+// Trích xuất ID từ danh sách khóa học đã đăng ký
+
+
+select.innerHTML = chuaDangKy.length === 0
     ? `<option disabled>Đã đăng ký hết các khóa học.</option>`
     : chuaDangKy.map(kh => `<option value="${kh.idkhoahoc}">${kh.tenkhoahoc}</option>`).join('');
 }

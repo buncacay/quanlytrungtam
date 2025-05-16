@@ -60,11 +60,12 @@ function groupByUniqueStudents(data) {
 
 // Hàm lọc và hiển thị danh sách học viên
 function filterAndShow() {
+    const searchTerm = document.getElementById("search-name").value.trim().toLowerCase();
     let filtered = uniqueStudents;
 
-    if (selectedCourseId) {
-        filtered = uniqueStudents.filter(student => student.idkhoahoc === selectedCourseId);
-    }
+    filtered = filtered.filter(student =>
+            student.hoten.toLowerCase().includes(searchTerm)
+        );
 
     totalPages = Math.ceil(filtered.length / limit);
     const pagedData = filtered.slice((currentPage - 1) * limit, currentPage * limit);
@@ -129,6 +130,10 @@ function renderPagination(currentPage, totalPages) {
     const nextBtn = createPaginationButton("Sau »", currentPage < totalPages, () => changePage(currentPage + 1));
     container.appendChild(nextBtn);
 }
+document.getElementById('btn-filter').addEventListener('click', () => {
+    currentPage = 1; // Reset về trang đầu tiên khi lọc
+    filterAndShow();
+});
 
 // Hàm tạo nút phân trang
 function createPaginationButton(text, enabled, onClick) {
