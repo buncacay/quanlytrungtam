@@ -6,75 +6,113 @@
     <title>Quản lý hóa đơn</title>
     <link rel="stylesheet" href="../../css/hoadon.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="../../css/chinh.css">
+    <link rel="stylesheet" href="../../css/main.css">
 </head>
 <body>
     <div id="header"></div>
-        <div id="sidebar"></div>
-        <div class="cards-container">
-            <div class="invoice-container">
-                <h1>Quản lý hóa đơn</h1>
-                    <div class="mb-4">
-                        <input
-                            type="text"
-                            id="search-tenhoadon"
-                            placeholder="Tìm theo tên khóa học..."
-                            class="border px-3 py-2 rounded w-64"
-                        />
-                        <button id="btn-search" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Tìm kiếm</button>
-                        <button id="btn-clear" class="ml-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Bỏ lọc</button>
-                        </div>
+    <div id="sidebar"></div>
 
-                <!-- Form tạo hóa đơn -->
-                <div class="invoice-form">
-                    <h2>Tạo hóa đơn mới</h2>
-                    <form id="invoiceForm">
-                        <div class="form-group">
-                            <label for="hsinh">Chọn học viên:</label>
-                            <select id="hsinh" name="course" required>
-                                <!-- <option value="">-- Chọn khóa học --</option> -->
-                               
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="course">Chọn khóa học:</label>
-                            <select id="course" name="course" required>
-                                <!-- <option value="">-- Chọn khóa học --</option> -->
-                               
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="amount">Số tiền (VND):</label>
-                            <input type="number" id="amount" name="amount" placeholder="Nhập số tiền thanh toán" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="date">Ngày thanh toán:</label>
-                            <input type="date" id="date" name="date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="loai">Loại hóa đơn:</label>
-                            <select id="loai" name="course" required>
-                                <option value="1">Thanh toán học phí</option>
-                                <option value="0">Chi phí/ Lương nhân viên</option>
-                               
-                            </select>
-                        </div>
-                        <button type="submit" class="btn-submit" onclick="tao(event)" id="btn">Tạo hóa đơn</button>
-                    </form>
-                </div>
-        
-                <!-- Danh sách hóa đơn -->
-                <div class="invoice-list" id="invoice">
-                    <h2>Lịch sử thanh toán</h2>
-                 
-                </div>
-                <div id="pagination" ></div>
+    <div class="cards-container">
+        <div class="invoice-container">
+            <div class="mb-4">
+                <input type="text" id="search-tenhoadon" placeholder="Tìm theo tên khóa học..." class="border px-3 py-2 rounded w-64"/>
+                <button id="btn-search" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Tìm kiếm</button>
+                <button id="btn-clear" class="ml-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Bỏ lọc</button>
             </div>
-        </div>
-  
 
+            <!-- Form chọn loại hóa đơn -->
+            <div class="form-group">
+                <label for="loai">Loại hóa đơn:</label>
+                <select id="loai" required>
+                    <option value="1">Thanh toán học phí</option>
+                    <option value="0">Chi phí / Lương giảng viên</option>
+                </select>
+            </div>
+
+            <!-- Form hóa đơn học phí -->
+            <form id="invoiceForm" class="invoice-form">
+                <h2>Tạo hóa đơn học phí</h2>
+                <div class="form-group">
+                    <label for="hsinh">Chọn học viên:</label>
+                    <select id="hsinh" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="course">Chọn khóa học:</label>
+                    <select id="course" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Số tiền (VND):</label>
+                    <input type="number" id="amount" placeholder="Nhập số tiền thanh toán" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Ngày thanh toán:</label>
+                    <input type="date" id="date" required>
+                </div>
+                <button type="submit" class="btn-submit" id="btn">Tạo hóa đơn</button>
+            </form>
+
+       <!-- Form tính lương giảng viên -->
+<div id="salary-form" class="invoice-form" style="display: none;">
+    <h2>Tính lương giảng viên</h2>
+
+    <div class="form-group">
+        <label for="filter-gv">Chọn giảng viên:</label>
+        <select id="filter-gv"></select>
+    </div>
+
+    <div class="form-group">
+        <label for="filter-month">Chọn tháng:</label>
+        <input type="month" id="filter-month">
+    </div>
+
+    <div class="form-group">
+        <button id="btn-filter" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Lọc</button>
+    </div>
+
+    <div class="form-group">
+        <label for="salary-amount">Tổng lương (VND):</label>
+        <input type="text" id="salary-amount" readonly class="bg-gray-100 px-2 py-1 rounded" />
+    </div>
+
+    <div class="form-group">
+        <label for="salary-date">Ngày thanh toán:</label>
+        <input type="date" id="salary-date" required />
+    </div>
+
+    <button id="btn-create-salary-invoice" class="btn-submit bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+        Tạo hóa đơn
+    </button>
+
+    <!-- <div class="mt-4">
+        <p>Tổng số buổi: <span id="total-buoi">0</span></p>
+        <p>Tổng số giờ: <span id="total-gio">0</span></p>
+    </div> -->
+
+    <!-- <table border="1" class="mt-4 w-full">
+        <thead>
+            <tr>
+                <th>Ngày</th>
+                <th>Khóa học</th>
+                <th>Hình thức</th>
+                <th>Bắt đầu</th>
+                <th>Kết thúc</th>
+                <th>Số phút</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</div> -->
+
+
+            <!-- Danh sách hóa đơn -->
+          
+        </div>
+          <div class="invoice-list" id="invoice">
+                <h2>Lịch sử thanh toán</h2>
+            </div>
+            <div id="pagination"></div>
+    </div>
     <script src="../../js/app.js"></script>
     <script type="module" src="../../fetch/hoadon.js"></script>
-
 </body>
 </html>

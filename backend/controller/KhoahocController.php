@@ -151,6 +151,7 @@ function createKhoaHoc($khoahoc) {
     $khoahoc->soluongbuoi = $data->soluongbuoi;
     $khoahoc->lichhoc = $data->lichhoc;
     $khoahoc->giatien = $data->giatien;
+    $khoahoc->danhmuc = $data->danhmuc;
      $khoahoc->ngaybatdau = $data->ngaybatdau;
     $khoahoc->ngayketthuc = $data->ngayketthuc;
     $khoahoc->giamgia = $data->giamgia ?? null;
@@ -169,7 +170,8 @@ function createKhoaHoc($khoahoc) {
                 "giatien" => $khoahoc->giatien,
                 "giamgia" => $khoahoc->giamgia,
                 "ngaybatdau" => $khoahoc->ngaybatdau,
-                "ngayketthuc" => $khoahoc->ngayketthuc
+                "ngayketthuc" => $khoahoc->ngayketthuc,
+                "danhmuc" => $khoahoc->danhmuc
             
            
         ]);
@@ -196,6 +198,7 @@ function updateKhoaHoc($khoahoc) {
          $khoahoc->trangthai = $data->trangthai;
         $khoahoc->ngaybatdau = $data->ngaybatdau;
         $khoahoc->ngayketthuc = $data->ngayketthuc;
+         $khoahoc->danhmuc = $data->danhmuc;
 
         if ($khoahoc->update()) {
             echo json_encode(["message" => "Cập nhật khoá học thành công."]);

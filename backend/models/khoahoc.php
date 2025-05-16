@@ -15,6 +15,7 @@ class KhoaHoc {
     public $conn;
     public $ngaybatdau;
     public $ngayketthuc;
+    public $danhmuc;
     public $table = "khoahoc";
 
     public function __construct($db) {
@@ -34,8 +35,8 @@ public function create() {
     }
 
     $query = "INSERT INTO " . $this->table . " 
-        (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc, mota, images, giatien, giamgia, ngaybatdau, ngayketthuc, trangthai) 
-        VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota, :images, :giatien, :giamgia, :ngaybatdau, :ngayketthuc, 1)";
+        (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc, mota, images, giatien, giamgia, ngaybatdau, ngayketthuc, trangthai, danhmuc) 
+        VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota, :images, :giatien, :giamgia, :ngaybatdau, :ngayketthuc, 1, danhmuc)";
 
     $stmt = $this->conn->prepare($query);
 
@@ -50,6 +51,7 @@ public function create() {
     $giamgia     = $this->giamgia;
     $ngaybatdau     = $this->ngaybatdau;
     $ngayketthuc     = $this->ngayketthuc;
+    $danhmuc = $this->danhmuc;
 
     $stmt->bindParam(':tenkhoahoc', $tenkhoahoc);
     $stmt->bindParam(':thoigianhoc', $thoigianhoc);
@@ -62,6 +64,7 @@ public function create() {
     $stmt->bindParam(':giamgia', $giamgia);
     $stmt->bindParam(':ngaybatdau', $ngaybatdau);
     $stmt->bindParam(':ngayketthuc', $ngayketthuc);
+     $stmt->bindParam(':danhmuc', $danhmuc);
 
     if ($stmt->execute()) {
         $this->idkhoahoc = $this->conn->lastInsertId();
@@ -84,6 +87,7 @@ public function create() {
         giamgia = :giamgia,
         ngaybatdau = :ngaybatdau,
         ngayketthuc = :ngayketthuc,
+        danhmuc = :danhmuc,
         trangthai = :trangthai"
         ;
 
@@ -106,7 +110,7 @@ public function create() {
     $stmt->bindParam(':giatien', $this->giatien);
    $stmt->bindParam(':ngaybatdau', $this->ngaybatdau);
 $stmt->bindParam(':ngayketthuc', $this->ngayketthuc);
-
+$stmt->bindParam(':danhmuc', $this->danhmuc);
     $stmt->bindParam(':giamgia', $this->giamgia);
       $stmt->bindParam(':trangthai', $this->trangthai);
     $stmt->bindParam(':idkhoahoc', $this->idkhoahoc, PDO::PARAM_INT);
