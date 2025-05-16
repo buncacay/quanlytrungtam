@@ -170,7 +170,7 @@ export async function UpdateKhoaHoc(data){
         throw new Error(await res.text());
     }
 
-    alert("Cập nhật thành công!");
+    // alert("Cập nhật thành công!");
     return true;
 } 
 

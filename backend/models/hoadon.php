@@ -37,7 +37,24 @@ class Hoadon {
     }
 
     public function read() {
-        $query = "SELECT * FROM " . $this->table . " INNER join hocvien on hoadon.idhocvien=hocvien.idhocvien INNER JOIN khoahoc on khoahoc.idkhoahoc=hoadon.idkhoahoc where hoadon.trangthai=1";
+        $query = " 
+SELECT 
+    hoadon.idhoadon, 
+    hoadon.tenhoadon, 
+    hoadon.thanhtien, 
+    hoadon.thoigianlap, 
+    hoadon.loai, 
+    IF(hoadon.loai = 0, nhanvien.tennhanvien, hocvien.hoten) AS hoten, 
+    IF(hoadon.loai = 0, '0', IF(hoadon.loai = 1 AND khoahoc.idkhoahoc IS NOT NULL, khoahoc.tenkhoahoc, '')) AS tenkhoahoc
+FROM hoadon
+LEFT JOIN nhanvien ON hoadon.idhocvien = nhanvien.idnhanvien
+LEFT JOIN hocvien ON hoadon.idhocvien = hocvien.idhocvien
+LEFT JOIN khoahoc ON hoadon.idkhoahoc = khoahoc.idkhoahoc -- LEFT JOIN với khoahoc để xử lý cả trường hợp loai = 1
+WHERE hoadon.trangthai = 1;
+
+
+
+";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 

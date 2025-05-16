@@ -123,7 +123,8 @@ export async function addChiTietKhoaHoc(data){
             return await res.json();
             }
    catch (error) {
-        alert("Lỗi khi thêm chi tiết giảng viên: " + error.message);
+    alert(error.message);
+        console.log("Lỗi khi thêm chi tiết giảng viên: " + error.message);
     }
 }
      

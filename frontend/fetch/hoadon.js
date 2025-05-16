@@ -258,20 +258,23 @@ async function loadLuongNhanVien() {
         const thanhtienStr = salaryAmountInput.value.replace(/\./g, '').replace(/đ/g, '');
         const thanhtien = parseFloat(thanhtienStr);
 
-        if (!idnhanvien || !thoigianlap || isNaN(thanhtien) || thanhtien <= 0) {
-            alert("Vui lòng lọc giảng viên và nhập đầy đủ thông tin.");
-            return;
-        }
+        // if (!idnhanvien || !thoigianlap || isNaN(thanhtien) || thanhtien <= 0) {
+        //     alert("Vui lòng lọc giảng viên và nhập đầy đủ thông tin.");
+        //     return;
+        // }
 
         const hoadon = {
             tenhoadon: "Lương giảng viên",
             thoigianlap,
             thanhtien,
-            idnhanvien,
+            idhocvien :idnhanvien,
             loai: 0,
+            idkhoahoc: 0,
             giamgia: 0
+             
         };
-
+        // alert("sai gi");
+        console.log(hoadon);
         try {
             await addHoaDon(hoadon);
             alert("Đã tạo hóa đơn lương giảng viên thành công!");

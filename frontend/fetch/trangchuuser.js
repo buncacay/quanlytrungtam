@@ -38,13 +38,26 @@ async function init() {
         const data = await fetchKhoaHoc();
         const res = data.filter(kh => kh.trangthai === '1');
         console.log(res);
+
         if (!res || res.length === 0) {
             all.innerHTML = '<p>Không có dữ liệu để hiển thị.</p>';
             return;
         }
 
         allData = res;
-        filteredData = [...allData]; // Khởi tạo dữ liệu đã lọc ban đầu
+
+        // Lọc khóa học theo iddanhmuc nếu có trong URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryIdFromUrl = urlParams.get("iddanhmuc");
+
+        if (categoryIdFromUrl) {
+            filteredData = allData.filter(course => course.danhmuc == categoryIdFromUrl);
+            console.log(filteredData);
+        } else {
+            filteredData = [...allData]; // Khởi tạo dữ liệu đã lọc ban đầu nếu không có iddanhmuc
+             console.log(filteredData);
+        }
+
         loadPage(page); // Hiển thị trang đầu tiên
 
     } catch (error) {

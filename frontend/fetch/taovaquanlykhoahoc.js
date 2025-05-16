@@ -1,13 +1,41 @@
-import {fetchGiangVien, fetchKhoaHoc, fetchChiTietKhoaHoc, fetchKhoaHocVoiId} from './get.js';
+import {fetchGiangVien, fetchKhoaHoc, fetchChiTietKhoaHoc,fetchDanhMuc,  fetchKhoaHocVoiId} from './get.js';
 import {addKhoaHoc, addChiTietKhoaHoc, addChiTietNhanVien} from './add.js';
 import {UpdateKhoaHoc, UpdateChiTietKhoaHoc} from './update.js';
 
 document.getElementById('course-image').addEventListener('change', function(event) {
    
         HienThiAnh(event, null);
+
    
     
 });
+
+async function loadDanhMucToSelect(selectedId = null) {
+  const data = await fetchDanhMuc(); // Lấy dữ liệu danh mục
+  const select = document.getElementById("danhmuc");
+
+  select.innerHTML = '';
+
+
+    data.forEach(dm => {
+    const option = document.createElement("option");
+    option.value = dm.iddanhmuc.toString(); // đảm bảo value là chuỗi
+    option.textContent = dm.tendanhmuc;
+    select.appendChild(option);
+
+    console.log(`ID: ${dm.iddanhmuc}, Tên danh mục: ${dm.tendanhmuc}`);
+    });
+
+// Kiểm tra thử
+// alert(selectedId)
+const option = document.querySelector(`#danhmuc option[value="${selectedId}"]`);
+if (!option) {
+  console.log(`❌ Không tìm thấy option tương ứng với ID: ${selectedId}`);
+} else {
+  console.log(`✅ Đã tìm thấy option: ${option.textContent}`);
+}
+
+}
 
 
 let resizedImageBlob = null; // Lưu blob ảnh đã resize để upload
@@ -87,7 +115,7 @@ async function themmoikhoahoc(event) {
         const giamgia = document.getElementById('giamgia').value;
         const start = document.getElementById('start').value;
         const end = document.getElementById('end').value;
-
+        const danhmuc = document.getElementById('danhmuc').value;
         const data = {
             tenkhoahoc: ten,
             thoigianhoc,
@@ -99,8 +127,10 @@ async function themmoikhoahoc(event) {
             giatien,
             giamgia,
             ngaybatdau: start,
-            ngayketthuc: end
+            ngayketthuc: end,
+            danhmuc : danhmuc
         };
+        // console.log(danhm)
         console.log(data);
 
         const formData = new FormData();
@@ -200,7 +230,7 @@ document.getElementById('themkhoahoc').onclick = async (event) => {
 
 
 document.addEventListener('DOMContentLoaded', async function (event) {
-       
+       loadDanhMucToSelect();
      const pa = new URLSearchParams(window.location.search);
      const images = pa.get('images');
     if (images) {
@@ -252,6 +282,7 @@ document.addEventListener('DOMContentLoaded', async function (event) {
         const giamgia= document.getElementById('giamgia');
          const start= document.getElementById('start');
         const end= document.getElementById('end');
+         const danhmuc= document.getElementById('danhmuc');
         
         // alert(kq[0]['tenkhoahoc']);
         ten.value = kq[0]['tenkhoahoc'];  // Sửa từ textContent thành value
@@ -265,6 +296,10 @@ document.addEventListener('DOMContentLoaded', async function (event) {
         start.value=kq[0]['ngaybatdau'];
         console.log(start.value);
         end.value=kq[0]['ngayketthuc'];
+        danhmuc.value = kq[0]['danhmuc'].toString();
+        // alert(danhmuc.value);
+        // loadDanhMucToSelect(danhmuc.value.toString());
+
 
 
         const chitiet = await fetchKhoaHocVoiId(idkhoahoc);
@@ -414,9 +449,10 @@ async function saveChanges(event, idkhoahoc) {
     const giamgia = document.getElementById('giamgia').value;
     const start = document.getElementById('start').value;
     const end = document.getElementById('end').value;
+     const danhmuc = document.getElementById('danhmuc').value;
 
     const today = new Date().toISOString().split('T')[0]; // Lấy ngày hôm nay ở định dạng 'YYYY-MM-DD'
-alert(today);
+// alert(today);
 
 if (end <= today) {
     // Gọi API cập nhật trạng thái
@@ -436,7 +472,8 @@ else {
         giamgia: giamgia,
         ngaybatdau : start,
         ngayketthuc : end,
-        trangthai : trangthai
+        trangthai : trangthai,
+        danhmuc : danhmuc
         // idnhanvien: idnhanvien
     };
     console.log(data);
@@ -444,7 +481,7 @@ else {
         
         if (await UpdateKhoaHoc(data)) {
             console.log(data);
-            alert("Cập nhật khóa học thành công!");
+            // alert("Cập nhật khóa học thành công!");
 
             // Xử lý chi tiết bài học
             const lessons = document.querySelectorAll('#noidungkhoahoc .lesson-item');
@@ -453,7 +490,7 @@ else {
             lessons.forEach(lesson =>{
                 const title = lesson.querySelector('.lesson-title')?.textContent.trim();
                 const link=lesson.querySelector('.lesson-link a')?.href;
-                alert(d);
+                // alert(d);
                 data3.push({
                     idkhoahoc : idkhoahoc,
                     idbaihoc: d,
@@ -465,7 +502,7 @@ else {
             // alert("cho anh");
             console.log("data 3" , data3);
             if (await UpdateChiTietKhoaHoc(data3)){
-                    alert("cap nhat chi tiet thanh cong");
+                    // alert("cap nhat chi tiet thanh cong");
                     window.location.href="danhsachkhoahoc.html"
             }
             

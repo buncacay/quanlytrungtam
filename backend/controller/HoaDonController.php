@@ -69,34 +69,48 @@ switch ($method) {
 
 
 function handleCreate($hoadon) {
-    $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->thoigianlap, $data->idkhoahoc, $data->idhocvien,$data->thoigianlap, $data->thanhtien )) {
-        $hoadon->thoigianlap = $data->thoigianlap;
-        $hoadon->idkhoahoc = $data->idkhoahoc;
-        $hoadon->loai = $data->loai;
-        $hoadon->idhocvien = $data->idhocvien;
-        $hoadon->giamgia = !empty($data->giamgia) ? $data->giamgia : null;
-        $hoadon->thanhtien =$data->thanhtien;
+   $data = json_decode(file_get_contents("php://input"));
 
-        if ($hoadon->create()) {
-            $response = [
-                "thoigianlap" => $hoadon->thoigianlap,
-                "tenhoadon" => $hoadon->tenhoadon,
-                "idkhoahoc" => $hoadon->idkhoahoc,
-                "idhocvien" => $hoadon->idhocvien,
-                "giamgia" => $hoadon->giamgia ?? null,
-                "thanhtien" => $hoadon->thanhtien,
-                 "loai" => $hoadon->loai
-            ];
-            echo json_encode($response);
-        } else {
-            http_response_code(500);
-            echo json_encode(["message" => "Unable to create record."]);
-        }
-    } else {
-        http_response_code(400);
-        echo json_encode(["message" => "Incomplete data."]);
+$requiredFields = ['thoigianlap', 'idkhoahoc', 'idhocvien', 'thanhtien'];
+$missingFields = [];
+
+foreach ($requiredFields as $field) {
+    if (!isset($data->$field)) {
+        $missingFields[] = $field;
     }
+}
+
+if (empty($missingFields)) {
+    $hoadon->thoigianlap = $data->thoigianlap;
+    $hoadon->idkhoahoc = $data->idkhoahoc;
+    $hoadon->loai = $data->loai ?? null;
+    $hoadon->idhocvien = $data->idhocvien;
+    $hoadon->giamgia = !empty($data->giamgia) ? $data->giamgia : null;
+    $hoadon->thanhtien = $data->thanhtien;
+
+    if ($hoadon->create()) {
+        $response = [
+            "thoigianlap" => $hoadon->thoigianlap,
+            "tenhoadon" => $hoadon->tenhoadon,
+            "idkhoahoc" => $hoadon->idkhoahoc,
+            "idhocvien" => $hoadon->idhocvien,
+            "giamgia" => $hoadon->giamgia ?? null,
+            "thanhtien" => $hoadon->thanhtien,
+            "loai" => $hoadon->loai
+        ];
+        echo json_encode($response);
+    } else {
+        http_response_code(500);
+        echo json_encode(["message" => "Unable to create record."]);
+    }
+} else {
+    http_response_code(400);
+    echo json_encode([
+        "message" => "Incomplete data.",
+        "missing_fields" => $missingFields
+    ]);
+}
+
 }
 
 

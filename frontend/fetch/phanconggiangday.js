@@ -64,7 +64,9 @@ async function populateDropdowns() {
     });
 
     const khoaHocList = await fetchKhoaHoc();
-    khoaHocList.forEach(kh => {
+    console.log(khoaHocList);
+    const khoaHocHieuLuc = khoaHocList.filter(kh => kh.trangthai === "1");
+    khoaHocHieuLuc.forEach(kh => {
       const option = document.createElement('option');
       option.value = kh.idkhoahoc;
       option.textContent = kh.tenkhoahoc;

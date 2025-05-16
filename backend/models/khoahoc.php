@@ -36,7 +36,7 @@ public function create() {
 
     $query = "INSERT INTO " . $this->table . " 
         (tenkhoahoc, thoigianhoc, soluongbuoi, lichhoc, diadiemhoc, mota, images, giatien, giamgia, ngaybatdau, ngayketthuc, trangthai, danhmuc) 
-        VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota, :images, :giatien, :giamgia, :ngaybatdau, :ngayketthuc, 1, danhmuc)";
+        VALUES (:tenkhoahoc, :thoigianhoc, :soluongbuoi, :lichhoc, :diadiemhoc, :mota, :images, :giatien, :giamgia, :ngaybatdau, :ngayketthuc, 1, :danhmuc)";
 
     $stmt = $this->conn->prepare($query);
 

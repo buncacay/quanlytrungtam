@@ -1,18 +1,22 @@
 
 document.addEventListener("DOMContentLoaded", function () {
-    $("#header").load("../user/header.html", function (res, status, xhr) {
+  // Load header
+  $("#header").load("../user/header.html", function (res, status, xhr) {
     console.log("HEADER LOAD STATUS:", status);
+    if (status === "success") {
+      $.getScript("../../fetch/header.js");
+    }
+  });
+
+  // Load sidebar
+  $("#sidebar").load("../user/sidebar.html", function (res, status, xhr) {
+    console.log("SIDEBAR LOAD STATUS:", status);
+    if (status === "success") {
+      $.getScript("../../fetch/sidebar.js");
+    }
+  });
 });
 
-    $("#header").load("../user/header.html", function () {
-        // Sau khi đã load xong HTML thì mới load và chạy JS
-        $.getScript("../../fetch/header.js");
-    });
-
-    $("#sidebar").load("../user/sidebar.html", function () {
-        $.getScript("../../fetch/sidebar.js");
-    });
-});
 
 
 
