@@ -4,8 +4,9 @@ import { addChiTietHocVien } from './add.js'; // API thêm chi tiết học viê
 
 const showDonHang = async () => {
     try {
-        const donhangList = await fetchDonHang();
-
+        const data = await fetchDonHang();
+        const donhangList = data[0];
+        
         if (!donhangList || donhangList.length === 0) {
             document.getElementById('hocvien-body').innerHTML = '<tr><td colspan="5">Không có dữ liệu</td></tr>';
             return;
@@ -14,8 +15,8 @@ const showDonHang = async () => {
         const tableBody = document.getElementById('hocvien-body');
         tableBody.innerHTML = '';
 
-        donhangList.forEach(donhang => {
-            const dh = donhang[0]; // Dễ gọi hơn
+        donhangList.forEach(dh => {
+          
 
             const row = document.createElement('tr');
 

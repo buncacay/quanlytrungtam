@@ -149,6 +149,7 @@ async function handleaddStudent(user) {
         ngaysinh: ngaysinh,
         user: user,
         idhocvien: id,
+        trangthia : 1
     };
     console.log(hv);
 
@@ -171,6 +172,7 @@ async function handleUpdateStudent(user) {
         ngaysinh: ngaysinh,
         user: user,
         idhocvien: id,
+        trangthia : 1
     };
     console.log(hv);
 
