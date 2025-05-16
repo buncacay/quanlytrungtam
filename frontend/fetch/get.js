@@ -199,6 +199,26 @@ export async function fetchDonHang(){
 }
 
 
+export async function fetchDanhMuc(){
+    const res= await fetch(`http://localhost/quanlytrungtam/backend/controller/danhmuccontroller.php`);
+    if (!res.ok){
+        throw new Error(await res.text());
+    }
+    const data = await res.json();
+    console.log("data " , data);
+    return data;
+}
+
+export async function fetchDanhMucByid(id){
+    const res= await fetch(`http://localhost/quanlytrungtam/backend/controller/danhmuccontroller.php?iddanhmuc=${id}`);
+    if (!res.ok){
+        throw new Error(await res.text());
+    }
+    const data = await res.json();
+    console.log("data " + data);
+    return data;
+}
+
 
 export async function fetchAllHocVien(page = 1, limit=5) {
     const res = await fetch(`http://localhost/quanlytrungtam/backend/controller/HocvienController.php?page=${page}&limit=${limit}`);

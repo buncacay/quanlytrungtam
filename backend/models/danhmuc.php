@@ -5,6 +5,7 @@ class DanhMuc {
 
     public $iddanhmuc;
     public $tendanhmuc;
+    public $trangthai;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -12,7 +13,7 @@ class DanhMuc {
 
     // Tạo mới danh mục
     public function create() {
-        $query = "INSERT INTO " . $this->table . " (tendanhmuc) VALUES (:tendanhmuc)";
+        $query = "INSERT INTO " . $this->table . " (tendanhmuc, trangthai) VALUES (:tendanhmuc, 1)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':tendanhmuc', $this->tendanhmuc);
 
@@ -21,7 +22,7 @@ class DanhMuc {
 
     // Đọc tất cả danh mục
     public function read() {
-        $query = "SELECT * FROM " . $this->table . " ORDER BY iddanhmuc DESC";
+        $query = "SELECT * FROM " . $this->table . " where trangthai=1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
@@ -40,20 +41,21 @@ class DanhMuc {
 
     // Xoá danh mục (xoá mềm nếu có trạng thái, xoá cứng nếu không có)
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE iddanhmuc = :iddanhmuc";
+        $query = "UPDATE " . $this->table . " SET trangthai = 0 WHERE iddanhmuc = :iddanhmuc";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':iddanhmuc', $this->iddanhmuc, PDO::PARAM_INT);
 
         return $stmt->execute();
     }
 
-    // Hiển thị danh mục theo ID
-    public function showById($id) {
-        $query = "SELECT * FROM " . $this->table . " WHERE iddanhmuc = :id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute([':id' => $id]);
+    public function readById($iddanhmuc) {
+    $query = "SELECT * FROM " . $this->table . " WHERE iddanhmuc = :iddanhmuc AND trangthai = 1";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':iddanhmuc', $iddanhmuc, PDO::PARAM_INT);
+    $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 }
 ?>

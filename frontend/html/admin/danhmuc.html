@@ -2,39 +2,47 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Quản lý học viên</title>
-  <link rel="stylesheet" href="../../css/danhsachhocvien.css" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Quản lý danh mục khóa học</title>
+  <link rel="stylesheet" href="../../css/danhsachkhoahoc.css">
   <link rel="stylesheet" href="../../css/main.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <div class="main">
-    <h1>Danh sách học viên</h1>
-    <div id="header"></div>
-    <div id="sidebar"></div>
- 
-    <div class="cards-container">
-      <div class="filter-bar">
-        <input type="text" id="search-name" placeholder="Tìm theo tên học viên..." />
-        <div id="filter-khoahoc">
-        
-          
-         
-        </div>
-        <button id="btn-filter">Lọc</button>
-      </div>
+  <div id="header"></div>
+  <div id="sidebar"></div>
 
-        <div id="student-all">
+  <div class="cards-container">
+    <h1>Quản lý Danh mục Khóa học</h1>
 
-        </div>
-        
-    </div>  
-    <div id="pagination">
-     
+    <!-- Form thêm/sửa danh mục -->
+    <div>
+      <!-- Input ẩn để lưu ID danh mục khi sửa -->
+      <input type="hidden" id="iddanhmuc" />
+      <!-- Input cho tên danh mục -->
+      <input type="text" id="tendanhmuc" placeholder="Nhập tên danh mục" />
+      <!-- Nút thêm hoặc cập nhật danh mục -->
+      <button type="button" onclick="themHoacCapNhat()">Thêm / Cập nhật</button>
     </div>
-  
-  
+
+    <!-- Bảng hiển thị danh sách danh mục -->
+    <table>
+      <thead>
+        <tr>
+          <th>ID Danh Mục</th>
+          <th>Tên Danh Mục</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="danhmucTable">
+        <!-- Nội dung sẽ được thêm bằng JavaScript -->
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- Các tệp JS cần thiết -->
   <script src="../../js/app.js"></script>
-  <script type="module" src="../../fetch/danhsachhocvien.js"></script>
+  <script type="module" src="../../fetch/danhmuc.js"></script>
+
 </body>
 </html>

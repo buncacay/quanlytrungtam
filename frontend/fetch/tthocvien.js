@@ -20,7 +20,7 @@ const limit = 5;
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   idhocvien = params.get('idhocvien');
-  alert(idhocvien);
+  // alert(idhocvien);
 
   if (!idhocvien) {
     alert("Không tìm thấy ID học viên.");
